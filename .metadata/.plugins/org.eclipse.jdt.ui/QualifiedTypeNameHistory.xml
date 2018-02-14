@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="errorJSON.ErrorJSON"/>
+<fullyQualifiedTypeName name="services.Login"/>
+<fullyQualifiedTypeName name="org.json.JSONObject"/>
+<fullyQualifiedTypeName name="services.CreateUser"/>
+<fullyQualifiedTypeName name="services.Login_s"/>
+<fullyQualifiedTypeName name="javax.servlet.http.HttpServlet"/>
+<fullyQualifiedTypeName name="tools.ConnectionTools"/>
+<fullyQualifiedTypeName name="tools.UserTools"/>
+<fullyQualifiedTypeName name="tools.FriendsTools"/>
+</qualifiedTypeNameHistroy>

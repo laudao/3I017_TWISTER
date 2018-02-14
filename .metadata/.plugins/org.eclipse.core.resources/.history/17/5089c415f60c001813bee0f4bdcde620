@@ -1,0 +1,6 @@
+package services;
+import javax.json;
+
+public class CreateUser {
+	public static JsonObject createUser(String login, )
+}

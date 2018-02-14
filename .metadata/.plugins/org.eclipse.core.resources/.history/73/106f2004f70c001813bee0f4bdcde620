@@ -1,0 +1,10 @@
+package services;
+
+import org.json.JSONObject;
+
+public class CreateUser {
+	public static JSONObject createUser(String login, String password,
+			String name, String lastName, String email){
+		JSONObject json = new JSONObject();
+	}
+}

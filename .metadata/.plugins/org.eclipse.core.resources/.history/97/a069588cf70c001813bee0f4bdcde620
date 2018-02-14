@@ -1,0 +1,12 @@
+package errorJSON;
+
+import org.json.JSONObject;
+
+public class ErrorJSON {
+
+	public static JSONObject serviceRefused(String string, int i) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

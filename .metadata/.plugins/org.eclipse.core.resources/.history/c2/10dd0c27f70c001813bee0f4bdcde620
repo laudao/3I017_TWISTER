@@ -1,0 +1,11 @@
+package tools;
+
+public class UserTools {
+
+	public static void insertUser(String login, String password, String name,
+			String lastName, String email) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}
