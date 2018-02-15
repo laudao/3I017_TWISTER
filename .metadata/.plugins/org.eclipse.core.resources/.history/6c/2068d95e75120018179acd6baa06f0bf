@@ -1,0 +1,10 @@
+package bd;
+
+public class DBStatic {
+	public static String host;
+	public static String username;
+	public static String password;
+	public static String db; //le nom de la base de donnees
+	public static boolean mysql_pooling;
+
+}

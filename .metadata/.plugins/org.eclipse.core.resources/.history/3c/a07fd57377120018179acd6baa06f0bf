@@ -1,0 +1,10 @@
+package bd;
+
+public class DBStatic {
+	public static boolean pooling = false;
+	public static String host = "localhost";
+	public static String db = "";
+	public static Object username = "root";
+	public static Object password = "root";
+
+}

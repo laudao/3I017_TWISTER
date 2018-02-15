@@ -25,6 +25,10 @@
 		<servlet-name>removeFriend</servlet-name> 
 		<servlet-class>servlets.RemoveFriend</servlet-class> 
 	</servlet>
+	<servlet> 
+		<servlet-name>testPooling</servlet-name> 
+		<servlet-class>servlets.TestPooling</servlet-class> 
+	</servlet>
 	<servlet-mapping> 
 		<servlet-name>createUser</servlet-name> 
 		<url-pattern>/user/createUser</url-pattern> 
@@ -48,5 +52,15 @@
 	<servlet-mapping> 
 		<servlet-name>removeFriend</servlet-name> 
 		<url-pattern>/friends/removeFriend</url-pattern> 
-	</servlet-mapping> 
+	</servlet-mapping>
+	<servlet-mapping> 
+		<servlet-name>testPooling</servlet-name> 
+		<url-pattern>/testPooling</url-pattern> 
+	</servlet-mapping>
+	<resource-ref>
+		<description>DB Connection<description>
+  	<res_ref_name>jdbc/db<res_ref_name>
+  	<res_type>javax.sql.DataSource<res_type>
+  	<res_auth>Container<res_auth>
+  </resource_ref>
 </web-app>

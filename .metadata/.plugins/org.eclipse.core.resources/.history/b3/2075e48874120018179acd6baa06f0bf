@@ -1,0 +1,24 @@
+package bd;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import javax.activation.DataSource;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
+public class Database {
+	private DataSource dataSource;
+	
+	public Database(String jndiname) throws SQLException {
+		try{
+			dataSource = (DataSource) new InitialContext().lookup("java:comp/env/" + jndiname);
+		}catch(NamingException e){
+			throw new SQLException(jndiname + " is missing in JDNI! : " + e.getMessage());
+		}
+	}
+	
+	public Connection getConnection() throws SQLException {
+		return ((Database) dataSource).getConnection();
+	}
+}

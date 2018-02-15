@@ -1,0 +1,20 @@
+package test;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import bd.Database;
+
+public class TestSql {
+
+	public static void main(String[] args) {
+		try {
+			Connection c = Database.getMySQLConnection();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+}
