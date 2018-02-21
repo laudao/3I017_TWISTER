@@ -23,14 +23,14 @@ public class AddComment extends HttpServlet{
 		JSONObject res = null;
 		String key = request.getParameter("key");
 		String text = request.getParameter("text");
-
+		out = response.getWriter();
+		
 		try{
 			res=AddComment_s.addComment(key, text);
+			out.println(res.toString());
 		}catch(JSONException e){
-			e.printStackTrace();
+			out.println("JSONException");
 		}
 		
-		out = response.getWriter();
-		out.println(res.toString());
 	}
 }

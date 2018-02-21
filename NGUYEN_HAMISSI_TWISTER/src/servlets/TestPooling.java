@@ -17,6 +17,7 @@ import org.json.JSONObject;
 
 import bd.Database;
 import services.RemoveFriend_s;
+import services.TestPooling_s;
 
 public class TestPooling extends HttpServlet{
 	public TestPooling(){
@@ -26,43 +27,23 @@ public class TestPooling extends HttpServlet{
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		PrintWriter out;
 		JSONObject res = null;
+
+		out = response.getWriter();
+		
 		try {
-			try {
-				Class.forName("com.mysql.jdbc.Driver").newInstance();
-			} catch (InstantiationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			Connection c = Database.getMySQLConnection();
-			String query = "SELECT * FROM test t WHERE t.hugo=\"guo\" AND t.hugowyborska=\"g\"";
-			Statement st = c.createStatement();
-			ResultSet rs = st.executeQuery(query);
-			
-			
-			while (rs.next()){
-				try {
-					res.put("hugo", rs.getString(1));
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			
-			st.close();
-			rs.close();
-			c.close();
+			res = TestPooling_s.test();
+			out.println(res.toString());
+		} catch (InstantiationException e) {
+			out.println("hugo");
+		} catch (IllegalAccessException e) {
+			out.println("chris");
+		} catch (ClassNotFoundException e) {
+			out.println("adrien");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			out.println("mr debate");
+		} catch (JSONException e) {
+			out.println("mr pants");
 		}
 		
-		out = response.getWriter();
-		out.println(res.toString());
 	}
 }

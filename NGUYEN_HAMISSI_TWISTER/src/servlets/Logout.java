@@ -2,6 +2,7 @@ package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -22,14 +23,16 @@ public class Logout extends HttpServlet{
 		PrintWriter out;
 		JSONObject res = null;
 		String key = request.getParameter("key");
+		out = response.getWriter();
 		
 		try{
 			res=Logout_s.logout(key);
+			out.println(res.toString());
 		}catch(JSONException e){
-			e.printStackTrace();
+			out.println("JSONException");
+		} catch (SQLException e) {
+			out.println("SQLException");
 		}
-		
-		out = response.getWriter();
-		out.println(res.toString());
+
 	}
 }

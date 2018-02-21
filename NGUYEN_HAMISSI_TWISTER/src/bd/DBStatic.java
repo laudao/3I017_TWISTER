@@ -5,6 +5,6 @@ public class DBStatic {
 	public static String mysql_username = "root";
 	public static String mysql_password = "root";
 	public static String mysql_host = "localhost";
-	public static String mysql_db = "FARA_DB";
+	public static String mysql_db = "HAMISSI_NGUYEN_DB";
 
 }

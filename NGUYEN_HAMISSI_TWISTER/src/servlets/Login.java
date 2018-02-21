@@ -2,6 +2,7 @@ package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -23,14 +24,15 @@ public class Login extends HttpServlet{
 		JSONObject res = null;
 		String login = request.getParameter("login");
 		String password = request.getParameter("password");
+		out = response.getWriter();
 		
 		try{
 			res=Login_s.login(login,password);
 		}catch(JSONException e){
-			e.printStackTrace();
+			out.println("");
+		} catch (SQLException e) {
+			out.println("");
 		}
 		
-		out = response.getWriter();
-		out.println(res.toString());
 	}
 }

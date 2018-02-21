@@ -1,5 +1,7 @@
 package test;
 
+import java.sql.SQLException;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -10,7 +12,12 @@ public class TestAddFriend {
 	public static void main(String[] args) {
 		JSONObject json = null;
 		try {
-			json = AddFriend_s.addFriend("hugowyb", "hamissihamissi");
+			try {
+				json = AddFriend_s.addFriend("hugowyb", "hamissihamissi");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

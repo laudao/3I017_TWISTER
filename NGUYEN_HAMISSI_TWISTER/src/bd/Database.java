@@ -28,7 +28,6 @@ public class Database {
 		if (DBStatic.pooling == false){
 			return(DriverManager.getConnection("jdbc:mysql://" + DBStatic.mysql_host + "/" + 
 					DBStatic.mysql_db, DBStatic.mysql_username, DBStatic.mysql_password));
-			//return (DriverManager.getConnection("jdbc:mysql://" + DBStatic.host + "/"  + DBStatic.db , DBStatic.username , DBStatic.password));
 		}
 		else{
 			if (database == null){

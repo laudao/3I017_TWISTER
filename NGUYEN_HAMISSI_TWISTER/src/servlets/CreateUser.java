@@ -4,6 +4,7 @@ import services.CreateUser_s;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -26,16 +27,16 @@ public class CreateUser extends HttpServlet{
 		String name = request.getParameter("name");
 		String lastName = request.getParameter("lastName");
 		String email = request.getParameter("email");
+		out = response.getWriter();
 		
 		try {
 			res = CreateUser_s.createUser(login, password, name, lastName, email);
+			out.println(res.toString());
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			out.println("JSONException");
+		} catch (SQLException e) {
+			out.println("SQLException");
 		}
-		
-		out = response.getWriter();
-		out.println(res.toString());
 		
 	}
 }
