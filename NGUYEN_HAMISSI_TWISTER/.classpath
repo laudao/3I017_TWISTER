@@ -11,5 +11,6 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/servlet-api.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/json-org.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/mysql-connector-java-5.1.18-bin.jar"/>
+	<classpathentry kind="lib" path="/users/nfs/Etu2/3535002/3I017/NGUYEN_HAMISSI_TWISTER/NGUYEN_HAMISSI_TWISTER/WebContent/WEB-INF/lib/mongo-2.10.1.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

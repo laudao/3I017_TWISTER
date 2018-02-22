@@ -40,9 +40,9 @@ public class TestPooling extends HttpServlet{
 		} catch (ClassNotFoundException e) {
 			out.println("adrien");
 		} catch (SQLException e) {
-			out.println("mr debate");
+			out.println("arthur");
 		} catch (JSONException e) {
-			out.println("mr pants");
+			out.println("mr debate");
 		}
 		
 	}

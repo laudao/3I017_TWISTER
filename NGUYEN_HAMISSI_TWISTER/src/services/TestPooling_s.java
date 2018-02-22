@@ -21,7 +21,7 @@ public class TestPooling_s {
 		
 		
 		while (rs.next()){
-			json.put("hugo", rs.getString(1));
+			json.put("user", rs.getString(1));
 		}
 		st.close();
 		rs.close();

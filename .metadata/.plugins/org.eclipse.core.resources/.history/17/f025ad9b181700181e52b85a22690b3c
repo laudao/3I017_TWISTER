@@ -1,0 +1,53 @@
+package services;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import bd.Database;
+import tools.ConnectionTools;
+import tools.FriendsTools;
+import tools.UserTools;
+import errorJSON.ErrorJSON;
+
+public class RemoveFriend_s {
+	public static JSONObject removeFriend(String key, String id_friend) throws JSONException{
+		JSONObject json = null;
+		Connection c = Database.getMySQLConnection();
+		String id_user;
+		try {
+			id_user = ConnectionTools.getId_from_key(key, c);
+		} catch (SQLException e1) {
+			json = ErrorJSON.serviceRefused("Data Base problem", 1000);
+		}
+		 
+		
+		if(key==null){
+			json = ErrorJSON.serviceRefused("wrong parameter",-1);
+		}
+		
+		if(id_friend==null){
+			json = ErrorJSON.serviceRefused("wrong parameter",-1);
+		}
+		
+		if (!UserTools.userExists(id_friend, c)){
+			return ErrorJSON.serviceRefused("Unknown user", -1);
+		}
+		
+		if (!FriendsTools.friendExists(id_friend, id_user, c)){
+			return ErrorJSON.serviceRefused("User is not in friends list", -1);
+		}
+		
+		try{
+			json = ErrorJSON.serviceAccepted("key",1);
+		}catch(JSONException e){
+			e.printStackTrace();
+		}
+		
+		c.close();
+		return json;
+		
+	}
+}

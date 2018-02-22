@@ -46,7 +46,7 @@ public class Login_s {
 		c.close();
 		
 		json = new JSONObject();
-		json.put("key",key);
+		json.put("","");
 		return json;
 	}
 }

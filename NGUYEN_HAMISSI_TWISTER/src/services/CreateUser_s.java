@@ -23,7 +23,7 @@ public class CreateUser_s {
 			return ErrorJSON.serviceRefused("User already exists", 100000);
 		}
 		if (!UserTools.insertUser(login, password, name, lastName, email, c)){
-			return ErrorJSON.serviceRefused("SQL Error", 1000);
+			return ErrorJSON.serviceRefused("User not inserted", 1000);
 		}
 		c.close();
 		json = new JSONObject();

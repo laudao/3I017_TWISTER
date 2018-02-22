@@ -2,6 +2,7 @@ package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -30,6 +31,8 @@ public class AddComment extends HttpServlet{
 			out.println(res.toString());
 		}catch(JSONException e){
 			out.println("JSONException");
+		} catch (SQLException e) {
+			out.println("SQLException");
 		}
 		
 	}

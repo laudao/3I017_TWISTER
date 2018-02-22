@@ -8,19 +8,21 @@ import java.sql.Statement;
 public class UserTools {
 
 	public static boolean insertUser(String login, String password, String name, String lastName, String email, Connection c) throws SQLException{
-		String update = "INSERT INTO USERS VALUES(null, \"" + login + "\", PASSWORD(\"" + password + "\", \"" + name + "\", \"" + lastName + "\", \"" + email + "\");";
+		String update = "INSERT INTO USERS(login, password, prenom, nom, email) VALUES(\'" + login + "\', PASSWORD(\'" + password + "\'), \'" + name + "\', \'" + lastName + "\', \'" + email + "\');";
 		Statement st = c.createStatement();
-		int res = st.executeUpdate(update);
-		st.close();
-		if (res == 1){
-			return true;
+		int r = st.executeUpdate(update);
+		boolean res;
+		if (r == 1){
+			res= true;
 		}else{
-			return false;
+			res = false;
 		}
+		st.close();
+		return res;
 	}
 
 	public static boolean userExists(String login, Connection c) throws SQLException {
-		String query = "SELECT login FROM USERS WHERE login = " + login + ";";
+		String query = "SELECT login FROM USERS WHERE login = \'" + login + "\';";
 		Statement st = c.createStatement();
 		ResultSet rs = st.executeQuery(query);
 		boolean res = true;
