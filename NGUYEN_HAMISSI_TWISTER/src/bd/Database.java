@@ -1,16 +1,23 @@
 package bd;
 
+import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Collection;
 
 import javax.sql.DataSource;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.Mongo;
+
 public class Database {
 	private DataSource dataSource;
 	private static Database database = null;
+
 	
 	public Database(String jndiname) throws SQLException {
 		try{
@@ -35,5 +42,11 @@ public class Database {
 			}
 			return (database.getConnection());
 		}
+	}
+	
+	public static DBCollection getMongocollection(String table) throws UnknownHostException {
+		Mongo m = new Mongo("localhost");
+		DB db = m.getDB("HAMISSI_NGUYEN_DB");	
+		return	db.getCollection(table);
 	}
 }

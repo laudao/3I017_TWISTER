@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  localhost
--- Généré le :  Mer 21 Février 2018 à 17:27
+-- Généré le :  Mer 28 Février 2018 à 14:06
 -- Version du serveur :  5.5.58-0+deb8u1
 -- Version de PHP :  5.6.33-0+deb8u1
 
@@ -39,10 +39,18 @@ CREATE TABLE IF NOT EXISTS `FRIENDS` (
 --
 
 CREATE TABLE IF NOT EXISTS `SESSIONS` (
-  `key` varchar(32) NOT NULL,
+  `key_user` varchar(32) NOT NULL,
   `idUser` int(11) NOT NULL,
   `connect` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Contenu de la table `SESSIONS`
+--
+
+INSERT INTO `SESSIONS` (`key_user`, `idUser`, `connect`) VALUES
+('244518758', 1, 1),
+('761633452', 2, 1);
 
 -- --------------------------------------------------------
 
@@ -55,8 +63,17 @@ CREATE TABLE IF NOT EXISTS `USERS` (
   `login` varchar(32) NOT NULL,
   `password` blob NOT NULL,
   `prenom` varchar(32) NOT NULL,
-  `nom` varchar(32) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `nom` varchar(32) NOT NULL,
+  `email` varchar(32) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+--
+-- Contenu de la table `USERS`
+--
+
+INSERT INTO `USERS` (`id`, `login`, `password`, `prenom`, `nom`, `email`) VALUES
+(1, 'chrisg', 0x2a36344235323933373143453337453630314532364434394235464434304238434141463238413446, 'Christian', 'Guillon', 'christian.guillon@lip6.fr'),
+(2, 'hugowyb', 0x2a33303436323432344145353144393441374238353141373744393938343330363746424438374632, 'Hugo', 'Wyborska', 'hugo.wyborska@lip6.fr');
 
 --
 -- Index pour les tables exportées
@@ -72,7 +89,7 @@ ALTER TABLE `FRIENDS`
 -- Index pour la table `SESSIONS`
 --
 ALTER TABLE `SESSIONS`
- ADD PRIMARY KEY (`key`), ADD UNIQUE KEY `indexSessions` (`key`,`idUser`,`connect`), ADD KEY `idUser` (`idUser`);
+ ADD PRIMARY KEY (`key_user`), ADD UNIQUE KEY `indexSessions` (`key_user`,`idUser`,`connect`), ADD KEY `idUser` (`idUser`);
 
 --
 -- Index pour la table `USERS`
@@ -88,7 +105,7 @@ ALTER TABLE `USERS`
 -- AUTO_INCREMENT pour la table `USERS`
 --
 ALTER TABLE `USERS`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- Contraintes pour les tables exportées
 --

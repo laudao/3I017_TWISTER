@@ -17,10 +17,11 @@ public class RemoveFriend_s {
 		JSONObject json = null;
 		Connection c;
 		String id_user;
+		String login_friend;
 		c = Database.getMySQLConnection();
 		
-		id_user = ConnectionTools.getId_from_key(key, c);
-		
+		id_user = ConnectionTools.getId_from_key_user(key, c);
+		login_friend = UserTools.getLogin(id_friend, c);
 		 
 		if(key==null){
 			return ErrorJSON.serviceRefused("wrong parameter",-1);
@@ -30,13 +31,15 @@ public class RemoveFriend_s {
 			return ErrorJSON.serviceRefused("wrong parameter",-1);
 		}
 		
-		if (!UserTools.userExists(id_friend, c)){
+		if (!UserTools.userExists(login_friend, c)){
 			return ErrorJSON.serviceRefused("Unknown user", 100000);
 		}
 		
 		if (!FriendsTools.friendExists(id_friend, id_user, c)){
 			return ErrorJSON.serviceRefused("User is not in friends list", -1);
 		}
+		
+		FriendsTools.removeFriend(id_user, id_friend, c);
 		
 		json = ErrorJSON.serviceAccepted("key",1);
 		

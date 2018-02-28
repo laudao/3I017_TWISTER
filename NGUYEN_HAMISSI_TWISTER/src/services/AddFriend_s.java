@@ -13,14 +13,16 @@ import tools.UserTools;
 import errorJSON.ErrorJSON;
 
 public class AddFriend_s {
-	public static JSONObject addFriend(String key, String id_friend) throws JSONException, SQLException{
+	public static JSONObject addFriend(String key_user, String id_friend) throws JSONException, SQLException{
 		JSONObject json = null;
 		Connection c = Database.getMySQLConnection();
 		String id_user;
+		String login_friend; 
 		
-		id_user = ConnectionTools.getId_from_key(key, c);
+		id_user = ConnectionTools.getId_from_key_user(key_user, c);
+		login_friend = UserTools.getLogin(id_friend, c);
 		
-		if(key==null){
+		if(key_user==null){
 			return ErrorJSON.serviceRefused("wrong parameter",-1);
 		}
 		
@@ -28,13 +30,15 @@ public class AddFriend_s {
 			return ErrorJSON.serviceRefused("wrong parameter",-1);
 		}
 		
-		if (!UserTools.userExists(id_friend, c)){
+		if (!UserTools.userExists(login_friend, c)){
 			return ErrorJSON.serviceRefused("Unknown user", -1);
 		}
 		
 		if (FriendsTools.friendExists(id_friend, id_user, c)){
 			return ErrorJSON.serviceRefused("User is already friend", -1);
 		}
+		
+		FriendsTools.addFriend(id_user, id_friend, c);
 		
 		json = ErrorJSON.serviceAccepted("key",1);
 		

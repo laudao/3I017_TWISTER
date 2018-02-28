@@ -7,8 +7,8 @@ import java.util.Random;
 
 public class ConnectionTools {
 
-	public static boolean removeConnection(String key,Connection c) throws SQLException {
-		String update = "DELETE FROM SESSIONS WHERE key=\""+key+"\";";
+	public static boolean removeConnection(String key_user,Connection c) throws SQLException {
+		String update = "DELETE FROM SESSIONS WHERE key_user=\""+key_user+"\";";
 		Statement st = c.createStatement();
 		int res = st.executeUpdate(update);
 		st.close();
@@ -20,8 +20,8 @@ public class ConnectionTools {
 		}	
 	}
 
-	public static String getId_from_key(String key, Connection c) throws SQLException{
-		String query = "SELECT idUser FROM SESSIONS WHERE key=\"" + key + "\";";
+	public static String getId_from_key_user(String key_user, Connection c) throws SQLException{
+		String query = "SELECT idUser FROM SESSIONS WHERE key_user=\"" + key_user + "\";";
 		Statement st = c.createStatement();
 		ResultSet rs = st.executeQuery(query);
 		String res;
@@ -35,8 +35,23 @@ public class ConnectionTools {
 		return res;
 	}
 	
-	public static boolean isConnected(String key,Connection c) throws SQLException {
-		String query = "SELECT * FROM SESSIONS WHERE key=\"" + key + "\";";
+	public static String getkey_user_from_id(String id, Connection c) throws SQLException{
+		String query = "SELECT key_user FROM SESSIONS WHERE idUser=\"" + id + "\";";
+		Statement st = c.createStatement();
+		ResultSet rs = st.executeQuery(query);
+		String res;
+		if (rs.next()){
+			res = rs.getString(1);
+		}else{
+			res = null;
+		}
+		st.close();
+		rs.close();
+		return res;
+	}
+	
+	public static boolean isConnected(String key_user,Connection c) throws SQLException {
+		String query = "SELECT * FROM SESSIONS WHERE key_user=\"" + key_user + "\";";
 		Statement st = c.createStatement();
 		ResultSet rs = st.executeQuery(query);
 		boolean res;
@@ -50,13 +65,13 @@ public class ConnectionTools {
 		return res;
 	}
 
-	public static String generateKey(Connection c) {
+	public static String generate_key_user(Connection c) {
 		Random r = new Random();
 		return String.valueOf(r.nextInt(999999999));
 	}
 	
-	public static boolean insertConnexion(String key, int id_user, Connection c) throws SQLException {
-		String update = "INSERT INTO SESSIONS VALUES(\"" + key + "\", " + id_user + ", true);";
+	public static boolean insertConnexion(String key_user, int id_user, Connection c) throws SQLException {
+		String update = "INSERT INTO SESSIONS VALUES(\"" + key_user + "\", " + id_user + ", true);";
 		Statement st = c.createStatement();
 		int res = st.executeUpdate(update);
 		st.close();

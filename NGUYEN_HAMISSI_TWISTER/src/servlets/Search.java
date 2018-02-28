@@ -2,6 +2,7 @@ package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -24,14 +25,16 @@ public class Search extends HttpServlet{
 		String key = request.getParameter("key");
 		String query = request.getParameter("q");
 		String id_friend = request.getParameter("friends");
-
+		out = response.getWriter();
+		
 		try{
 			res=Search_s.search(key, query, id_friend);
+			out.println(res.toString());
 		}catch(JSONException e){
-			e.printStackTrace();
+			out.println("JSONException");
+		} catch (SQLException e) {
+			out.println("SQLException");
 		}
-		
-		out = response.getWriter();
-		out.println(res.toString());
+
 	}
 }

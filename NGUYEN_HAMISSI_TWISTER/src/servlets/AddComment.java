@@ -22,12 +22,13 @@ public class AddComment extends HttpServlet{
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		PrintWriter out;
 		JSONObject res = null;
-		String key = request.getParameter("key");
+		String key_user = request.getParameter("key");
+		String id_message = request.getParameter("id_message");
 		String text = request.getParameter("text");
 		out = response.getWriter();
 		
 		try{
-			res=AddComment_s.addComment(key, text);
+			res=AddComment_s.addComment(key_user, id_message, text);
 			out.println(res.toString());
 		}catch(JSONException e){
 			out.println("JSONException");

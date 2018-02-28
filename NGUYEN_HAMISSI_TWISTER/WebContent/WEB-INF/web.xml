@@ -6,6 +6,10 @@
 		<servlet-class>servlets.TestPooling</servlet-class> 
 	</servlet>
 	<servlet> 
+		<servlet-name>search</servlet-name> 
+		<servlet-class>servlets.Search</servlet-class> 
+	</servlet>
+	<servlet> 
 		<servlet-name>createUser</servlet-name> 
 		<servlet-class>servlets.CreateUser</servlet-class> 
 	</servlet>
@@ -18,6 +22,10 @@
 		<servlet-class>servlets.Logout</servlet-class> 
 	</servlet>  
 	<servlet> 
+		<servlet-name>addMessage</servlet-name> 
+		<servlet-class>servlets.AddMessage</servlet-class> 
+	</servlet>
+	<servlet> 
 		<servlet-name>addComment</servlet-name> 
 		<servlet-class>servlets.AddComment</servlet-class> 
 	</servlet>
@@ -28,6 +36,14 @@
 	<servlet> 
 		<servlet-name>removeFriend</servlet-name> 
 		<servlet-class>servlets.RemoveFriend</servlet-class> 
+	</servlet>
+	<servlet> 
+		<servlet-name>removeMessage</servlet-name> 
+		<servlet-class>servlets.RemoveMessage</servlet-class> 
+	</servlet>
+	<servlet> 
+		<servlet-name>removeComment</servlet-name> 
+		<servlet-class>servlets.RemoveComment</servlet-class> 
 	</servlet>
 	<servlet> 
 		<servlet-name>testPooling</servlet-name> 
@@ -46,8 +62,8 @@
 		<url-pattern>/user/logout</url-pattern> 
 	</servlet-mapping> 
 	<servlet-mapping> 
-		<servlet-name>addComment</servlet-name> 
-		<url-pattern>/user/addComment</url-pattern> 
+		<servlet-name>addMessage</servlet-name> 
+		<url-pattern>/user/addMessage</url-pattern> 
 	</servlet-mapping> 
 	<servlet-mapping> 
 		<servlet-name>addFriend</servlet-name> 
@@ -58,8 +74,24 @@
 		<url-pattern>/friends/removeFriend</url-pattern> 
 	</servlet-mapping>
 	<servlet-mapping> 
+		<servlet-name>removeMessage</servlet-name> 
+		<url-pattern>/user/removeMessage</url-pattern> 
+	</servlet-mapping>
+	<servlet-mapping> 
 		<servlet-name>testPooling</servlet-name> 
 		<url-pattern>/testPooling</url-pattern> 
+	</servlet-mapping>
+	<servlet-mapping> 
+		<servlet-name>search</servlet-name> 
+		<url-pattern>/user/search</url-pattern> 
+	</servlet-mapping>
+	<servlet-mapping> 
+		<servlet-name>addComment</servlet-name> 
+		<url-pattern>/user/addComment</url-pattern> 
+	</servlet-mapping>
+	<servlet-mapping> 
+		<servlet-name>removeComment</servlet-name> 
+		<url-pattern>/user/removeComment</url-pattern> 
 	</servlet-mapping>
 	<resource-ref>
 		<description>DB Connection</description>

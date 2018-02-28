@@ -14,7 +14,7 @@ import errorJSON.ErrorJSON;
 public class Login_s {
 	public static JSONObject login(String login, String password) throws JSONException, SQLException{
 		JSONObject json;
-		String key = null;
+		String key_user = null;
 		int id_user;
 		Connection c;
 		c = Database.getMySQLConnection();
@@ -38,15 +38,15 @@ public class Login_s {
 			return ErrorJSON.serviceRefused("wrong password",1000);
 		}
 		
-		key = ConnectionTools.generateKey(c);
+		key_user = ConnectionTools.generate_key_user(c);
 		id_user = UserTools.getId(login, c);
 		
-		ConnectionTools.insertConnexion(key,id_user,c);		
+		ConnectionTools.insertConnexion(key_user,id_user,c);		
 		
 		c.close();
 		
 		json = new JSONObject();
-		json.put("","");
+		json.put("key",key_user);
 		return json;
 	}
 }

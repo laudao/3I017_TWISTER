@@ -12,27 +12,28 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import services.Logout_s;
+import services.RemoveMessage_s;
 
-public class Logout extends HttpServlet{
-	public Logout(){
+public class RemoveMessage extends HttpServlet{
+	public RemoveMessage(){
 		super();
 	}
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		PrintWriter out;
 		JSONObject res = null;
-		String key_user = request.getParameter("key_user");
+		String key = request.getParameter("key_user");
+		String id_message = request.getParameter("id_message");
 		out = response.getWriter();
 		
 		try{
-			res=Logout_s.logout(key_user);
+			res=RemoveMessage_s.removeMessage(key,id_message);
 			out.println(res.toString());
 		}catch(JSONException e){
 			out.println("JSONException");
 		} catch (SQLException e) {
 			out.println("SQLException");
 		}
-
+		
 	}
 }

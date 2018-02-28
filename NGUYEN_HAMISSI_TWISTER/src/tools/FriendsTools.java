@@ -25,4 +25,31 @@ public class FriendsTools {
 		return res;
 	}
 
+	public static boolean addFriend(String source, String cible, Connection c) throws SQLException{
+		String update = "INSERT INTO FRIENDS(source, cible) VALUES(" + source + ", " + cible + ");";
+		Statement st = c.createStatement();
+		int r = st.executeUpdate(update);
+		boolean res;
+		if (r == 1){
+			res= true;
+		}else{
+			res = false;
+		}
+		st.close();
+		return res;
+	}
+	
+	public static boolean removeFriend(String source, String cible, Connection c) throws SQLException{
+		String update = "DELETE FROM FRIENDS WHERE source = " + source + " AND cible = " + cible + ";";
+		Statement st = c.createStatement();
+		int r = st.executeUpdate(update);
+		boolean res;
+		if (r == 1){
+			res= true;
+		}else{
+			res = false;
+		}
+		st.close();
+		return res;
+	}
 }

@@ -15,34 +15,37 @@ import com.mongodb.DBCollection;
 
 import errorJSON.ErrorJSON;
 
-public class AddComment_s {
-	public static JSONObject addComment(String key_user, String id_message, String text) throws JSONException, SQLException, UnknownHostException{
+public class RemoveMessage_s {
+	public static JSONObject removeMessage(String key_user, String id_message) throws JSONException, SQLException, UnknownHostException{
 		JSONObject json = null;
 		String id_user = null;
 		Connection c = Database.getMySQLConnection();
-			
+		
 		DBCollection coll = Database.getMongocollection("messages");
-			
+		
 		if(key_user==null){
 			return ErrorJSON.serviceRefused("missing parameter key",-1);
 		}
-			
-		if (id_message == null){
+		
+		if(id_message==null){
 			return ErrorJSON.serviceRefused("missing parameter id_message",-1);
 		}
-			
-		if(text==null){
-			json = ErrorJSON.serviceRefused("missing parameter text",-1);
-		}
-			
+		
 		id_user = ConnectionTools.getId_from_key_user(key_user, c);
-			
-		MessageTools.addComment(id_user, id_message, text, coll);
-			
+		
+		if(!MessageTools.exists(id_message,coll)){
+			return ErrorJSON.serviceRefused("message does not exist",-1);
+		}
+		
+		if(!MessageTools.check_author(id_user,id_message,coll)){
+			return ErrorJSON.serviceRefused("permission denied",-1);
+		}
+		
+		MessageTools.removeMessage(id_message,coll);
+		
 		json = ErrorJSON.serviceAccepted("text",1);
-			
+		
 		return json;
-			
+	
 	}
-
 }

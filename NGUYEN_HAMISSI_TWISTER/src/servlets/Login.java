@@ -28,7 +28,7 @@ public class Login extends HttpServlet{
 		
 		try{
 			res=Login_s.login(login,password);
-			out.println("ok");
+			out.println(res.toString());
 		}catch(JSONException e){
 			out.println("");
 		} catch (SQLException e) {
