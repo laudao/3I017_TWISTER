@@ -1,0 +1,36 @@
+#main_connection .ids{
+	margin-top: 3%;
+	position:relative;
+}
+
+#main_connection .buttons{
+	display:inline-block;
+}
+
+#login{
+	font-size:x-large;
+	margin-left:45%;
+}
+
+#password{
+	font-size:x-large;
+	margin-left:43.15%;
+}
+
+.buttons{
+	margin-top:1%;
+	margin-left:49.5%;
+}
+
+.links{
+	margin-top:1%;
+	margin-left:48.5%;
+}
+
+#signin{
+	font-size:xx-large;
+	margin-left:50%;
+	color:#006dbf;
+}
+
+

@@ -1,0 +1,40 @@
+package services;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import bd.Database;
+import tools.ConnectionTools;
+import tools.FriendsTools;
+import tools.UserTools;
+import errorJSON.ErrorJSON;
+
+public class RemoveComment_s {
+	public static JSONObject removeComment(String key, String id_message) throws JSONException, SQLException{
+		JSONObject json = null;
+		Connection c;
+		String id_user;
+		String login_friend;
+		c = Database.getMySQLConnection();
+		
+		id_user = ConnectionTools.getId_from_key_user(key, c);
+		
+		 
+		if(key==null){
+			return ErrorJSON.serviceRefused("wrong parameter",-1);
+		}
+		
+		
+		MessageTools.removeComment(id_user, id_message, c);
+		
+		json = ErrorJSON.serviceAccepted("key",1);
+		
+		c.close();
+		
+		return json;
+		
+	}
+}

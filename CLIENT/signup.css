@@ -1,0 +1,44 @@
+#firstname {
+    margin-left: 40%;
+}
+
+#lastname {
+    margin-left:40%;
+}
+
+#main_connection .buttons{
+	display:inline-block;
+}
+
+#login{
+	font-size:x-large;
+	margin-left:45%;
+}
+
+#email{
+	font-size:x-large;
+	margin-left:45%;
+	margin-top:1%;
+}
+
+#retype{
+	font-size:x-large;
+	margin-left:39.3%;
+}
+
+
+#password{
+	font-size:x-large;
+	margin-left:43.15%;
+}
+
+.buttons{
+	margin-top:1%;
+	margin-left:49.5%;
+}
+
+#signup{
+	font-size:xx-large;
+	margin-left:50%;
+	color:#006dbf;
+}
