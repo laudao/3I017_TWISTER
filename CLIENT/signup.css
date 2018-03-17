@@ -1,12 +1,18 @@
+.names{
+	float:left;
+	margin-left:40%;
+}
+
 #firstname {
-    margin-left: 40%;
+	display: inline;
 }
 
 #lastname {
-    margin-left:40%;
+	display:inline;
+	margin-left:10%;
 }
 
-#main_connection .buttons{
+#main_signup .buttons{
 	display:inline-block;
 }
 
