@@ -2,7 +2,7 @@
 	text-align: center;
 	margin: auto;
 	width: 300px;
-	margin-top: 200px;
+	margin-top: 125px;
 }
 
 #main_connection .ids{
@@ -61,4 +61,8 @@
     font-family: sans-serif;
     color: #333;
     letter-spacing: 1px;
+}
+
+.logo img {
+	width: 100px;
 }
