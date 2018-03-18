@@ -1,0 +1,50 @@
+.names{
+	float:left;
+	margin-left:40%;
+}
+
+#firstname {
+	display: inline;
+}
+
+#lastname {
+	display:inline;
+	margin-left:10%;
+}
+
+#main_signup .buttons{
+	display:inline-block;
+}
+
+#login{
+	font-size:x-large;
+	margin-left:45%;
+}
+
+#email{
+	font-size:x-large;
+	margin-left:45%;
+	margin-top:1%;
+}
+
+#retype{
+	font-size:x-large;
+	margin-left:39.3%;
+}
+
+
+#password{
+	font-size:x-large;
+	margin-left:43.15%;
+}
+
+.buttons{
+	margin-top:1%;
+	margin-left:49.5%;
+}
+
+#signup{
+	font-size:xx-large;
+	margin-left:50%;
+	color:#006dbf;
+}

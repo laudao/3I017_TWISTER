@@ -6,13 +6,11 @@
 }
 
 #main_connection .ids{
-	justify-content: space-between;
-    display: flex;
     margin-bottom: 10px;
 }
 
 #main_connection .ids input{
-	width: 100%;
+	width: calc(100% - 40px);
     padding: 10px 20px;
     border-radius: 3px;
     border: none;
@@ -41,14 +39,6 @@
 }
 #main_connection .buttons input:hover{
     outline: none;
-}
-#login{
-}
-
-#password{
-}
-
-.buttons{
 }
 
 .links{
