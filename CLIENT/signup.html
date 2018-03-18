@@ -6,34 +6,21 @@
 	</head>
 	<body>
 		<div id="main_signup">
-		<h1 id="signup">Sign up</h1>
-		<form action="javascript:(function() { return; })()" method="get">
-			<div class="names">
-				<span id="firstname">First name</span>
-				<input type="text" name="First name"/>
-				<span id="lastname">Last name</span>
-				<input type="text" name="Last name"/>
-			</div>
-			<div class="info">
-				<span id="login">Login</span>
-				<input type="text" name="login"/>
-			</div>
-			<div class="info">
-				<span id="email">Email</span>
-				<input type="text" name="email"/>
-			</div>
-			<div class="info">
-				<span id="password">Password</span>
-				<input type="text" name="password"/>
-			</div>
-			<div class="info">
-				<span id="retype">Retype password</span>
-				<input type="text" name="retype password"/>
-			</div>	
-			<div class="buttons">
-				<input type="submit" value="Register"/>
-				<input type="submit" value="Cancel"/>
-			</div>
-		</form>
+			<h1 id="signup">CREATE YOUR ACCOUNT</h1>
+			<form action="javascript:(function() { return; })()" method="get">
+				<div class="info">
+					<input type="text" name="First name" placeholder="FIRST NAME"/>
+					<input type="text" name="Last name" placeholder="LAST NAME"/>
+					<input type="text" name="login" placeholder="LOGIN"/>
+					<input type="text" name="email" placeholder="EMAIL"/>
+					<input type="password" name="password" placeholder="PASSWORD"/>
+					<input type="password" name="retype password" placeholder="CONFIRM PASSWORD"/>
+				</div>	
+				<div class="buttons">
+					<input type="submit" value="REGISTER"/>
+					<input id="cancel" type="submit" value="CANCEL"/>
+				</div>
+			</form>
+		</div>
 	</body>
 </html>
