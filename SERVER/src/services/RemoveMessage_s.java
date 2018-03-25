@@ -19,6 +19,7 @@ public class RemoveMessage_s {
 	public static JSONObject removeMessage(String key_user, String id_message) throws JSONException, SQLException, UnknownHostException{
 		JSONObject json = null;
 		String id_user = null;
+		String login_user = null;
 		Connection c = Database.getMySQLConnection();
 		
 		DBCollection coll = Database.getMongocollection("messages");
@@ -32,12 +33,13 @@ public class RemoveMessage_s {
 		}
 		
 		id_user = ConnectionTools.getId_from_key_user(key_user, c);
-		
+		login_user = ConnectionTools.getLogin(id_user, c);
+
 		if(!MessageTools.exists(id_message,coll)){
 			return ErrorJSON.serviceRefused("message does not exist",-1);
 		}
 		
-		if(!MessageTools.check_author(id_user,id_message,coll)){
+		if(!MessageTools.check_author(login_user,id_message,coll)){
 			return ErrorJSON.serviceRefused("permission denied",-1);
 		}
 		
