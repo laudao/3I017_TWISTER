@@ -20,6 +20,8 @@ public class AddMessage_s {
 	public static JSONObject addMessage(String key_user, String text) throws JSONException, SQLException, UnknownHostException{
 		JSONObject json = null;
 		String id_user = null;
+		String login_user = null;
+		String name_user = null;
 		Connection c = Database.getMySQLConnection();
 		
 		DBCollection coll = Database.getMongocollection("messages");
@@ -33,8 +35,11 @@ public class AddMessage_s {
 		}
 		
 		id_user = ConnectionTools.getId_from_key_user(key_user, c);
-		
-		MessageTools.addMessage(id_user, text, coll);
+		login_user = UserTools.getLogin(id_user, c);
+		name_user = UserTools.getName(id_user, c);
+
+		MessageTools.addMessage(name_user, login_user, text, coll);
+		//MessageTools.addMessage(id_user, text, coll);
 		
 		json = ErrorJSON.serviceAccepted("text",1);
 		

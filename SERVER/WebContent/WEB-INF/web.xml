@@ -46,9 +46,10 @@
 		<servlet-class>servlets.RemoveComment</servlet-class> 
 	</servlet>
 	<servlet> 
-		<servlet-name>testPooling</servlet-name> 
-		<servlet-class>servlets.TestPooling</servlet-class> 
+		<servlet-name>addLike</servlet-name> 
+		<servlet-class>servlets.AddLike</servlet-class> 
 	</servlet>
+
 	<servlet-mapping> 
 		<servlet-name>createUser</servlet-name> 
 		<url-pattern>/user/createUser</url-pattern> 
@@ -93,6 +94,11 @@
 		<servlet-name>removeComment</servlet-name> 
 		<url-pattern>/user/removeComment</url-pattern> 
 	</servlet-mapping>
+	<servlet-mapping> 
+		<servlet-name>addLike</servlet-name> 
+		<url-pattern>/user/addLike</url-pattern> 
+	</servlet-mapping>
+
 	<resource-ref>
 		<description>DB Connection</description>
   		<res-ref-name>jdbc/db</res-ref-name>

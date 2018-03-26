@@ -21,11 +21,14 @@ public class RemoveComment_s {
 		JSONObject json = null;
 		Connection c;
 		String id_user;
+		String login_user = null;
+
 		c = Database.getMySQLConnection();
 		DBCollection coll = Database.getMongocollection("messages");
 		
 		id_user = ConnectionTools.getId_from_key_user(key, c);
-		
+		login_user = UserTools.getLogin(id_user, c);
+
 		if(key==null){
 			return ErrorJSON.serviceRefused("missing key_user",-1);
 		}
@@ -38,11 +41,11 @@ public class RemoveComment_s {
 			return ErrorJSON.serviceRefused("missing id_comment",-1);
 		}
 		
-		if (!MessageTools.check_remove_comment(id_user, id_message, id_comment, coll)){
+		if (!MessageTools.check_remove_comment(login_user, id_message, id_comment, coll)){
 			return ErrorJSON.serviceRefused("permission denied",-1);
 		}
 		
-		MessageTools.removeComment(id_user, id_message, id_comment, coll);
+		MessageTools.removeComment(id_message, id_comment, coll);
 		
 		json = ErrorJSON.serviceAccepted("key",1);
 		

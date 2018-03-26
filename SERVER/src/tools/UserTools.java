@@ -68,6 +68,22 @@ public class UserTools {
 		rs.close();
 		return res;
 	}
+
+	public static String getName(String id, Connection c) throws SQLException {
+		String query = "SELECT prenom, nom FROM USERS WHERE id = " + id + ";";
+		Statement st = c.createStatement();
+		ResultSet rs = st.executeQuery(query);
+		String res;
+		
+		if (rs.next()){
+			res = rs.getString(1) + " " + rs.getString(2);
+		}else{
+			res = null;
+		}
+		st.close();
+		rs.close();
+		return res;
+	}
 	
 	public static boolean checkPassword(String login, String password, Connection c) throws SQLException {
 		String query = "SELECT * FROM USERS WHERE login=\"" + login + "\" AND password=PASSWORD(\"" + password + "\");";
