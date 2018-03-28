@@ -7,7 +7,10 @@
       href="logo_blue.PNG">
 		<link href="connection.css" rel="stylesheet" type="text/css"/>
 	</head>
-	<body>
+	<script type="text/javascript" src='script_connection.js'></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<body onload="javascript:makeConnectionPanel();">
+		<!--
 		<div id="main_connection">
 			<div class="logo">
 				<img src="logo_blue.PNG" alt="bird_logo">
@@ -15,10 +18,10 @@
 			<h1 id="signin">CONNECTION</h1>
 			<form action="javascript:(function() { return; })()" method="get">
 				<div class="ids">
-					<input type="text" name="login" placeholder="LOGIN"/>
+					<input type="text" name="login" placeholder="LOGIN" value="login"/>
 				</div>
 				<div class="ids">
-					<input type="password" name="password" placeholder="********"/>
+					<input type="password" name="password" placeholder="********" value="password"/>
 				</div>
 				<div class="buttons">
 					<input type="submit" value="CONNECT"/>
@@ -29,5 +32,6 @@
 				</div>
 			</form>
 		</div>
+	-->
 	</body>
 </html>

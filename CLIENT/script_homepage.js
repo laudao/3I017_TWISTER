@@ -1,5 +1,6 @@
 function Message(author, login, date, content, comments, likes){
     this.author = author;
+    this.id =1 ;
     this.login = login;
     this.date = date;
     this.content = content;
@@ -133,6 +134,8 @@ function init(){
     env.noConnection = true;
     env.key = "FARA123";
     env.id_user = 1;
+    env.minId = -1;
+    env.maxId = -1;
     env.login = "hugowyb";
     setVirtualDB();
 }
@@ -171,14 +174,15 @@ function makeMainPanel(fromId, fromLogin, query){
                     '<div class="message-form">' +
                         '<textarea class="message-input" placeholder="What\'s on your mind ?"></textarea>' +
                                 '<div class="send-button">' +
-                                    '<input type="submit" value="TWIST"/>' +
+                               
+        '<input type="submit" value="TWIST"/>' +
                                 '</div>' +
                     '</div>' +
                 '</div>'; 
 
     s += '<div class="messages-list">';
 
-    s += '</div>' +
+    s += '</div>' +""+
             '</div>' +
         '</div>' +
         '</body>' +
@@ -219,41 +223,50 @@ function getFromLocalDB(from, minId, maxId, nbMax){
         if (f == undefined){
             f = new Set();
         }
-        for (var i = localdb.length -1; i>=0; i--){
-            if (nbMax >= 0 && nb >= nbMax){
-                break;
-            }
-            var m = localdb[i];
-            if (m == undefined){
-                continue;
-            }
-            if ((maxId < 0 || m.id < maxId) && m.id > minId){
-                if ((f == undefined || m.author.id == from) || f.has(m.author.id)){
-                    tab.push(m);
-                    nb++;
-                }
-                return tab;
-            }
-        }
     }
+    for (var i = localdb.length -1; i>=0; i--){
+        if (nbMax >= 0 && nb >= nbMax){
+            break;
+        }
+        var m = localdb[i];
+
+        if (m == undefined){
+            continue;
+        }
+        console.log("a"+env.minId)
+        console.log("b"+m.id)
+        console.log("c"+env.maxId)
+
+        if ((env.maxId < 0 || m.id < env.maxId) && m.id > env.minId){
+
+            if ((f == undefined || m.author.id == from) || f.has(m.author.id)){
+
+                tab.push(m);
+                nb++;
+            }
+
+        }
+        
+    }
+    return tab;
 }
 
 function completeMessagesReponse(rep){
     console.log(rep);
     var tab = JSON.parse(rep, revival);
+
     var s = "";
     for (var i=0; i<tab.length; i++){
         var m = tab[i];
-        //alert(m.getHTML())
-        s += m.getHTML();
         env.msgs[m.id] = m;
         if (m.id > env.maxId){
             env.maxId = m.id;
         }
-        if ((env.mindId < 0) || (m.id < env.mindId)){
-            env.minId = m.id;
-            $(".messages-list").html(s);
+        if ((env.minId < 0) || (m.id < env.minId)){
+            env.minId = m.id;  
+ 
         }
+        $(".messages-list").append(m.getHTML());
     }
 }
 
