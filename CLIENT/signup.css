@@ -73,3 +73,12 @@
     color: #333;
     letter-spacing: 1px;
 }
+
+.err_msg { 
+    margin-bottom: 15px;
+    font-size: 15px;
+    font-weight: 300;
+    font-family: sans-serif;
+    color: red;
+    letter-spacing: 1px;
+}
