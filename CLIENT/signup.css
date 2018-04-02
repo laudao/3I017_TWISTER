@@ -2,7 +2,7 @@
 	text-align: center;
 	margin: auto;
 	width: 300px;
-	margin-top: 200px;
+	margin-top: 150px;
 }
 
 #main_signup .info{
@@ -81,4 +81,8 @@
     font-family: sans-serif;
     color: red;
     letter-spacing: 1px;
+}
+
+.logo img {
+    width: 80px;
 }
