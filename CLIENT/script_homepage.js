@@ -323,11 +323,13 @@ function newMessage(){
     var text=$(".message-input").val();
     $(".message-input").val("");
     console.log(text);
-    if (!env.noConnection){
-        // requête d'ajout de message
-    }
-    else{
-        newMessage_response(JSON.stringify(new Message(env.id_user, env.msgs.length, env.author, env.login, new Date(), text, undefined, 0)));
+    if (text != ""){
+        if (!env.noConnection){
+            // requête d'ajout de message
+        }
+        else{
+            newMessage_response(JSON.stringify(new Message(env.id_user, env.msgs.length, env.author, env.login, new Date(), text, undefined, 0)));
+        }
     }
 }
 
@@ -348,9 +350,6 @@ function newMessage_response(resp){
         }
 */
     }
-    else{
-        alert("Error: cannot add message");
-    }
 }
 
 
@@ -358,11 +357,13 @@ function newComment(id){
     var text=$("#message_" + id + " .comment-input").val();
     console.log(text);
     console.log(id);
-    if (!env.noConnection){
-        // requête d'ajout de commentaire
-    }
-    else{
-        newComment_response(id, JSON.stringify(new Comment(env.id_user, env.msgs[id].comments.length+1, env.author, env.login, new Date(), text)));
+    if (text != ""){
+        if (!env.noConnection){
+            // requête d'ajout de commentaire
+        }
+        else{
+            newComment_response(id, JSON.stringify(new Comment(env.id_user, env.msgs[id].comments.length+1, env.author, env.login, new Date(), text)));
+        }
     }
 }
 
