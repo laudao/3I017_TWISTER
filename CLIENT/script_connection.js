@@ -1,7 +1,6 @@
 function connection(form){
     var login = form.login.value;
     var password = form.password.value;
-    console.log(login)
     if (verif_form_connection(login, password)){
         connect(login, password);
     }
@@ -16,13 +15,14 @@ function verif_form_connection(login, password){
         func_error("Password is missing");
         return false;
     }
+    return true;
 }
 
 function func_error(msg){
     var msg_box = "<div class=\"err_msg\">" + msg + "</div>";
     var old_msg = $(".err_msg");
     if (old_msg.length == 0){
-        $("form").prepend(msg_box); // demander à Gaetan de faire le css ^_^
+        $("form").prepend(msg_box);
     }else{
         old_msg.replaceWith(msg_box);
     }
@@ -56,5 +56,36 @@ function makeConnectionPanel(){
         '</html>';
 
     $("body").html(s);
+}
 
+
+function init(){
+    env = new Object();
+    env.noConnection = true;
+}
+
+function connectionResponse(resp){
+    console.log(resp);
+    resp = JSON.parse(resp);
+    console.log(resp.id);
+    if (resp.error == undefined){
+        env.key = resp.key;
+        env.id = resp.id;
+        env.login = resp.login;
+        
+        document.location.href = "homepage.html";
+        makeMainPanel(env.id, env.login);
+    }
+    else{
+        func_error(resp.error);
+    }
+}
+
+function connect(login, password){
+    if (!env.noConnection){
+        // requête BD
+    }
+    else{
+        connectionResponse("{\"key\": \"FARA123\", \"id\": 1, \"login\": \"hugowyb\"}")
+    }
 }
