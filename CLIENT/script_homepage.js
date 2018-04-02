@@ -43,13 +43,13 @@ Message.prototype.getHTML =
 						"<p class=\"date\">" + this.date + "</p>\n" +
                     "</div>\n" +
                     "<div class=\"delete\">\n" +
-						"<img src=\"bin.png\" alt=\"delete\"/>\n" +
+						"<img src=\"bin.png\" alt=\"delete\" onclick=\"deleteMessage(" + this.id_msg +")\"/>\n" +
                     "</div>\n" +
                 "</div>\n" +
 				"<p class=\"content\">" + this.content + "</p>\n" +
 					"<div class=\"message-action\">\n" +
 						"<div class=\"likes\">\n" +
-							"<img src=\"like.png\" alt=\"like\"/>\n" +
+							"<img src=\"like.png\" alt=\"like\" onclick=\"addLike(" + this.id_msg + ");\"/>\n" +
 							"<p>" + this.likes + "</p>\n" +
 						"</div>\n" + 
 						"<div class=\"comments\">" +
@@ -57,20 +57,19 @@ Message.prototype.getHTML =
 						"</div>\n" +
 					"</div>\n" + 
 					"<div class=\"comments-list\">\n";
-                    /*
-						"<div class=\"comment-form\">\n" + 
-							"<textarea class=\"comment-input\" placeholder=\"Reply\"></textarea>\n" +
-								"<div class=\"send-button--comment\">\n" +
-									"<input type=\"submit\" value=\"REPLY\"/>\n" +
-								"</div>\n" +
-                        "</div>\n" ; */
     
-        /*
+
         for (var i=0; i<this.comments.length; i++){
             s += this.comments[i].getHTML();  
         }
-        */
-        s += "</div>\n</div>\n</div>\n";
+        
+        s += "<div class=\"comment-form\">\n" + 
+                "<textarea class=\"comment-input\" placeholder=\"Reply\"></textarea>\n" +
+                    "<div class=\"send-button--comment\">\n" +
+                        "<input type=\"submit\" value=\"REPLY\" onclick=\"javascript:newComment(" + this.id_msg + ")\"/>\n" +
+                    "</div>\n" +
+            "</div>\n" +
+            "</div></div></div>\n";
         
         return s;
     }
@@ -132,7 +131,7 @@ function setVirtualDB(){
     localdb[2] = m3;
 
     env.msgs = localdb;
-    console.log(env.msgs);
+    console.log(env.msgs.length);
 
 }
 
@@ -181,10 +180,9 @@ function makeMainPanel(fromId, fromLogin, query){
                 '<div class="new-message">' +
                     '<div class="message-form">' +
                         '<textarea class="message-input" placeholder="What\'s on your mind ?"></textarea>' +
-                                '<div class="send-button">' +
-                               
-        '<input type="submit" value="TWIST"/>' +
-                                '</div>' +
+                            '<div class="send-button">' +
+                                '<input type="submit" value="TWIST" onclick="javascript:newMessage()"/>' +
+                            '</div>' +
                     '</div>' +
                 '</div>'; 
 
@@ -197,6 +195,7 @@ function makeMainPanel(fromId, fromLogin, query){
         '</html>';
 
     $("body").html(s);
+
 /*
     if (env.fromId < 0){
         // page d'accueil
@@ -216,6 +215,9 @@ function makeMainPanel(fromId, fromLogin, query){
 
     completeMessages();
 
+    for (var i=0; i<env.msgs.length; i++){
+        $("#message_" + i + " .comments-list").hide();
+    }
 }
 
 function pageUser(id, login){
@@ -289,7 +291,8 @@ function develop(id){
     var m = env.msgs[id];
     console.log(m);
     var el = $("#message_" + id + " .comments-list");
-
+    el.show("slow");
+/*
     for (var i=0; i<m.comments.length; i++){
         var c = m.comments[i];
         el.append(c.getHTML());
@@ -300,6 +303,8 @@ function develop(id){
                         "<input type=\"submit\" value=\"REPLY\" onclick=\"javascript:newComment(" + id + ")\"/>\n" +
                     "</div>\n" +
                 "</div>\n");
+*/
+
     el = $("#message_" + id + " .comments-button");
     el.replaceWith("<p class=\"comments-button\" onclick=\"javascript:hideComments(" + id + ")\">comments (" + m.comments.length + ")</p>\n");
 
@@ -308,14 +313,51 @@ function develop(id){
 function hideComments(id){
     var m = env.msgs[id];
     var el = $("#message_" + id + " .comments-list");
-    el.html("");
+    el.hide("slow");
+    //el.html("");
     var el = $("#message_" + id + " .comments-button");
     el.replaceWith("<p class=\"comments-button\" onclick=\"javascript:develop(" + id + ")\">comments (" + m.comments.length + ")</p>\n");
 }
 
+function newMessage(){
+    var text=$(".message-input").val();
+    $(".message-input").val("");
+    console.log(text);
+    if (!env.noConnection){
+        // requête d'ajout de message
+    }
+    else{
+        newMessage_response(JSON.stringify(new Message(env.id_user, env.msgs.length, env.author, env.login, new Date(), text, undefined, 0)));
+    }
+}
+
+function newMessage_response(resp){
+    var msg = JSON.parse(resp, revival);
+    console.log(msg);
+    if (msg != undefined && (msg.error == undefined)){
+        var el = $(".messages-list");
+
+        el.prepend(msg.getHTML());
+
+        env.msgs.push(msg);
+//        console.log(env.msgs);
+        console.log(env.msgs[3]);
+
+/*        if (env.noConnection){
+            localdb[id] = env.msgs[id];
+        }
+*/
+    }
+    else{
+        alert("Error: cannot add message");
+    }
+}
+
+
 function newComment(id){
     var text=$("#message_" + id + " .comment-input").val();
     console.log(text);
+    console.log(id);
     if (!env.noConnection){
         // requête d'ajout de commentaire
     }
@@ -329,10 +371,10 @@ function newComment_response(id, resp){
     console.log(com);
     if (com != undefined && (com.error == undefined)){
         var el = $("#message_" + id + " .comments-list");
-        var comment_form = $(".comment-form");
 
         el.append(com.getHTML());
-        $(".comment-form").remove();
+
+        $("#message_" + id + " .comment-form").remove();
 
         el.append("<div class=\"comment-form\">\n" + 
                 "<textarea class=\"comment-input\" placeholder=\"Reply\"></textarea>\n" +
@@ -352,6 +394,32 @@ function newComment_response(id, resp){
     }
     else{
         alert("Error: cannot add comment");
+    }
+}
+
+function addLike(id){
+    console.log(id);
+    var el = $("#message_" + id + " .likes p");
+    var cpt = el.text();
+    console.log(el);
+    el.text(parseInt(cpt)+1); 
+}
+
+function deleteMessage(id){
+    var login = $("#message_" + id + " .message-head .login").text().substr(2);
+    console.log(login);
+    if (!env.noConnection){
+        // requête d'ajout de commentaire
+    }
+    else{
+        deleteMessage_response(id, login);
+    }
+}
+
+function deleteMessage_response(id, login){
+    if (login == env.login){
+        $("#message_" + id).remove();
+        env.msgs.splice(id);
     }
 }
 
