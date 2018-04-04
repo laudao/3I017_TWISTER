@@ -116,9 +116,12 @@ function setVirtualDB(){
         follows[i] = new Set();
     }
 
-    follows[1].add(2, 3);
+    follows[1].add(2)
+    follows[1].add(3);
     follows[2].add(1);
-    follows[3].add(1, 2, 4);
+    follows[3].add(1)
+    follows[3].add(2)
+    follows[3].add(4);
     follows[4].add(2);
 
 
@@ -263,7 +266,6 @@ function getFromLocalDB(from, minId, maxId, nbMax){
             break;
         }
         var m = localdb[i];
-        //console.log(m)
 
         if (m == undefined){
             continue;
