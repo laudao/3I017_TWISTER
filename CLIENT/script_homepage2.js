@@ -9,9 +9,6 @@ function Message(id_user, id_msg, author, login, date, content, comments, likes)
     if (comments == undefined){
         comments = []
     }
-    if (likes == undefined){
-        likes = [];
-    }
     this.comments = comments;
     this.likes = likes;
 }
@@ -43,7 +40,7 @@ Message.prototype.getHTML =
         s = "<div class=\"message\" id=\"message_" + this.id_msg + "\">\n" +
 				"<div class=\"message-head\">\n" +
 					"<div class=\"message-head--content\">\n" +
-						"<p class=\"author\">" + this.author + "</p>\n" +
+                        "<p class=\"author-button\" onclick=\"javascript:profile(" + this.author + ")\"> "+ this.author  + "</p>\n" +
 						"<p class=\"login\"> @" +this.login + "</p>\n" +
 						"<p class=\"date\">" + this.date + "</p>\n" +
                     "</div>\n" +
@@ -55,7 +52,7 @@ Message.prototype.getHTML =
 					"<div class=\"message-action\">\n" +
 						"<div class=\"likes\">\n" +
 							"<img src=\"like.png\" alt=\"like\" onclick=\"addLike(" + this.id_msg + ");\"/>\n" +
-							"<p>" + this.likes.length + "</p>\n" +
+							"<p>" + this.likes + "</p>\n" +
 						"</div>\n" + 
 						"<div class=\"comments\">" +
 							"<p class=\"comments-button\" onclick=\"javascript:develop(" + this.id_msg + ")\">comments (" + this.comments.length + ")</p>\n" +
@@ -82,7 +79,7 @@ Message.prototype.getHTML =
 revival = 
     function(key, val) {
         if (val.error == undefined){
-            if (val.comments != undefined){ // message
+            if (val.likes != undefined){ // message
                 return new Message(val.id_user, val.id_msg, val.author, val.login, val.date, val.content, val.comments, val.likes);
             }
             else if (val.content != undefined){ // commentaire
@@ -126,10 +123,9 @@ function setVirtualDB(){
     c3 = new Comment(u2["id"], 2, u2["author"], u2["login"], "March 20", "Amusing...");
     
     
-    //m1 = new Message(u1["id"], 0, u1["author"], u1["login"], "March 18", "Researchers at Whitehead Institute have uncovered a framework for regeneration that may explain and predict how stem cells in adult, regenerating tissue determine where to form replacement structures.", [c1, c2, c3], 5);
-    m1 = new Message(u1["id"], 0, u1["author"], u1["login"], "March 18", "Researchers at Whitehead Institute have uncovered a framework for regeneration that may explain and predict how stem cells in adult, regenerating tissue determine where to form replacement structures.", [c1, c2, c3], [1, 2, 3, 4]);
-    m2 = new Message(u3["id"], 1, u3["author"], u3["login"], "March 10", "We're past our pi-themed half-way point! Over 3,141 have given to MIT today in honor of the 24-Hour Challenge! Spread the word and help us reach our ultimate goal of 6,283 donors!", undefined, [4]);
-    m3 = new Message(u2["id"], 2, u2["author"], u2["login"], "February 17", "Many thanks to the over 25 departments, offices, and student organizations that participated in Random Acts of Kindness (RAK) Week! For a look back at the fun, check our RAK Week album", undefined, [4, 3]);
+    m1 = new Message(u1["id"], 0, u1["author"], u1["login"], "March 18", "Researchers at Whitehead Institute have uncovered a framework for regeneration that may explain and predict how stem cells in adult, regenerating tissue determine where to form replacement structures.", [c1, c2, c3], 5);
+    m2 = new Message(u3["id"], 1, u3["author"], u3["login"], "March 10", "We're past our pi-themed half-way point! Over 3,141 have given to MIT today in honor of the 24-Hour Challenge! Spread the word and help us reach our ultimate goal of 6,283 donors!", undefined, 3);
+    m3 = new Message(u2["id"], 2, u2["author"], u2["login"], "February 17", "Many thanks to the over 25 departments, offices, and student organizations that participated in Random Acts of Kindness (RAK) Week! For a look back at the fun, check our RAK Week album", undefined, 6);
 
 
     localdb[0] = m1;
@@ -175,13 +171,7 @@ function makeMainPanel(fromId, fromLogin, query){
                     '</div>' +
                 '</div>' +
                 '<div class="disconnect">' +
-                    '<input type="submit" id="logout" value="LOG OUT"/>' +
-                    '<script type="text/javascript">' +
-                        'document.getElementById("logout").onclick = function () {' +
-                        'location.href = "connection.html";' +
-                        'makeConnectionPanel();' + 
-                    '};' +
-                    "</script>" +
+                    '<input type="submit" value="LOG OUT"/>' +
                 '</div>' + 
             '</div>' +
         '</div>';
@@ -236,6 +226,11 @@ function makeMainPanel(fromId, fromLogin, query){
 
 function pageUser(id, login){
     makeMainPanel(id, login, env.query)
+}
+
+function profile(author){
+    document.location.href = "profile.html"
+    makeProfilePanel();
 }
 
 function getFromLocalDB(from, minId, maxId, nbMax){
@@ -342,7 +337,7 @@ function newMessage(){
             // requête d'ajout de message
         }
         else{
-            newMessage_response(JSON.stringify(new Message(env.id_user, env.msgs.length, env.author, env.login, new Date(), text, undefined, undefined)));
+            newMessage_response(JSON.stringify(new Message(env.id_user, env.msgs.length, env.author, env.login, new Date(), text, undefined, 0)));
         }
     }
 }
@@ -413,12 +408,11 @@ function newComment_response(id, resp){
 }
 
 function addLike(id){
+    console.log(id);
     var el = $("#message_" + id + " .likes p");
-    if (!(env.msgs[id].likes.includes(env.id_user))){
-        var cpt = el.text();
-        el.text(parseInt(cpt)+1);
-        env.msgs[id].likes.push(env.id_user); 
-    }
+    var cpt = el.text();
+    console.log(el);
+    el.text(parseInt(cpt)+1); 
 }
 
 function deleteMessage(id){
@@ -435,7 +429,7 @@ function deleteMessage(id){
 function deleteMessage_response(id, login){
     if (login == env.login){
         $("#message_" + id).remove();
-        delete(env.msgs[id]);
+        env.msgs.splice(id);
     }
 }
 

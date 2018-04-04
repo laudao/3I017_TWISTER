@@ -1,3 +1,4 @@
+/*creation de l'objet Message avec le constructeur suivant : */
 function Message(author, login, date, content, comments, likes){
     this.author = author;
     this.id =1 ;
@@ -11,6 +12,7 @@ function Message(author, login, date, content, comments, likes){
     this.likes = likes;
 }
 
+/*creation de l'objet Comment avec le constructeur suivant : */
 function Comment(author, login, date, content){
     this.author = author;
     this.login = login;
@@ -18,7 +20,7 @@ function Comment(author, login, date, content){
     this.content = content;
 }
 
-
+/*Creation de la methode getHTML qui est prototypé donc reste la meme par defaut pour toutes les instances de l'objet Comment*/
 Comment.prototype.getHTML =
     function(){
         s = "<div class=\"comment\">\n" +
@@ -29,7 +31,7 @@ Comment.prototype.getHTML =
         "</div>\n";
         return s;
     }
-
+/*Creation de la methode getHTML qui est prototypé donc reste la meme par defaut pour toutes les instances de l'objet Message*/
 Message.prototype.getHTML =
     function(){
         s = "<div class=\"message\">\n" +
@@ -70,5 +72,5 @@ Message.prototype.getHTML =
         
         return s;
     }
-
+/*On exporte les objets et methodes crees afin de pouvoir les utiliser dans les autre fichier js*/
 export {Message, Comment, Message.prototype.getHTML, Comment.prototype.getHTML} ;

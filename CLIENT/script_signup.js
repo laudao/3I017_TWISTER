@@ -60,11 +60,12 @@ function func_error(msg){
 }
 
 function cancel(){
-    document.location.href = "connection.html";
+    document.location.href = "connection.html"; //pour dire ou se trouve le makeConnectionPanel
     makeConnectionPanel();
 
 }
 
+/*fonction du corps de la page de signup*/
 function makeSignupPanel(){
     var s = "<div id=\"main_signup\">" + 
             "<div class=\"logo\">" + 
