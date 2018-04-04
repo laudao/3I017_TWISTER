@@ -112,14 +112,17 @@ function setVirtualDB(){
     var u3 = {"id": 3, "login": "jerrywednesday", "author": "Jerry Tom Charlie Wednesday"};
     var u4 = {"id": 4, "login": "felixt", "author": "Felix Taquin"};
 
-    for (var i=0; i<4; i++){
+    for (var i=1; i<=4; i++){
         follows[i] = new Set();
     }
 
-    follows[0].add(2, 3);
-    follows[1].add(1);
-    follows[2].add(1, 2, 4);
-    follows[3].add(2);
+    follows[1].add(2)
+    follows[1].add(3);
+    follows[2].add(1);
+    follows[3].add(1)
+    follows[3].add(2)
+    follows[3].add(4);
+    follows[4].add(2);
 
 
     c1 = new Comment(u4["id"], 0, u4["author"], u4["login"], "March 19", "That's lit ;---) keep it up !");
