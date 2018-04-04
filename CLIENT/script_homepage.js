@@ -43,7 +43,8 @@ Message.prototype.getHTML =
         s = "<div class=\"message\" id=\"message_" + this.id_msg + "\">\n" +
 				"<div class=\"message-head\">\n" +
 					"<div class=\"message-head--content\">\n" +
-						"<p class=\"author\">" + this.author + "</p>\n" +
+						//"<p class=\"author\">" + this.author + "</p>\n" +
+						"<p class=\"author\" onclick=\"javascript:profile(" + this.author + ")\">" + this.author + "</p>\n" +
 						"<p class=\"login\"> @" +this.login + "</p>\n" +
 						"<p class=\"date\">" + this.date + "</p>\n" +
                     "</div>\n" +
@@ -233,10 +234,17 @@ function makeMainPanel(fromId, fromLogin, query){
         $("#message_" + i + " .comments-list").hide();
     }
 }
-
+/*
 function pageUser(id, login){
     makeMainPanel(id, login, env.query)
 }
+*/
+
+function profile(author){
+    document.location.href = "profile.html";
+    makeProfilePanel(author);
+}
+
 
 function getFromLocalDB(from, minId, maxId, nbMax){
     var tab = [];

@@ -107,17 +107,6 @@ p {
     justify-content: space-between;
 }
 
-.stats {
-    width: 285px;
-    height: 285px;
-    background: #FFF;
-    margin-top: 25px;
-    display: inline-block;
-}
-
-.stats img {
-    width: 100%; 
-}
 .messages {
     width: 685px;
     display: inline-block;
@@ -171,12 +160,43 @@ p {
 }
 
 .profile {
-        font-weight: 700;
-        line-height: 1.5;
-        display: inline-block;
-        color: #333;
-        font-size: 16px;
+    width: 285px;
+    height: 285px;
+    background: #FFF;
+    margin-top: 25px;
+    display: inline-block;
 }
+
+
+.profile-author{
+		line-height: 1.5;
+    color: #333;
+    font-weight: 700;
+    height: 25px;
+    /* margin-bottom: 5px; */
+    padding: 10px 25px 5px 10px;
+    border: none;
+    resize: none;
+    font-size: 18px;
+    /* text-align: center; */
+}
+
+.profile-login{
+    font-size: 15px;
+    padding: 0px 25px 15px 10px;
+}
+
+.profile-bio{
+    font-size: 15px;
+		padding: 0px 25px 15px 10px;
+}
+
+.profile-nbFollowers{
+    font-size: 15px;
+		padding: 0px 25px 15px 10px;
+}
+
+
 .date {
 	display: inline-block;
     font-size: 14px;
@@ -260,16 +280,16 @@ p {
 
 .message-input {
 	width: 585px;
-    height: 75px;
-    padding: 15px 25px 15px 25px;
-    border-radius: 4px;
-    border: none;
-    background: #fff;
-    resize: none;
-    border: 2px solid #4480f999;
+  height: 75px;
+  padding: 15px 25px 15px 25px;
+  border-radius: 4px;
+  border: none;
+  background: #fff;
+  resize: none;
+  border: 2px solid #4480f999;
 
 	font-weight: 300;
-    font-size: 15px;
+  font-size: 15px;
 }
 
 .send-button {
@@ -283,15 +303,15 @@ p {
 .send-button input {
 	margin-top: 8px;
 	border-radius: 29px;
-    width: 100px;
-    padding: 14px;
-    border: none;
-    cursor: pointer;
-    transition: 0.5s;
-    outline: none;
-    background: #4480f9;
-    color: #FFF;
-    font-weight: 300;
+  width: 100px;
+  padding: 14px;
+  border: none;
+  cursor: pointer;
+  transition: 0.5s;
+  outline: none;
+  background: #4480f9;
+  color: #FFF;
+  font-weight: 300;
 	letter-spacing: 2px;
 }
 .send-button input:hover {
@@ -301,17 +321,17 @@ p {
 }
 
 .send-button-prof input {
-	margin-top: 8px;
+	margin-top: 80px;
 	border-radius: 29px;
-    width: 100px;
-    padding: 14px;
-    border: none;
-    cursor: pointer;
-    transition: 0.5s;
-    outline: none;
-    background: #4480f9;
-    color: #FFF;
-    font-weight: 300;
+  width: 100px;
+  padding: 14px;
+  border: none;
+  cursor: pointer;
+  transition: 0.5s;
+  outline: none;
+  background: #4480f9;
+  color: #FFF;
+  font-weight: 300;
 	letter-spacing: 2px;
 }
 .send-button-prof input:hover {

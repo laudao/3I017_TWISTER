@@ -9,6 +9,9 @@ function Message(id_user, id_msg, author, login, date, content, comments, likes)
     if (comments == undefined){
         comments = []
     }
+    if (likes == undefined){
+        likes = [];
+    }
     this.comments = comments;
     this.likes = likes;
 }
@@ -178,16 +181,18 @@ function makeProfilePanel(fromId, fromLogin, query){
         '</div>';
 
     s += '<div class="wrapper">' + 
-            '<div class="stats">' +
-            '<p class="profile">hugos<p>'+
-                '<p class="profile">Bio : Vive la mongolie !<p>'+
-                '<p class="profile">10K followers<p>'+  
+            '<div class="profile">' +
+            '<p class="profile-author">Hugo Wyborska</p>'+
+            '<p class="profile-login">@hugowyb</p> '+
+            '<p class="profile-bio">Vive la mongolie !</p>'+
+            '<p class="profile-nbFollowers">10K followers</p>'+  
                         '<div class="send-button-prof">'+
                                 '<input type="submit" value="follow"/>'+
                          '</div> '+
-                         '<div class="send-button-prof">'+
+                        /* '<div class="send-button-prof">'+
                                 '<input type="submit" value="unfollow"/>'+
                          '</div>'+
+                        */
             '</div>' +
             '<div class="messages">' +
                 '<div class="new-message">' +
