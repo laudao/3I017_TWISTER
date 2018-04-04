@@ -44,7 +44,7 @@ Message.prototype.getHTML =
 				"<div class=\"message-head\">\n" +
 					"<div class=\"message-head--content\">\n" +
 						//"<p class=\"author\">" + this.author + "</p>\n" +
-						"<p class=\"author\" onclick=\"javascript:profile(" + this.author + ")\">" + this.author + "</p>\n" +
+						"<p class=\"author\" onclick=\"javascript:profile(" + this.login  + ")\">" + this.author + "</p>\n" +
 						"<p class=\"login\"> @" +this.login + "</p>\n" +
 						"<p class=\"date\">" + this.date + "</p>\n" +
                     "</div>\n" +
@@ -240,9 +240,9 @@ function pageUser(id, login){
 }
 */
 
-function profile(author){
+function profile(login){
     document.location.href = "profile.html";
-    makeProfilePanel(author);
+    makeProfilePanel(login);
 }
 
 

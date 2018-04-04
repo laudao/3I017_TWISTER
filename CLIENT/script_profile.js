@@ -153,7 +153,7 @@ function init(){
 }
 
 /*fonction qui construit le corps de la home page*/
-function makeProfilePanel(fromId, fromLogin, query){
+function makeProfilePanel(fromId,fromLogin){
     //env.msgs = [];
     
     if (fromId == undefined){
@@ -162,14 +162,14 @@ function makeProfilePanel(fromId, fromLogin, query){
     //env.fromId = fromId;
     //env.fromLogin = fromLogin;
 
-    fromLogin="chrisg";
-    fromId="Hugo"
+    //fromLogin="chrisg";
+    //fromId="Hugo"
 
     // html du header
     var s = '<div class="header">' +
             '<div class="header-wrapper">' + 
                 '<div class="logo">' +
-                    '<img src="logo_blue.PNG" alt="bird_logo">' + 
+                "<img src=\"logo_blue.PNG\" alt=\"bird_logo\" onclick=\"homepage()\"/>" + 
                 '</div>' + 
                 '<div class="search-zone">' +
                     '<input type="text" placeholder="SEARCH"/>' +
@@ -436,6 +436,11 @@ function addFollower(){
         el.text(parseInt(cpt)+1+" followers");
         followed = true;
     }
+}
+
+function homepage(){
+    document.location.href = "homepage.html"; //pour dire ou se trouve le makeConnectionPanel
+    makemakeMainPanel();
 }
 
 function test(){ 

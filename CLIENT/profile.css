@@ -31,6 +31,8 @@ p {
     margin-left: 20px;
     margin-top: 6px;
     transition: .5s;
+    cursor: pointer;
+            
 }
 
 .logo:hover {
