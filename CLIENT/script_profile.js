@@ -102,6 +102,7 @@ revival =
         return val;
 }
 
+//base de donnée virtuelle utile quand la connection avec le serveur n'est pas encore fait
 function setVirtualDB(){
     localdb = []; // base de messages locale : liste de messages sur le serveur, ordonnée par ordre décroissant d'id
     follows = []; // table des personnes suivies par chaque utilisateur : follows[id] = ensemble des personnes suivies par l'utilisateur d'identifiant id
@@ -140,6 +141,7 @@ function setVirtualDB(){
 
 }
 
+//fonction d'initiation sur la session en court
 function init(){
     env = new Object();
     env.noConnection = true;
@@ -147,26 +149,29 @@ function init(){
     env.id_user = 1;
     env.minId = -1;
     env.maxId = -1;
-    env.login = "hugowyb";
+    env.login = "hugowy";
     env.author = "Hugo Wyborska";
     setVirtualDB();
 }
 
 /*fonction qui construit le corps de la home page*/
-function makeProfilePanel(fromId, fromLogin, query){
+function makeProfilePanel(fromLogin){
     //env.msgs = [];
     
-    if (fromId == undefined){
+    /*if (fromId == undefined){
         fromId = -1;
-    }
-    env.fromId = fromId;
-    env.fromLogin = fromLogin;
+    }*/
+    //env.fromId = fromId;
+    //env.fromLogin = fromLogin;
+
+    //fromLogin="chrisg";
+    //fromId="Hugo"
 
     // html du header
     var s = '<div class="header">' +
             '<div class="header-wrapper">' + 
                 '<div class="logo">' +
-                    '<img src="logo_blue.PNG" alt="bird_logo">' + 
+                "<img src=\"logo_blue.PNG\" alt=\"bird_logo\" onclick=\"homepage()\"/>" + 
                 '</div>' + 
                 '<div class="search-zone">' +
                     '<input type="text" placeholder="SEARCH"/>' +
@@ -185,40 +190,36 @@ function makeProfilePanel(fromId, fromLogin, query){
             '<p class="profile-author">Hugo Wyborska</p>'+
             '<p class="profile-login">@hugowyb</p> '+
             '<p class="profile-bio">Vive la mongolie !</p>'+
-            '<p class="profile-nbFollowers">10K followers</p>'+  
-                        '<div class="send-button-prof">'+
-                                '<input type="submit" value="follow"/>'+
+            '<p class="profile-nbFollowers">2 followers</p>'+  
+                        '<div id="follow"class="send-button-prof">'+
+                                "<input id=\"ifollow\" type=\"submit\" value=\"follow\" onclick=\"javascript:addFollower()\"/>" +
                          '</div> '+
-                        /* '<div class="send-button-prof">'+
-                                '<input type="submit" value="unfollow"/>'+
-                         '</div>'+
-                        */
-            '</div>' +
-            '<div class="messages">' +
-                '<div class="new-message">' +
-                    '<div class="message-form">' +
-                        '<textarea class="message-input" placeholder="What\'s on your mind ?"></textarea>' +
-                            '<div class="send-button">' +
-                                '<input type="submit" value="TWIST" onclick="javascript:newMessage()"/>' +
-                            '</div>' +
-                    '</div>' +
-                '</div>'; 
+            '</div>' 
+            if (env.login==fromLogin){
+               s += '<div class="messages">' +
+                    '<div class="new-message">' +
+                        '<div class="message-form">' +
+                           '<textarea class="message-input" placeholder="What\'s on your mind ?"></textarea>' +
+                               '<div class="send-button">' +
+                                  "<input type=\"submit\" value=\"TWIST\" onclick=\"javascript:newMessage()\"/>" +
+                              '</div>' +
+                        '</div>' +
+                    '</div>'; 
+            }
+            
 
-    s += '<div class="messages-list">';
+        s += '<div class="messages-list">';
 
-    s += '</div>' +""+
-            '</div>' +
-        '</div>' +
-        '</body>' +
-        '</html>';
+         s += '</div>' +""+
+               '</div>' +
+             '</div>' +
+            '</body>' +
+            '</html>';
 
     /*On met la valeur s de la string à l'interrieur de la balise body*/
     $("body").html(s);
 }
 
-function profile(author){
-    makeProfilePane(fromId, fromLogin, query);
-}
 
 function getFromLocalDB(from, minId, maxId, nbMax){
     var tab = [];
@@ -256,20 +257,21 @@ function getFromLocalDB(from, minId, maxId, nbMax){
 
 function completeMessagesReponse(rep){
     console.log(rep);
-    var tab = JSON.parse(rep, revival);
+    var tab = JSON.parse(rep, revival); //le tableau contenant les messages 
 
     var s = "";
-    for (var i=0; i<tab.length; i++){
-        var m = tab[i];
-        env.msgs[m.id] = m;
+    for (var i=0; i<tab.length; i++){ //pour chaque message
+        var m = tab[i]; //on le recupere
+        env.msgs[m.id] = m; //on l'ajoute a la liste des message dans le base do donnée virtuelle
+        
         if (m.id > env.maxId){
-            env.maxId = m.id;
+            env.maxId = m.id; //on met a jour les variables
         }
         if ((env.minId < 0) || (m.id < env.minId)){
             env.minId = m.id;  
  
         }
-        $(".messages-list").append(m.getHTML());
+        $(".messages-list").append(m.getHTML()); //on ajoute le message aux message dans la page html
     }
 }
 
@@ -286,7 +288,7 @@ function completeMessages(){
 function develop(id){
     var m = env.msgs[id];
     console.log(m);
-    var el = $("#message_" + id + " .comments-list");
+    var el = $("#message_" + id + " .comments-list"); //recupere la liste des commentaire d'un message dont l'id est passé en parametre
     el.show("slow");
 /*
     for (var i=0; i<m.comments.length; i++){
@@ -307,7 +309,6 @@ function develop(id){
 }
 
 function hideComments(id){
-    var m = env.msgs[id];
     var el = $("#message_" + id + " .comments-list");
     el.hide("slow");
     //el.html("");
@@ -418,6 +419,46 @@ function deleteMessage_response(id, login){
         $("#message_" + id).remove();
         env.msgs.splice(id);
     }
+}
+
+var followed = false;
+
+function addFollower(){
+    var el = $(".profile-nbFollowers");
+    var cpt = el.text();
+
+    if(!followed){
+        el.text(parseInt(cpt)+1+" followers");
+        followed = true;
+    }
+    
+
+    var bt = $("#ifollow");
+    bt.replaceWith("<input id=\"ifollow\" type=\"submit\" value=\"followed\" onclick=\"javascript:removeFollower()\"/>");
+    var bt = $("#ifollow");
+    var bt = bt.css("color","#4480f9");
+    var bt = bt.css("background","#FFF");
+    env.follows(env.id_user).push(id);
+}
+
+function removeFollower(){
+    var el = $(".profile-nbFollowers");
+    var cpt = el.text();
+    
+    if(followed){
+        el.text(parseInt(cpt)-1+" followers");
+        followed = false;
+    }
+    
+    var bt = $("#ifollow");
+    bt.replaceWith("<input id=\"ifollow\" type=\"submit\" value=\"follow\" onclick=\"javascript:addFollower()\"/>");
+
+    env.follows(env.id_user).splice(id);
+}
+
+function homepage(){
+    document.location.href = "homepage.html"; //pour dire ou se trouve le makeConnectionPanel
+    makemakeMainPanel();
 }
 
 function test(){ 

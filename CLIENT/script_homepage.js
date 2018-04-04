@@ -44,7 +44,7 @@ Message.prototype.getHTML =
 				"<div class=\"message-head\">\n" +
 					"<div class=\"message-head--content\">\n" +
 						//"<p class=\"author\">" + this.author + "</p>\n" +
-						"<p class=\"author\" onclick=\"javascript:profile(" + this.author + ")\">" + this.author + "</p>\n" +
+						"<p class=\"author\" onclick=\"javascript:profile(\"hugowy\")\">" + this.author + "</p>\n" +
 						"<p class=\"login\"> @" +this.login + "</p>\n" +
 						"<p class=\"date\">" + this.date + "</p>\n" +
                     "</div>\n" +
@@ -240,9 +240,9 @@ function pageUser(id, login){
 }
 */
 
-function profile(author){
+function profile(login){
     document.location.href = "profile.html";
-    makeProfilePanel(author);
+    makeProfilePanel(login);
 }
 
 
@@ -310,7 +310,7 @@ function completeMessages(){
 }
 
 function develop(id){
-    var m = env.msgs[id];
+    var m = env.msgs[id];    //QUESTION IMPORTANTE
     console.log(m);
     var el = $("#message_" + id + " .comments-list");
     el.show("slow");
@@ -333,7 +333,7 @@ function develop(id){
 }
 
 function hideComments(id){
-    var m = env.msgs[id];
+   // var m = env.msgs[id];
     var el = $("#message_" + id + " .comments-list");
     el.hide("slow");
     //el.html("");
@@ -425,7 +425,7 @@ function addLike(id){
     if (!(env.msgs[id].likes.includes(env.id_user))){
         var cpt = el.text();
         el.text(parseInt(cpt)+1);
-        env.msgs[id].likes.push(env.id_user); 
+        env.msgs[id].likes.push(env.id_user);
     }
 }
 

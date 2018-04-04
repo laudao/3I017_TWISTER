@@ -31,6 +31,9 @@ p {
     margin-left: 20px;
     margin-top: 6px;
     transition: .5s;
+    cursor: pointer;
+    
+            
 }
 
 .logo:hover {
@@ -296,7 +299,11 @@ p {
 	text-align: right;
 }
 
-.send-button-prof {
+#follow{
+	text-align: center;
+}
+
+#unfollow{
 	text-align: center;
 }
 
@@ -304,7 +311,7 @@ p {
 	margin-top: 8px;
 	border-radius: 29px;
   width: 100px;
-  padding: 14px;
+  padding: 8px;
   border: none;
   cursor: pointer;
   transition: 0.5s;
@@ -320,11 +327,27 @@ p {
 	transform: translateY(-2px);
 }
 
-.send-button-prof input {
-	margin-top: 80px;
-	border-radius: 29px;
+#follow input {
+    margin-top: 8px;
+    border-radius: 29px;
   width: 100px;
-  padding: 14px;
+  padding: 8px;
+  border: none;
+  cursor: pointer;
+  transition: 0.5s;
+  outline: none;
+  background: #4480f9;
+  color: #FFF;
+  font-weight: 300;
+	letter-spacing: 2px;
+}
+
+
+#unfollow input {
+	margin-top: Opx;
+    border-radius: 29px;
+  width: 100px;
+  padding: 10px;
   border: none;
   cursor: pointer;
   transition: 0.5s;
