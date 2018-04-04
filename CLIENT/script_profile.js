@@ -434,9 +434,10 @@ function addFollower(){
     
 
     var bt = $("#ifollow");
+    bt.replaceWith("<input id=\"ifollow\" type=\"submit\" value=\"followed\" onclick=\"javascript:removeFollower()\"/>");
+    var bt = $("#ifollow");
     var bt = bt.css("color","#4480f9");
     var bt = bt.css("background","#FFF");
-    bt.replaceWith("<input id=\"ifollow\" type=\"submit\" value=\"followed\" onclick=\"javascript:removeFollower()\"/>");
     env.follows(env.id_user).push(id);
 }
 
@@ -448,10 +449,8 @@ function removeFollower(){
         el.text(parseInt(cpt)-1+" followers");
         followed = false;
     }
-
+    
     var bt = $("#ifollow");
-    var bt = bt.css("color","#4480f9");
-    var bt = bt.css("background","#FFF");
     bt.replaceWith("<input id=\"ifollow\" type=\"submit\" value=\"follow\" onclick=\"javascript:addFollower()\"/>");
 
     env.follows(env.id_user).splice(id);
