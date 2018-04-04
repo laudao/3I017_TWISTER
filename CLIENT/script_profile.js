@@ -102,6 +102,7 @@ revival =
         return val;
 }
 
+//base de donnée virtuelle utile quand la connection avec le serveur n'est pas encore fait
 function setVirtualDB(){
     localdb = []; // base de messages locale : liste de messages sur le serveur, ordonnée par ordre décroissant d'id
     follows = []; // table des personnes suivies par chaque utilisateur : follows[id] = ensemble des personnes suivies par l'utilisateur d'identifiant id
@@ -140,6 +141,7 @@ function setVirtualDB(){
 
 }
 
+//fonction d'initiation sur la session en court
 function init(){
     env = new Object();
     env.noConnection = true;
@@ -153,12 +155,12 @@ function init(){
 }
 
 /*fonction qui construit le corps de la home page*/
-function makeProfilePanel(fromId,fromLogin){
+function makeProfilePanel(fromLogin){
     //env.msgs = [];
     
-    if (fromId == undefined){
+    /*if (fromId == undefined){
         fromId = -1;
-    }
+    }*/
     //env.fromId = fromId;
     //env.fromLogin = fromLogin;
 
@@ -222,9 +224,6 @@ function makeProfilePanel(fromId,fromLogin){
     $("body").html(s);
 }
 
-function profile(author){
-    makeProfilePane(fromId, fromLogin, query);
-}
 
 function getFromLocalDB(from, minId, maxId, nbMax){
     var tab = [];
@@ -262,20 +261,21 @@ function getFromLocalDB(from, minId, maxId, nbMax){
 
 function completeMessagesReponse(rep){
     console.log(rep);
-    var tab = JSON.parse(rep, revival);
+    var tab = JSON.parse(rep, revival); //le tableau contenant les messages 
 
     var s = "";
-    for (var i=0; i<tab.length; i++){
-        var m = tab[i];
-        env.msgs[m.id] = m;
+    for (var i=0; i<tab.length; i++){ //pour chaque message
+        var m = tab[i]; //on le recupere
+        env.msgs[m.id] = m; //on l'ajoute a la liste des message dans le base do donnée virtuelle
+        
         if (m.id > env.maxId){
-            env.maxId = m.id;
+            env.maxId = m.id; //on met a jour les variables
         }
         if ((env.minId < 0) || (m.id < env.minId)){
             env.minId = m.id;  
  
         }
-        $(".messages-list").append(m.getHTML());
+        $(".messages-list").append(m.getHTML()); //on ajoute le message aux message dans la page html
     }
 }
 
@@ -292,7 +292,7 @@ function completeMessages(){
 function develop(id){
     var m = env.msgs[id];
     console.log(m);
-    var el = $("#message_" + id + " .comments-list");
+    var el = $("#message_" + id + " .comments-list"); //recupere la liste des commentaire d'un message dont l'id est passé en parametre
     el.show("slow");
 /*
     for (var i=0; i<m.comments.length; i++){
@@ -313,7 +313,6 @@ function develop(id){
 }
 
 function hideComments(id){
-    var m = env.msgs[id];
     var el = $("#message_" + id + " .comments-list");
     el.hide("slow");
     //el.html("");
@@ -431,11 +430,13 @@ var followed = false;
 function addFollower(){
     var el = $(".profile-nbFollowers");
     var cpt = el.text();
-    console.log(el);
+
     if(!followed){
         el.text(parseInt(cpt)+1+" followers");
         followed = true;
     }
+
+    env.follows(env.id_user).push(id);
 }
 
 function homepage(){
