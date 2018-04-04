@@ -21,10 +21,10 @@ function verif_form_connection(login, password){
 function func_error(msg){
     var msg_box = "<div class=\"err_msg\">" + msg + "</div>";
     var old_msg = $(".err_msg");
-    if (old_msg.length == 0){
-        $("form").prepend(msg_box);
+    if (old_msg.length == 0){ //si c'est pour la premier fois que l'on envoie un message d'erreur
+        $("form").prepend(msg_box); 
     }else{
-        old_msg.replaceWith(msg_box);
+        old_msg.replaceWith(msg_box);   
     }
     
 }

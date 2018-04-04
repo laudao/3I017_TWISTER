@@ -55,7 +55,7 @@ Message.prototype.getHTML =
 				"<p class=\"content\">" + this.content + "</p>\n" +
 					"<div class=\"message-action\">\n" +
 						"<div class=\"likes\">\n" +
-							"<img src=\"like.png\" alt=\"like\" onclick=\"addLike(" + this.id_msg + ");\"/>\n" +
+							"<img id=\"likes\" src=\"like.png\" alt=\"like\" onclick=\"addLike(" + this.id_msg + ");\"/>\n" +
 							"<p>" + this.likes.length + "</p>\n" +
 						"</div>\n" + 
 						"<div class=\"comments\">" +
@@ -426,6 +426,9 @@ function addLike(id){
         var cpt = el.text();
         el.text(parseInt(cpt)+1);
         env.msgs[id].likes.push(env.id_user);
+        
+        var bt = $("#likes");
+        bt.replaceWith("<img id=\"likes\" src=\"redlike.png\" alt=\"like\" onclick=\"addLike(" + this.id_msg + ");\"/>\n");
     }
 }
 
