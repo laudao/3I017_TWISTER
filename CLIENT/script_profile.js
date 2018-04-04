@@ -422,15 +422,10 @@ function deleteMessage_response(id, login){
 }
 
 var followed = false;
-var unfollowed = false;
 
 function addFollower(){
     var el = $(".profile-nbFollowers");
     var cpt = el.text();
-
-    if(unfollowed==true){
-        fallowed = false;
-    }
 
     if(!followed){
         el.text(parseInt(cpt)+1+" followers");
@@ -442,7 +437,6 @@ function addFollower(){
     var bt = bt.css("color","#4480f9");
     var bt = bt.css("background","#FFF");
     bt.replaceWith("<input id=\"ifollow\" type=\"submit\" value=\"followed\" onclick=\"javascript:removeFollower()\"/>");
-
     env.follows(env.id_user).push(id);
 }
 
@@ -450,9 +444,9 @@ function removeFollower(){
     var el = $(".profile-nbFollowers");
     var cpt = el.text();
     
-    if(!unfollowed){
+    if(followed){
         el.text(parseInt(cpt)-1+" followers");
-        unfollowed = true;
+        followed = false;
     }
 
     var bt = $("#ifollow");
