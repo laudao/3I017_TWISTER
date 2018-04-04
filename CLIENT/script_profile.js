@@ -190,14 +190,13 @@ function makeProfilePanel(fromLogin){
             '<p class="profile-author">Hugo Wyborska</p>'+
             '<p class="profile-login">@hugowyb</p> '+
             '<p class="profile-bio">Vive la mongolie !</p>'+
-            '<p class="profile-nbFollowers">0 followers</p>'+  
+            '<p class="profile-nbFollowers">2 followers</p>'+  
                         '<div class="send-button-prof">'+
                                 "<input type=\"submit\" value=\"follow\" onclick=\"javascript:addFollower()\"/>" +
                          '</div> '+
-                        /* '<div class="send-button-prof">'+
-                                '<input type="submit" value="unfollow"/>'+
+                        '<div class="send-button-prof">'+
+                                "<input type=\"submit\" value=\"unfollow\" onclick=\"javascript:removeFollower()\"/>"+
                          '</div>'+
-                        */
             '</div>' 
             if (env.login==fromLogin){
                s += '<div class="messages">' +
@@ -437,6 +436,20 @@ function addFollower(){
     }
 
     env.follows(env.id_user).push(id);
+}
+
+var unfollowed = false;
+
+function removeFollower(){
+    var el = $(".profile-nbFollowers");
+    var cpt = el.text();
+    
+    if(!unfollowed){
+        el.text(parseInt(cpt)-1+" followers");
+        unfollowed = true;
+    }
+
+    env.follows(env.id_user).splice(id);
 }
 
 function homepage(){
