@@ -46,7 +46,7 @@ function makeConnectionPanel(){
             "<input type=\"submit\" value=\"CONNECT\"/>" +
         "</div>" +
         "<div class=\"links\">" +
-            "<a id=\"link1\" href=\"#\">Password forgotten ?</a>" +
+            "<a id=\"link1\" href=\"reset_password.html\">Password forgotten ?</a>" +
             "<a id=\"link2\" href=\"signup.html\">Sign up</a>" +
         "</div>" +
     "</form>" +

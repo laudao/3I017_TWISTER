@@ -165,6 +165,7 @@ p {
     display: inline-block;
     color: #333;
     font-size: 16px;
+    cursor:pointer;
 }
 
 .date {
