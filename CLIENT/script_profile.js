@@ -147,8 +147,8 @@ function init(){
     env.id_user = 1;
     env.minId = -1;
     env.maxId = -1;
-    env.login = "hugowyb";
-    env.author = "Hugo Wyborska";
+    env.login = "hugowy";
+    env.author = "Christian mm";
     setVirtualDB();
 }
 
@@ -159,8 +159,11 @@ function makeProfilePanel(fromId, fromLogin, query){
     if (fromId == undefined){
         fromId = -1;
     }
-    env.fromId = fromId;
-    env.fromLogin = fromLogin;
+    //env.fromId = fromId;
+    //env.fromLogin = fromLogin;
+
+    fromLogin="chrisg";
+    fromId="Hugo"
 
     // html du header
     var s = '<div class="header">' +
@@ -185,32 +188,35 @@ function makeProfilePanel(fromId, fromLogin, query){
             '<p class="profile-author">Hugo Wyborska</p>'+
             '<p class="profile-login">@hugowyb</p> '+
             '<p class="profile-bio">Vive la mongolie !</p>'+
-            '<p class="profile-nbFollowers">10K followers</p>'+  
+            '<p class="profile-nbFollowers">0 followers</p>'+  
                         '<div class="send-button-prof">'+
-                                '<input type="submit" value="follow"/>'+
+                                "<input type=\"submit\" value=\"follow\" onclick=\"javascript:addFollower()\"/>" +
                          '</div> '+
                         /* '<div class="send-button-prof">'+
                                 '<input type="submit" value="unfollow"/>'+
                          '</div>'+
                         */
-            '</div>' +
-            '<div class="messages">' +
-                '<div class="new-message">' +
-                    '<div class="message-form">' +
-                        '<textarea class="message-input" placeholder="What\'s on your mind ?"></textarea>' +
-                            '<div class="send-button">' +
-                                '<input type="submit" value="TWIST" onclick="javascript:newMessage()"/>' +
-                            '</div>' +
-                    '</div>' +
-                '</div>'; 
+            '</div>' 
+            if (env.login==fromLogin){
+               s += '<div class="messages">' +
+                    '<div class="new-message">' +
+                        '<div class="message-form">' +
+                           '<textarea class="message-input" placeholder="What\'s on your mind ?"></textarea>' +
+                               '<div class="send-button">' +
+                                  "<input type=\"submit\" value=\"TWIST\" onclick=\"javascript:newMessage()\"/>" +
+                              '</div>' +
+                        '</div>' +
+                    '</div>'; 
+            }
+            
 
-    s += '<div class="messages-list">';
+        s += '<div class="messages-list">';
 
-    s += '</div>' +""+
-            '</div>' +
-        '</div>' +
-        '</body>' +
-        '</html>';
+         s += '</div>' +""+
+               '</div>' +
+             '</div>' +
+            '</body>' +
+            '</html>';
 
     /*On met la valeur s de la string à l'interrieur de la balise body*/
     $("body").html(s);
@@ -418,6 +424,13 @@ function deleteMessage_response(id, login){
         $("#message_" + id).remove();
         env.msgs.splice(id);
     }
+}
+
+function addFollower(){
+    var el = $(".profile-nbFollowers");
+    var cpt = el.text();
+    console.log(el);
+    el.text(parseInt(cpt)+1+" followers"); 
 }
 
 function test(){ 
