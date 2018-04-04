@@ -191,12 +191,9 @@ function makeProfilePanel(fromLogin){
             '<p class="profile-login">@hugowyb</p> '+
             '<p class="profile-bio">Vive la mongolie !</p>'+
             '<p class="profile-nbFollowers">2 followers</p>'+  
-                        '<div id="follow" class="send-button-prof">'+
-                                "<input type=\"submit\" value=\"follow\" onclick=\"javascript:addFollower()\"/>" +
+                        '<div id="follow"class="send-button-prof">'+
+                                "<input id=\"ifollow\" type=\"submit\" value=\"follow\" onclick=\"javascript:addFollower()\"/>" +
                          '</div> '+
-                        '<div id="unfollow" class="send-button-prof">'+
-                                "<input type=\"submit\" value=\"unfollow\" onclick=\"javascript:removeFollower()\"/>"+
-                         '</div>'+
             '</div>' 
             if (env.login==fromLogin){
                s += '<div class="messages">' +
@@ -425,20 +422,29 @@ function deleteMessage_response(id, login){
 }
 
 var followed = false;
+var unfollowed = false;
 
 function addFollower(){
     var el = $(".profile-nbFollowers");
     var cpt = el.text();
 
+    if(unfollowed==true){
+        fallowed = false;
+    }
+
     if(!followed){
         el.text(parseInt(cpt)+1+" followers");
         followed = true;
     }
+    
+
+    var bt = $("#ifollow");
+    var bt = bt.css("color","#4480f9");
+    var bt = bt.css("background","#FFF");
+    bt.replaceWith("<input id=\"ifollow\" type=\"submit\" value=\"followed\" onclick=\"javascript:removeFollower()\"/>");
 
     env.follows(env.id_user).push(id);
 }
-
-var unfollowed = false;
 
 function removeFollower(){
     var el = $(".profile-nbFollowers");
@@ -448,6 +454,11 @@ function removeFollower(){
         el.text(parseInt(cpt)-1+" followers");
         unfollowed = true;
     }
+
+    var bt = $("#ifollow");
+    var bt = bt.css("color","#4480f9");
+    var bt = bt.css("background","#FFF");
+    bt.replaceWith("<input id=\"ifollow\" type=\"submit\" value=\"follow\" onclick=\"javascript:addFollower()\"/>");
 
     env.follows(env.id_user).splice(id);
 }
