@@ -191,10 +191,10 @@ function makeProfilePanel(fromLogin){
             '<p class="profile-login">@hugowyb</p> '+
             '<p class="profile-bio">Vive la mongolie !</p>'+
             '<p class="profile-nbFollowers">2 followers</p>'+  
-                        '<div class="send-button-prof">'+
+                        '<div id="follow" class="send-button-prof">'+
                                 "<input type=\"submit\" value=\"follow\" onclick=\"javascript:addFollower()\"/>" +
                          '</div> '+
-                        '<div class="send-button-prof">'+
+                        '<div id="unfollow" class="send-button-prof">'+
                                 "<input type=\"submit\" value=\"unfollow\" onclick=\"javascript:removeFollower()\"/>"+
                          '</div>'+
             '</div>' 
