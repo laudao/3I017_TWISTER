@@ -148,7 +148,7 @@ function init(){
     env.minId = -1;
     env.maxId = -1;
     env.login = "hugowy";
-    env.author = "Christian mm";
+    env.author = "Hugo Wyborska";
     setVirtualDB();
 }
 
@@ -426,11 +426,16 @@ function deleteMessage_response(id, login){
     }
 }
 
+var followed = false;
+
 function addFollower(){
     var el = $(".profile-nbFollowers");
     var cpt = el.text();
     console.log(el);
-    el.text(parseInt(cpt)+1+" followers"); 
+    if(!followed){
+        el.text(parseInt(cpt)+1+" followers");
+        followed = true;
+    }
 }
 
 function test(){ 
