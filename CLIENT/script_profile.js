@@ -40,7 +40,7 @@ Message.prototype.getHTML =
         s = "<div class=\"message\" id=\"message_" + this.id_msg + "\">\n" +
 				"<div class=\"message-head\">\n" +
 					"<div class=\"message-head--content\">\n" +
-						"<p class=\"author\">" + this.author + "</p>\n" +
+                        "<p class=\"author-button\" onclick=\"javascript:profile(" + this.author + ")\"> "+ this.author  + "</p>\n" +
 						"<p class=\"login\"> @" +this.login + "</p>\n" +
 						"<p class=\"date\">" + this.date + "</p>\n" +
                     "</div>\n" +
@@ -150,8 +150,9 @@ function init(){
 }
 
 /*fonction qui construit le corps de la home page*/
-function makeMainPanel(fromId, fromLogin, query){
+function makeProfilePanel(fromId, fromLogin, query){
     //env.msgs = [];
+    
     if (fromId == undefined){
         fromId = -1;
     }
@@ -178,6 +179,15 @@ function makeMainPanel(fromId, fromLogin, query){
 
     s += '<div class="wrapper">' + 
             '<div class="stats">' +
+            '<p class="profile">hugos<p>'+
+                '<p class="profile">Bio : Vive la mongolie !<p>'+
+                '<p class="profile">10K followers<p>'+  
+                        '<div class="send-button-prof">'+
+                                '<input type="submit" value="follow"/>'+
+                         '</div> '+
+                         '<div class="send-button-prof">'+
+                                '<input type="submit" value="unfollow"/>'+
+                         '</div>'+
             '</div>' +
             '<div class="messages">' +
                 '<div class="new-message">' +
@@ -199,33 +209,10 @@ function makeMainPanel(fromId, fromLogin, query){
 
     /*On met la valeur s de la string à l'interrieur de la balise body*/
     $("body").html(s);
-
-/*
-    if (env.fromId < 0){
-        // page d'accueil
-    }
-    else{
-        if (env.id = env.fromId){ // afficher ses messages
-
-        }
-        else if (!env.follows[fromId].has(env.fromId)){ // afficher page de l'utilisateur + proposer de suivre l'utilisateur
-
-        }
-        else{ // afficher page de l'utilisateur + proposer de ne plus suivre l'utilisateur 
-
-        }
-    }*/
-
-
-    completeMessages();
-
-    for (var i=0; i<env.msgs.length; i++){
-        $("#message_" + i + " .comments-list").hide();
-    }
 }
 
-function pageUser(id, login){
-    makeMainPanel(id, login, env.query)
+function profile(author){
+    makeProfilePane(fromId, fromLogin, query);
 }
 
 function getFromLocalDB(from, minId, maxId, nbMax){
