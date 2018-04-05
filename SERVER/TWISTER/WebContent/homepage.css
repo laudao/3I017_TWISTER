@@ -327,3 +327,85 @@ p {
 	box-shadow: 0px 4px 10px -5px rgba(0,0,255,0.8);
 	transform: translateY(-2px);
 }
+
+.profile {
+    width: 285px;
+    height: 285px;
+    background: #FFF;
+    margin-top: 25px;
+    display: inline-block;
+}
+
+.profile-author{
+    line-height: 1.5;
+    color: #333;
+    font-weight: 700;
+    height: 25px;
+    /* margin-bottom: 5px; */
+    padding: 10px 25px 5px 10px;
+    border: none;
+    resize: none;
+    font-size: 18px;
+    display:inline-block;
+    /* text-align: center; */
+}
+
+.profile-login{
+    font-size: 15px;
+    padding: 0px 25px 15px 10px;
+}
+
+.profile-bio{
+    font-size: 15px;
+    padding: 0px 25px 15px 10px;
+}
+
+.profile-nbFollowers{
+    font-size: 15px;
+    padding: 0px 25px 15px 10px;
+}
+
+#follow{
+    text-align: center;
+}
+
+#unfollow{
+    text-align: center;
+}
+
+#follow input {
+    margin-top: 8px;
+    border-radius: 29px;
+  width: 100px;
+  padding: 8px;
+  border: none;
+  cursor: pointer;
+  transition: 0.5s;
+  outline: none;
+  background: #4480f9;
+  color: #FFF;
+  font-weight: 300;
+    letter-spacing: 2px;
+}
+
+
+#unfollow input {
+    margin-top: Opx;
+    border-radius: 29px;
+  width: 100px;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+  transition: 0.5s;
+  outline: none;
+  background: #4480f9;
+  color: #FFF;
+  font-weight: 300;
+    letter-spacing: 2px;
+}
+
+.send-button-prof input:hover {
+    transition: 0.5s;
+    box-shadow: 0px 4px 10px -5px rgba(0,0,255,0.8);
+    transform: translateY(-2px);
+}
