@@ -456,7 +456,7 @@ function addFollower(){
     var el = $(".profile-nbFollowers");
     var cpt = el.text();
 
-    if((!followed) && (env.login != env.fromLogin)) {
+    if(!followed && (env.login != env.fromLogin)) {
         el.text(parseInt(cpt)+1+" followers");
         followed = true;
         var bt = $("#ifollow");
@@ -464,6 +464,9 @@ function addFollower(){
         var bt = $("#ifollow");
         var bt = bt.css("color","#4480f9");
         var bt = bt.css("background","#FFF");
+        el.text(parseInt(cpt)+1+" followers");
+        followed = true;
+        var bt = $("#ifollow")
         env.follows(env.id_user).push(id);
     }
 }
