@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  localhost
--- Généré le :  Mer 28 Février 2018 à 14:06
+-- Généré le :  Jeu 05 Avril 2018 à 16:53
 -- Version du serveur :  5.5.58-0+deb8u1
 -- Version de PHP :  5.6.33-0+deb8u1
 
@@ -32,6 +32,15 @@ CREATE TABLE IF NOT EXISTS `FRIENDS` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Contenu de la table `FRIENDS`
+--
+
+INSERT INTO `FRIENDS` (`source`, `cible`, `timestamp`) VALUES
+(2, 9, '2018-04-05 14:15:24'),
+(2, 10, '2018-04-05 14:15:27'),
+(10, 9, '2018-04-05 14:14:59');
+
 -- --------------------------------------------------------
 
 --
@@ -49,8 +58,18 @@ CREATE TABLE IF NOT EXISTS `SESSIONS` (
 --
 
 INSERT INTO `SESSIONS` (`key_user`, `idUser`, `connect`) VALUES
+('226647490', 2, 1),
 ('244518758', 1, 1),
-('761633452', 2, 1);
+('278075632', 10, 1),
+('414874241', 3, 1),
+('471530534', 2, 1),
+('69451144', 10, 1),
+('70740544', 10, 1),
+('761633452', 2, 1),
+('805059158', 2, 1),
+('838262057', 9, 1),
+('858454233', 2, 1),
+('915524976', 10, 1);
 
 -- --------------------------------------------------------
 
@@ -65,15 +84,20 @@ CREATE TABLE IF NOT EXISTS `USERS` (
   `prenom` varchar(32) NOT NULL,
   `nom` varchar(32) NOT NULL,
   `email` varchar(32) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 
 --
 -- Contenu de la table `USERS`
 --
 
 INSERT INTO `USERS` (`id`, `login`, `password`, `prenom`, `nom`, `email`) VALUES
-(1, 'chrisg', 0x2a36344235323933373143453337453630314532364434394235464434304238434141463238413446, 'Christian', 'Guillon', 'christian.guillon@lip6.fr'),
-(2, 'hugowyb', 0x2a33303436323432344145353144393441374238353141373744393938343330363746424438374632, 'Hugo', 'Wyborska', 'hugo.wyborska@lip6.fr');
+(1, 'chrisg', 0x2a36344235323933373143453337453630314532364434394235464434304238434141463238413446, 'Christian', 'Mm', 'christian.mm@lip6.fr'),
+(2, 'hugowyb', 0x2a33303436323432344145353144393441374238353141373744393938343330363746424438374632, 'Hugo', 'Wyborska', 'hugo.wyborska@lip6.fr'),
+(3, 'jerryw', 0x2a34333137333234414146344139413734314644383845394436424132324441383734453930363944, 'JerryTomCharlie', 'Wednesday', 'jerry.wednesday@lip6.fr'),
+(7, 'colonelBlotto', 0x2a34354231373041314335324244393433313945333332373546363744453032393830394238333045, 'Colonel', 'Blotto', 'cblotto@lip6.fr'),
+(9, 'nguyenfati', 0x2a30343932314641303131454633313442464431423434393034453544314234373130393235353131, 'Fatemeh', 'Nguyen', 'fatemeh.hamissi@lip6.fr'),
+(10, 'laurahamissi', 0x2a37313834413445373146413935333344304536463338324145364331413135313138423134413535, 'Laura', 'Hamissi', 'laura.hamissi@lip6.fr'),
+(11, 'javad26', 0x2a34343241363244453730324132434432314135443842343738364438363536313234383632333445, 'Javad', 'Ezati', 'javad.ezati@lip6.fr');
 
 --
 -- Index pour les tables exportées
@@ -105,7 +129,7 @@ ALTER TABLE `USERS`
 -- AUTO_INCREMENT pour la table `USERS`
 --
 ALTER TABLE `USERS`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
 --
 -- Contraintes pour les tables exportées
 --

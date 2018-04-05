@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>HOMEPAGE</title>
+		<link rel="icon"
+			type="image/png"
+			href="logo_blue.PNG">
+		<link href="homepage.css" rel="stylesheet" type="text/css"/>
+	</head>
+	<script type="text/javascript" src='script_homepage.js'></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<body onload="javascript:init();makeMainPanel();">
+	</body>
+</html>
