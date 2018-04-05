@@ -140,8 +140,6 @@ function setVirtualDB(){
     localdb[2] = m3;
 
     env.msgs = localdb;
-    console.log(env.msgs.length);
-
 }
 
 //fonction d'initiation sur la session en court
@@ -163,7 +161,8 @@ function makeProfilePanel(fromId, fromLogin){
     
     env.fromId = fromId;
     env.fromLogin = fromLogin;
-
+    console.log(fromLogin);
+    console.log(fromId);
     //fromLogin="chrisg";
     //fromId="Hugo"
 
@@ -488,7 +487,7 @@ function removeFollower(){
 
 function homepage(){
     document.location.href = "homepage.html"; //pour dire ou se trouve le makeConnectionPanel
-    makemakeMainPanel();
+    //makeMainPanel();
 }
 
 function test(){ 

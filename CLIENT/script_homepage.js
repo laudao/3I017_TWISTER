@@ -41,10 +41,22 @@ Comment.prototype.getHTML =
 Message.prototype.getHTML =
     function(){
         s = "<div class=\"message\" id=\"message_" + this.id_msg + "\">\n" +
-				"<div class=\"message-head\">\n" +
+				"<div class=\"message-head\">\n" + 
 					"<div class=\"message-head--content\">\n" +
 						//"<p class=\"author\">" + this.author + "</p>\n" +
-						"<p class=\"author\" onclick=\"javascript:profile()\">" + this.author + "</p>\n" +
+						"<p id=\"author_" + this.id_user +"\" class=\"author\">" + this.author + "</p>\n" +
+                        "<script type=\"text/javascript\">" +
+                            "document.getElementById(\"author_" + this.id_user + "\").onclick = function () {" +
+                                "location.href = \"profile.html\";" +
+                                //"$(\'body\').replaceWith(\'<body onload=\"javascript:init();makeProfilePanel(" + this.id_user + ", \"" + this.login + "\");\">\');" +
+                                //"location.href = \"profile.html\";" +
+                                //"$(body).replaceWith(\"<body onload=\"javascript:init();makeProfilePanel(" + this.id_user + ", \"" + this.login + "\");\">\");" +
+                                //el.replaceWith("<p class=\"comments-button\" onclick=\"javascript:hideComments(" + id + ")\">comments (" + m.comments.length + ")</p>\n");
+
+                                //"makeProfilePanel(1, 'hugowyb');" + 
+                                //"makeProfilePanel(" + this.id_user + ",\"" + this.login + "\");" + 
+                            "};" +
+                        "</script>" +
 						"<p class=\"login\"> @" +this.login + "</p>\n" +
 						"<p class=\"date\">" + this.date + "</p>\n" +
                     "</div>\n" +
@@ -55,7 +67,7 @@ Message.prototype.getHTML =
 				"<p class=\"content\">" + this.content + "</p>\n" +
 					"<div class=\"message-action\">\n" +
 						"<div class=\"likes\">\n" +
-							"<img src=\"like.png\" alt=\"like\" onclick=\"addLike(" + this.id_msg + ");\"/>\n" +
+							"<img id=\"likes_" + this.id_msg + "\" src=\"like.png\" alt=\"like\" onclick=\"addLike(" + this.id_msg + ");\"/>\n" +
 							"<p>" + this.likes.length + "</p>\n" +
 						"</div>\n" + 
 						"<div class=\"comments\">" +
@@ -64,7 +76,6 @@ Message.prototype.getHTML =
 					"</div>\n" + 
 					"<div class=\"comments-list\">\n";
     
-
         for (var i=0; i<this.comments.length; i++){
             s += this.comments[i].getHTML();  
         }
@@ -141,7 +152,7 @@ function setVirtualDB(){
     localdb[2] = m3;
 
     env.msgs = localdb;
-    console.log(env.msgs.length);
+    //console.log(env.msgs.length);
 
 }
 
@@ -152,9 +163,11 @@ function init(){
     env.id_user = 1;
     env.minId = -1;
     env.maxId = -1;
-    env.login = "hugowyb";
-    env.author = "Hugo Wyborska";
+    env.login = "chrisg";
+    env.author = "Chris Mm";
     setVirtualDB();
+    console.log("$(\'body\').replaceWith(\"<body onload=\"javascript:init();makeProfilePanel(" + this.id_user + ", \"" + this.login + "\");\">\");")
+
 }
 
 /*fonction qui construit le corps de la home page*/
@@ -243,11 +256,13 @@ function pageUser(id, login){
 }
 */
 
+/*
 function profile(login){
     document.location.href = "profile.html";
+    console.log(login);
     makeProfilePanel(login);
 }
-
+*/
 
 function getFromLocalDB(from, minId, maxId, nbMax){
     var tab = [];
@@ -284,7 +299,7 @@ function getFromLocalDB(from, minId, maxId, nbMax){
 }
 
 function completeMessagesReponse(rep){
-    console.log(rep);
+    //console.log(rep);
     var tab = JSON.parse(rep, revival);
 
     var s = "";
@@ -314,7 +329,7 @@ function completeMessages(){
 
 function develop(id){
     var m = env.msgs[id];    //QUESTION IMPORTANTE
-    console.log(m);
+   // console.log(m);
     var el = $("#message_" + id + " .comments-list");
     el.show("slow");
 /*
@@ -347,7 +362,7 @@ function hideComments(id){
 function newMessage(){
     var text=$(".message-input").val();
     $(".message-input").val("");
-    console.log(text);
+  //  console.log(text);
     if (text != ""){
         if (!env.noConnection){
             // requête d'ajout de message
@@ -360,7 +375,7 @@ function newMessage(){
 
 function newMessage_response(resp){
     var msg = JSON.parse(resp, revival);
-    console.log(msg);
+    //console.log(msg);
     if (msg != undefined && (msg.error == undefined)){
         var el = $(".messages-list");
 
@@ -368,7 +383,7 @@ function newMessage_response(resp){
 
         env.msgs.push(msg);
 //        console.log(env.msgs);
-        console.log(env.msgs[3]);
+       // console.log(env.msgs[3]);
 
 /*        if (env.noConnection){
             localdb[id] = env.msgs[id];
@@ -380,8 +395,8 @@ function newMessage_response(resp){
 
 function newComment(id){
     var text=$("#message_" + id + " .comment-input").val();
-    console.log(text);
-    console.log(id);
+    //console.log(text);
+    //console.log(id);
     if (text != ""){
         if (!env.noConnection){
             // requête d'ajout de commentaire
@@ -394,7 +409,7 @@ function newComment(id){
 
 function newComment_response(id, resp){
     var com = JSON.parse(resp, revival);
-    console.log(com);
+    //console.log(com);
     if (com != undefined && (com.error == undefined)){
         var el = $("#message_" + id + " .comments-list");
 
@@ -430,14 +445,14 @@ function addLike(id){
         el.text(parseInt(cpt)+1);
         env.msgs[id].likes.push(env.id_user);
 
-        var bt = $("#likes");
-        bt.replaceWith("<img id=\"likes\" src=\"redlike.png\" alt=\"like\" onclick=\"addLike(" + this.id_msg + ");\"/>\n");
+        var bt = $("#likes_" + id);
+        bt.replaceWith("<img id=\"likes_" + id + "\" src=\"redlike.png\" alt=\"like\" onclick=\"addLike(" + id + ");\"/>\n");
     }
 }
 
 function deleteMessage(id){
     var login = $("#message_" + id + " .message-head .login").text().substr(2);
-    console.log(login);
+    //console.log(login);
     if (!env.noConnection){
         // requête d'ajout de commentaire
     }

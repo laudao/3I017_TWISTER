@@ -87,7 +87,7 @@ function makeSignupPanel(){
                     "<script type=\"text/javascript\">" +
                     "document.getElementById(\"cancel\").onclick = function () {" +
                         "location.href = \"connection.html\";" +
-                        "makeConnectionPanel();" + 
+                        //"makeConnectionPanel();" + 
                     "};" +
                     "</script>" +
                 "</div>" +
