@@ -44,7 +44,7 @@ Message.prototype.getHTML =
 				"<div class=\"message-head\">\n" +
 					"<div class=\"message-head--content\">\n" +
 						//"<p class=\"author\">" + this.author + "</p>\n" +
-						"<p class=\"author\" onclick=\"javascript:profile(\"hugowy\")\">" + this.author + "</p>\n" +
+						"<p class=\"author\" onclick=\"javascript:profile()\">" + this.author + "</p>\n" +
 						"<p class=\"login\"> @" +this.login + "</p>\n" +
 						"<p class=\"date\">" + this.date + "</p>\n" +
                     "</div>\n" +
@@ -429,6 +429,9 @@ function addLike(id){
         var cpt = el.text();
         el.text(parseInt(cpt)+1);
         env.msgs[id].likes.push(env.id_user);
+
+        var bt = $("#likes");
+        bt.replaceWith("<img id=\"likes\" src=\"redlike.png\" alt=\"like\" onclick=\"addLike(" + this.id_msg + ");\"/>\n");
     }
 }
 
