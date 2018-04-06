@@ -63,7 +63,7 @@ function func_error(msg){
 }
 
 function cancel(){
-    document.location.href = "connection.html"; //pour dire ou se trouve le makeConnectionPanel
+    document.location.href = "twister.html"; //pour dire ou se trouve le makeConnectionPanel
     makeConnectionPanel();
 
 }
@@ -89,7 +89,7 @@ function makeSignupPanel(){
                     "<input type=\"button\" id=\"cancel\" value=\"CANCEL\"/>" +
                     "<script type=\"text/javascript\">" +
                     "document.getElementById(\"cancel\").onclick = function () {" +
-                        "location.href = \"connection.html\";" +
+                        "location.href = \"twister.html\";" +
                         //"makeConnectionPanel();" + 
                     "};" +
                     "</script>" +

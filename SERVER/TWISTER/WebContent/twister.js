@@ -499,7 +499,14 @@ function addLike(id){
     var el = $("#message_" + id + " .likes p");
     
     /*if (!env.noConnection){
-        //ajax
+       $.ajax({
+                type:"GET",
+                url:"user/addlike",
+                data:"key_user=" + env.key + "&id_message" + id +,
+                datatype:"text",
+                success:function(resp){ addLikeRespon(resp);},
+                error:function(XHR, textStatus,errorThrown) { alert(textStatus);
+                }})
     }*/
     
         if (!(env.msgs[id].likes.includes(env.id_user))){
@@ -517,13 +524,20 @@ function addLikeResponse(){
 }
 
 
-/****************************GERE REMOVEMESSAGE****************************/
+/****************************GERER REMOVEMESSAGE****************************/
 
 function deleteMessage(id){
     var login = $("#message_" + id + " .message-head .login").text().substr(2);
     //console.log(login);
     if (!env.noConnection){
-        // requête d'ajout de commentaire
+        $.ajax({
+            type:"GET",
+            url:"user/removemessage",
+            data:"key=" + env.key + "&id_message=" + id,
+            datatype:"text",
+            success:function(resp){ addFollowerResponse(resp);},
+            error:function(XHR, textStatus,errorThrown) { alert(textStatus); }
+        })
     }
     else{
         deleteMessage_response(id, login);
@@ -542,10 +556,7 @@ function deleteMessage_response(id, login){
 
 
 function addFollower(){
-    var el = $(".profile-nbFollowers");
-    var cpt = el.text();
-
-    /*if (!env.noConnection){
+    if (!env.noConnection){
         $.ajax({
             type:"GET",
             url:"user/addfriend",
@@ -557,20 +568,23 @@ function addFollower(){
     }
     else{
         addFollowerResponse("{\"key\": \"FARA123\", \"id\": 1, \"login\": \"hugowyb\", \"author\": \"Hugo Wyborska\"}")
-    }*/
+    }
 
-    if((!follows[env.fromId].has(env.id_user)) && (env.login != env.fromLogin)) {
-        el.text(parseInt(cpt)+1+" followers");
-        followed = true;
-        var bt = $("#ifollow");
-        bt.replaceWith("<input id=\"ifollow\" type=\"submit\" value=\"followed\" onclick=\"javascript:removeFollower()\"/>");
-        var bt = $("#ifollow");
-        var bt = bt.css("color","#4480f9");
-        var bt = bt.css("background","#FFF");
-        el.text(parseInt(cpt)+1+" followers");
-        followed = true;
-        var bt = $("#ifollow")
-        follows[env.fromId].add(env.id_user);
+
+function addFollowerResponse(){
+    var el = $(".profile-nbFollowers");
+    var cpt = el.text();
+    el.text(parseInt(cpt)+1+" followers");
+    followed = true;
+    var bt = $("#ifollow");
+    bt.replaceWith("<input id=\"ifollow\" type=\"submit\" value=\"followed\" onclick=\"javascript:removeFollower()\"/>");
+    var bt = $("#ifollow");
+    var bt = bt.css("color","#4480f9");
+    var bt = bt.css("background","#FFF");
+    el.text(parseInt(cpt)+1+" followers");
+    followed = true;
+    var bt = $("#ifollow")
+    follows[env.fromId].add(env.id_user);
     }
 }
 
@@ -578,19 +592,33 @@ function addFollower(){
 
 
 function removeFollower(){
+    if (!env.noConnection){
+        $.ajax({
+            type:"GET",
+            url:"user/removefriend",
+            data:"key=" + env.key + "&id_friend=" + env.id_user,
+            datatype:"text",
+            success:function(resp){ removeFollowerResponse(resp);},
+            error:function(XHR, textStatus,errorThrown) { alert(textStatus); }
+        })
+    }
+    else{
+        if(follows[env.fromId].has(env.id_user)){
+            removeFollowerResponse("{\"key\": \"FARA123\", \"id\": 1, \"login\": \"hugowyb\", \"author\": \"Hugo Wyborska\"}")
+        }
+    }
+}
+
+
+
+function removeFollowerResponse(){
     var el = $(".profile-nbFollowers");
     var cpt = el.text();
-    
-    if(follows[env.fromId].has(env.id_user)){
-        el.text(parseInt(cpt)-1+" followers");
-    }
-    
+    el.text(parseInt(cpt)-1+" followers");
     var bt = $("#ifollow");
     bt.replaceWith("<input id=\"ifollow\" type=\"submit\" value=\"follow\" onclick=\"javascript:addFollower()\"/>");
     follows[env.fromId].delete(env.id_user);
-    
 }
-
 
 /*
 function init(){

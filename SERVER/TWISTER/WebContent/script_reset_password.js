@@ -71,7 +71,7 @@ function connectionResponse(resp){
 }
 
 function goBack(){
-    location.href = "connection.html";
+    location.href = "twister.html";
     makeConnectionPanel();
 }
 
