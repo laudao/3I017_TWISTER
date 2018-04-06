@@ -148,12 +148,12 @@ function setVirtualDB(){
 function init(){
     env = new Object();
     env.noConnection = true;
-    env.key = "FARA123";
-    env.id_user = 2;
+   // env.key = "FARA123";
+   // env.id_user = 2;
     env.minId = -1;
     env.maxId = -1;
-    env.login = "chrisg";
-    env.author = "Christian Mm";
+   // env.login = "chrisg";
+   // env.author = "Christian Mm";
     setVirtualDB();
 }
 
@@ -610,11 +610,11 @@ function makeConnectionPanel(){
     $("body").html(s);
 }
 
-
+/*
 function init(){
     env = new Object();
     env.noConnection = true;
-}
+}*/
 
 function connectionResponse(resp){
     //console.log(resp);
@@ -622,14 +622,15 @@ function connectionResponse(resp){
     console.log(resp);
     if (resp.error == undefined){
         env.key = resp.key;
-        env.id = resp.id;
+        env.id_user = resp.id;
         env.login = resp.login;
+        env.author = resp.author;
         
         console.log(env.id);
         console.log(env.login);
-        document.location.href = "homepage.html";
+        //document.location.href = "homepage.html";
         
-        makeMainPanel(env.id, env.login);
+        makeMainPanel();
     }
     else{
         func_error(resp.message);
@@ -648,6 +649,6 @@ function connect(login, password){
         })
     }
     else{
-        connectionResponse("{\"key\": \"FARA123\", \"id\": 1, \"login\": \"hugowyb\"}")
+        connectionResponse("{\"key\": \"FARA123\", \"id\": 1, \"login\": \"hugowyb\", \"author\": \"Hugo Wyborska\"}")
     }
 }
