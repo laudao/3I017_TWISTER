@@ -181,6 +181,7 @@ function makeMainPanel(fromId, fromLogin, fromAuthor, query){
                     '<input type="text" placeholder="SEARCH"/>' +
                     '<div class="search-button">' +
                         '<img src="search.png" alt="search"/>'+
+                        "<img src=\"logo_blue.PNG\" alt=\"bird_logo\" onclick=\"mypage();\"/>" + 
                     '</div>' +
                 '</div>' +
                 '<div class="disconnect">' +
@@ -275,6 +276,10 @@ function profile(id, login, author){
     makeMainPanel(id, login, author, env.query);
 }
 
+function mypage(){
+    console.log(env.fromLogin);
+   profile(env.fromId,env.fromLogin,env.fromAuthor);
+}
 
 function getFromLocalDB(from, minId, maxId, nbMax){
     var tab = [];

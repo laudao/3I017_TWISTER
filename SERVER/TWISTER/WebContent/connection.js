@@ -61,26 +61,23 @@ function makeConnectionPanel(){
 
 function init(){
     env = new Object();
-    env.noConnection = false;
+    env.noConnection = true;
 }
 
 function connectionResponse(resp){
     //console.log(resp);
     resp = JSON.parse(resp);
-    console.log(resp);
+    //console.log(resp.id);
     if (resp.error == undefined){
         env.key = resp.key;
         env.id = resp.id;
         env.login = resp.login;
         
-        console.log(env.id);
-        console.log(env.login);
-        document.location.href = "homepage.html";
-        
+        //document.location.href = "homepage.html";
         makeMainPanel(env.id, env.login);
     }
     else{
-        func_error(resp.message);
+        func_error(resp.error);
     }
 }
 
@@ -88,7 +85,7 @@ function connect(login, password){
     if (!env.noConnection){
         $.ajax({
             type:"GET",
-            url:"user/login",
+            url:"login",
             data:"login=" + login + "&password=" + password,
             datatype:"text",
             success:function(resp){ connectionResponse(resp);},

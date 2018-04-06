@@ -1,3 +1,4 @@
+
 body {
 	margin: 0;
 	background: #F4F4F4;
@@ -31,6 +32,7 @@ p {
     margin-left: 20px;
     margin-top: 6px;
     transition: .5s;
+    cursor: pointer;
 }
 
 .logo:hover {

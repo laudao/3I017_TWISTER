@@ -1,3 +1,4 @@
+/*creation de l'objet Message avec le constructeur suivant : */
 function Message(id_user, id_msg, author, login, date, content, comments, likes){
     this.id_user = id_user;
     this.id_msg = id_msg;
@@ -42,20 +43,9 @@ Message.prototype.getHTML =
         s = "<div class=\"message\" id=\"message_" + this.id_msg + "\">\n" +
 				"<div class=\"message-head\">\n" + 
 					"<div class=\"message-head--content\">\n" +
-						//"<p class=\"author\">" + this.author + "</p>\n" +
-						"<p id=\"author_" + this.id_user +"\" class=\"author\">" + this.author + "</p>\n" +
-                        "<script type=\"text/javascript\">" +
-                            "document.getElementById(\"author_" + this.id_user + "\").onclick = function () {" +
-                                "location.href = \"profile.html\";" +
-                                //"$(\'body\').replaceWith(\'<body onload=\"javascript:init();makeProfilePanel(" + this.id_user + ", \"" + this.login + "\");\">\');" +
-                                //"location.href = \"profile.html\";" +
-                                //"$(body).replaceWith(\"<body onload=\"javascript:init();makeProfilePanel(" + this.id_user + ", \"" + this.login + "\");\">\");" +
-                                //el.replaceWith("<p class=\"comments-button\" onclick=\"javascript:hideComments(" + id + ")\">comments (" + m.comments.length + ")</p>\n");
+						"<p class=\"author\" onclick=\"profile(" + this.id_user + ", \'" + this.login + "\', \'" + this.author +"\');\">" + this.author + "</p>\n" +
 
-                                //"makeProfilePanel(1, 'hugowyb');" + 
-                                //"makeProfilePanel(" + this.id_user + ",\"" + this.login + "\");" + 
-                            "};" +
-                        "</script>" +
+						//"<p id=\"author_" + this.id_user +"\" class=\"author\">" + this.author + "</p>\n" +
 						"<p class=\"login\"> @" +this.login + "</p>\n" +
 						"<p class=\"date\">" + this.date + "</p>\n" +
                     "</div>\n" +
@@ -126,11 +116,11 @@ function setVirtualDB(){
         follows[i] = new Set();
     }
 
-    follows[1].add(2)
+    follows[1].add(2);
     follows[1].add(3);
     follows[2].add(1);
-    follows[3].add(1)
-    follows[3].add(2)
+    follows[3].add(1);
+    follows[3].add(2);
     follows[3].add(4);
     follows[4].add(2);
 
@@ -159,35 +149,39 @@ function init(){
     env = new Object();
     env.noConnection = true;
     env.key = "FARA123";
-    env.id_user = 1;
+    env.id_user = 2;
     env.minId = -1;
     env.maxId = -1;
     env.login = "chrisg";
     env.author = "Chris Mm";
     setVirtualDB();
-    console.log("$(\'body\').replaceWith(\"<body onload=\"javascript:init();makeProfilePanel(" + this.id_user + ", \"" + this.login + "\");\">\");")
-
 }
 
 /*fonction qui construit le corps de la home page*/
-function makeMainPanel(fromId, fromLogin, query){
+function makeMainPanel(fromId, fromLogin, fromAuthor, query){
     //env.msgs = [];
+    env.minId = -1;
+    env.maxId = -1;
+	
     if (fromId == undefined){
         fromId = -1;
     }
     env.fromId = fromId;
     env.fromLogin = fromLogin;
+    console.log(fromLogin);
+    console.log(fromId);
 
     // html du header
     var s = '<div class="header">' +
             '<div class="header-wrapper">' + 
                 '<div class="logo">' +
-                    '<img src="logo_blue.PNG" alt="bird_logo">' + 
+                    "<img src=\"logo_blue.PNG\" alt=\"bird_logo\" onclick=\"homepage();\"/>" + 
                 '</div>' + 
                 '<div class="search-zone">' +
                     '<input type="text" placeholder="SEARCH"/>' +
                     '<div class="search-button">' +
                         '<img src="search.png" alt="search"/>'+
+                        "<img src=\"logo_blue.PNG\" alt=\"bird_logo\" onclick=\"mypage();\"/>" + 
                     '</div>' +
                 '</div>' +
                 '<div class="disconnect">' +
@@ -202,22 +196,39 @@ function makeMainPanel(fromId, fromLogin, query){
             '</div>' +
         '</div>';
 
-    s += '<div class="wrapper">' + 
+    if (env.fromId < 0){ // page d'accueil
+        s += '<div class="wrapper">' + 
             '<div class="stats">' +
-            '</div>' +
-            '<div class="messages">' +
+            '</div>' ; 
+    }
+    else{ // page d'un utilisateur
+        s += '<div class="wrapper">' + 
+            '<div class="profile">' +
+            '<p class="profile-author">' + fromAuthor +'</p>'+
+            '<p class="profile-login">@'+ fromLogin +'</p> '+
+           // '<p class="profile-bio">Vive la mongolie !</p>'+
+            '<p class="profile-nbFollowers">' + follows[fromId].size + ' followers</p>'+  
+                        '<div id="follow" class="send-button-prof">'+
+                                "<input id=\"ifollow\" type=\"submit\" value=\"follow\" onclick=\"javascript:addFollower()\"/>" +
+                         '</div> '+
+            '</div>' ;
+    }
+
+    s += '<div class="messages">' +
                 '<div class="new-message">' +
                     '<div class="message-form">' +
-                        '<textarea class="message-input" placeholder="What\'s on your mind ?"></textarea>' +
+                       '<textarea class="message-input" placeholder="What\'s on your mind ?"></textarea>' +
                             '<div class="send-button">' +
-                                '<input type="submit" value="TWIST" onclick="javascript:newMessage()"/>' +
+                            "<input type=\"submit\" value=\"TWIST\" onclick=\"javascript:newMessage()\"/>" +
                             '</div>' +
                     '</div>' +
-                '</div>'; 
-
+            '</div>';
+    
     s += '<div class="messages-list">';
 
-    s += '</div>' +""+
+
+
+    s += '</div>' +
             '</div>' +
         '</div>' +
         '</body>' +
@@ -226,42 +237,49 @@ function makeMainPanel(fromId, fromLogin, query){
     /*On met la valeur s de la string à l'interrieur de la balise body*/
     $("body").html(s);
 
-/*
-    if (env.fromId < 0){
-        // page d'accueil
-    }
-    else{
-        if (env.id = env.fromId){ // afficher ses messages
+    console.log(env.login);
+    console.log(env.fromLogin);
 
-        }
-        else if (!env.follows[fromId].has(env.fromId)){ // afficher page de l'utilisateur + proposer de suivre l'utilisateur
-
-        }
-        else{ // afficher page de l'utilisateur + proposer de ne plus suivre l'utilisateur 
-
-        }
-    }*/
-
+    /* pour que message-form occupe soit caché tout en conservant sa place dans le flux (pour l'affichage) */
+    if ((env.fromLogin != undefined) && (env.login!= env.fromLogin)){
+        $(".message-form").hide();
+    } 
 
     completeMessages();
 
     for (var i=0; i<env.msgs.length; i++){
         $("#message_" + i + " .comments-list").hide();
     }
+
+    if (env.fromId >= 0){ // page d'un utilisateur
+        if (env.id_user == env.fromId){ // page de l'utilisateur connecté
+            $("#ifollow").hide();        
+        }
+        else if (follows[fromId].has(env.id_user)){ // l'utilisateur connecté le suit déjà, proposer de ne plus suivre
+            $("#ifollow").replaceWith("<input id=\"ifollow\" type=\"submit\" value=\"followed\" onclick=\"javascript:removeFollower()\"/>");
+            $("#ifollow").css("color","#4480f9");
+            $("#ifollow").css("background","#FFF");
+        }
+    }
 }
+
 /*
 function pageUser(id, login){
     makeMainPanel(id, login, env.query)
 }
 */
 
-/*
-function profile(login){
-    document.location.href = "profile.html";
-    console.log(login);
-    makeProfilePanel(login);
+function profile(id, login, author){
+    //document.location.href = "profile.html";
+    //console.log(login);
+
+    makeMainPanel(id, login, author, env.query);
 }
-*/
+
+function mypage(){
+    console.log(env.fromLogin);
+   profile(env.fromId,env.fromLogin,env.fromAuthor);
+}
 
 function getFromLocalDB(from, minId, maxId, nbMax){
     var tab = [];
@@ -285,8 +303,10 @@ function getFromLocalDB(from, minId, maxId, nbMax){
             continue;
         }
 
+        //console.log(env.maxId, env.minId, m.id_user, f);
         if ((env.maxId < 0 || m.id_user < env.maxId) && m.id_user > env.minId){
             if ((f == undefined || m.id_user == from) || f.has(m.id_user)){
+                
                 tab.push(m);
                 nb++;
             }
@@ -318,7 +338,14 @@ function completeMessagesReponse(rep){
 
 function completeMessages(){
     if (!env.noConnection){
-        // requête au serveur
+    	$.ajax({
+            type:"GET",
+            url:"user/listMessages",
+            data:"login=" + env.login,
+            datatype:"text",
+            success:function(resp){ signupResponse(resp);},
+            error:function(XHR, textStatus,errorThrown) { alert(textStatus); }
+        })   
     }
     else{
         var tab = getFromLocalDB(env.fromId, env.minId, -1, -1);
@@ -467,6 +494,45 @@ function deleteMessage_response(id, login){
     }
 }
 
+
+function addFollower(){
+    var el = $(".profile-nbFollowers");
+    var cpt = el.text();
+
+    if((!follows[env.fromId].has(env.id_user)) && (env.login != env.fromLogin)) {
+        el.text(parseInt(cpt)+1+" followers");
+        followed = true;
+        var bt = $("#ifollow");
+        bt.replaceWith("<input id=\"ifollow\" type=\"submit\" value=\"followed\" onclick=\"javascript:removeFollower()\"/>");
+        var bt = $("#ifollow");
+        var bt = bt.css("color","#4480f9");
+        var bt = bt.css("background","#FFF");
+        el.text(parseInt(cpt)+1+" followers");
+        followed = true;
+        var bt = $("#ifollow")
+        follows[env.fromId].add(env.id_user);
+    }
+}
+
+function removeFollower(){
+    var el = $(".profile-nbFollowers");
+    var cpt = el.text();
+    
+    if(follows[env.fromId].has(env.id_user)){
+        el.text(parseInt(cpt)-1+" followers");
+    }
+    
+    var bt = $("#ifollow");
+    bt.replaceWith("<input id=\"ifollow\" type=\"submit\" value=\"follow\" onclick=\"javascript:addFollower()\"/>");
+    follows[env.fromId].delete(env.id_user);
+    
+}
+
+function homepage(){
+    //document.location.href = "homepage.html"; //pour dire ou se trouve le makeConnectionPanel
+    makeMainPanel();
+}
+
 function test(){ 
 
 /*
@@ -559,17 +625,20 @@ function init(){
 function connectionResponse(resp){
     //console.log(resp);
     resp = JSON.parse(resp);
-    //console.log(resp.id);
+    console.log(resp);
     if (resp.error == undefined){
         env.key = resp.key;
         env.id = resp.id;
         env.login = resp.login;
         
-        //document.location.href = "homepage.html";
+        console.log(env.id);
+        console.log(env.login);
+        document.location.href = "homepage.html";
+        
         makeMainPanel(env.id, env.login);
     }
     else{
-        func_error(resp.error);
+        func_error(resp.message);
     }
 }
 
@@ -577,7 +646,7 @@ function connect(login, password){
     if (!env.noConnection){
         $.ajax({
             type:"GET",
-            url:"login",
+            url:"user/login",
             data:"login=" + login + "&password=" + password,
             datatype:"text",
             success:function(resp){ connectionResponse(resp);},
