@@ -1,3 +1,5 @@
+/****************************FONCTION DE BASE + GENERER LES PAGES HTML****************************/
+
 /*creation de l'objet Message avec le constructeur suivant : */
 function Message(id_user, id_msg, author, login, date, content, comments, likes){
     this.id_user = id_user;
@@ -28,14 +30,14 @@ function Comment(id_user, id_comment, author, login, date, content){
 /*Creation de la methode getHTML qui est prototypé donc reste la meme par defaut pour toutes les instances de l'objet Comment*/
 Comment.prototype.getHTML =
     function(){
-        s = "<div class=\"comment\" id=\"comment_" + nclick=\"profile(" + this.id_user + ", \'" + this.login + "\', \'" + this.author +"\');\">" + this.author + "</p>\n" +
+        s = "<div class=\"comment\" id=\"comment_" + this.id_comment + "\">\n" +
+            "<p class=\"author comment-author\" onclick=\"profile(" + this.id_user + ", \'" + this.login + "\', \'" + this.author +"\');\">" + this.author + "</p>\n" +
             "<p class=\"login\"> @" + this.login + "</p>\n" +
             "<p class=\"date\">" + this.date + "</p>\n" +
             "<p class=\"content\">" + this.content + "</p>\n" +
-        "</div>\n";
-        return s;
-    }this.id_comment + "\">\n" +
-            "<p class=\"author comment-author\" o
+            "</div>\n";
+    return s;
+}
 
 /*Creation de la methode getHTML qui est prototypé donc reste la meme par defaut pour toutes les instances de l'objet Message*/
 Message.prototype.getHTML =
@@ -80,82 +82,36 @@ Message.prototype.getHTML =
         return s;
     }
 
-revival = 
-    function(key, val) {
-        if (val.error == undefined){
-            if (val.comments != undefined){ // message
-                return new Message(val.id_user, val.id_msg, val.author, val.login, val.date, val.content, val.comments, val.likes);
-            }
-            else if (val.content != undefined){ // commentaire
-                return new Comment(val.id_user, val.id_comment, val.author, val.login, val.date, val.content);
-            }
-            else if (key == "date"){
-                var d = new Date(val);
-                var d = d.toLocaleDateString('en-US', {
-                    month : 'long',
-                    day : 'numeric',
-                });
-                return d;
-            }
-        } else { // erreur
-            return Object(val.error); // objet générique contenant seulement l'attribut error
-        }
-        return val;
-}
 
-function setVirtualDB(){
-    localdb = []; // base de messages locale : liste de messages sur le serveur, ordonnée par ordre décroissant d'id
-    follows = []; // table des personnes suivies par chaque utilisateur : follows[id] = ensemble des personnes suivies par l'utilisateur d'identifiant id
-
-    var u1 = {"id": 1, "login": "hugowyb", "author": "Hugo Wyborska"};
-    var u2 = {"id": 2, "login": "chrisg", "author": "Christian Mm"};
-    var u3 = {"id": 3, "login": "jerrywednesday", "author": "Jerry Tom Charlie Wednesday"};
-    var u4 = {"id": 4, "login": "felixt", "author": "Felix Taquin"};
-
-    for (var i=1; i<=4; i++){
-        follows[i] = new Set();
+function makeConnectionPanel(){
+    var s = "<div id=\"main_connection\">" + 
+            "<div class=\"logo-connect\">" + 
+            "<img src=\"logo_blue.PNG\" alt=\"bird_logo\">" +
+            "</div>" +
+            "<h1 id=\"signin\">CONNECTION</h1>" +
+            "<form action=\"javascript:(function() { return; })\" method=\"get\" onsubmit=\"javascript:connection(this)\">" +
+            "<div class=\"ids\">" +
+                "<input type=\"text\" name=\"login\" placeholder=\"LOGIN\"/>" +
+            "</div>" +
+            "<div class=\"ids\">" +
+                "<input type=\"password\" name=\"password\" placeholder=\"********\"/>" +
+            "</div>" +
+            "<div class=\"buttons\">" +
+                "<input type=\"submit\" value=\"CONNECT\"/>" +
+            "</div>" +
+            "<div class=\"links\">" +
+                "<a id=\"link1\" href=\"reset_password.html\">Password forgotten ?</a>" +
+                "<a id=\"link2\" href=\"signup.html\">Sign up</a>" +
+            "</div>" +
+        "</form>" +
+        "</div>" ;
+    
+        s += '</body class="body">' +
+            '</html>';
+        
+        $("body").html(s);
+       $("body").css("background", "#FFFFFF"); 
     }
-
-    follows[1].add(2);
-    follows[1].add(3);
-    follows[2].add(1);
-    follows[3].add(1);
-    follows[3].add(2);
-    follows[3].add(4);
-    follows[4].add(2);
-
-
-    c1 = new Comment(u4["id"], 0, u4["author"], u4["login"], "March 19", "That's lit ;---) keep it up !");
-    c2 = new Comment(u1["id"], 1, u1["author"], u1["login"], "March 20", "Thanks bro :--)");
-    c3 = new Comment(u2["id"], 2, u2["author"], u2["login"], "March 20", "Amusing...");
-    
-    
-    //m1 = new Message(u1["id"], 0, u1["author"], u1["login"], "March 18", "Researchers at Whitehead Institute have uncovered a framework for regeneration that may explain and predict how stem cells in adult, regenerating tissue determine where to form replacement structures.", [c1, c2, c3], 5);
-    m1 = new Message(u1["id"], 0, u1["author"], u1["login"], "March 18", "Researchers at Whitehead Institute have uncovered a framework for regeneration that may explain and predict how stem cells in adult, regenerating tissue determine where to form replacement structures.", [c1, c2, c3], [1, 2, 3, 4]);
-    m2 = new Message(u3["id"], 1, u3["author"], u3["login"], "March 10", "We're past our pi-themed half-way point! Over 3,141 have given to MIT today in honor of the 24-Hour Challenge! Spread the word and help us reach our ultimate goal of 6,283 donors!", undefined, [4]);
-    m3 = new Message(u2["id"], 2, u2["author"], u2["login"], "February 17", "Many thanks to the over 25 departments, offices, and student organizations that participated in Random Acts of Kindness (RAK) Week! For a look back at the fun, check our RAK Week album", undefined, [4, 3]);
-
-
-    localdb[0] = m1;
-    localdb[1] = m2;
-    localdb[2] = m3;
-
-    env.msgs = localdb;
-    //console.log(env.msgs.length);
-
-}
-
-function init(){
-    env = new Object();
-    env.noConnection = true;
-   // env.key = "FARA123";
-   // env.id_user = 2;
-    env.minId = -1;
-    env.maxId = -1;
-   // env.login = "chrisg";
-   // env.author = "Christian Mm";
-    setVirtualDB();
-}
 
 /*fonction qui construit le corps de la home page*/
 function makeMainPanel(fromId, fromLogin, fromAuthor, query){
@@ -256,11 +212,83 @@ function makeMainPanel(fromId, fromLogin, fromAuthor, query){
     }
 }
 
-/*
-function pageUser(id, login){
-    makeMainPanel(id, login, env.query)
+revival = 
+    function(key, val) {
+        if (val.error == undefined){
+            if (val.comments != undefined){ // message
+                return new Message(val.id_user, val.id_msg, val.author, val.login, val.date, val.content, val.comments, val.likes);
+            }
+            else if (val.content != undefined){ // commentaire
+                return new Comment(val.id_user, val.id_comment, val.author, val.login, val.date, val.content);
+            }
+            else if (key == "date"){
+                var d = new Date(val);
+                var d = d.toLocaleDateString('en-US', {
+                    month : 'long',
+                    day : 'numeric',
+                });
+                return d;
+            }
+        } else { // erreur
+            return Object(val.error); // objet générique contenant seulement l'attribut error
+        }
+        return val;
 }
-*/
+
+function setVirtualDB(){
+    localdb = []; // base de messages locale : liste de messages sur le serveur, ordonnée par ordre décroissant d'id
+    follows = []; // table des personnes suivies par chaque utilisateur : follows[id] = ensemble des personnes suivies par l'utilisateur d'identifiant id
+
+    var u1 = {"id": 1, "login": "hugowyb", "author": "Hugo Wyborska"};
+    var u2 = {"id": 2, "login": "chrisg", "author": "Christian Mm"};
+    var u3 = {"id": 3, "login": "jerrywednesday", "author": "Jerry Tom Charlie Wednesday"};
+    var u4 = {"id": 4, "login": "felixt", "author": "Felix Taquin"};
+
+    for (var i=1; i<=4; i++){
+        follows[i] = new Set();
+    }
+
+    follows[1].add(2);
+    follows[1].add(3);
+    follows[2].add(1);
+    follows[3].add(1);
+    follows[3].add(2);
+    follows[3].add(4);
+    follows[4].add(2);
+
+
+    c1 = new Comment(u4["id"], 0, u4["author"], u4["login"], "March 19", "That's lit ;---) keep it up !");
+    c2 = new Comment(u1["id"], 1, u1["author"], u1["login"], "March 20", "Thanks bro :--)");
+    c3 = new Comment(u2["id"], 2, u2["author"], u2["login"], "March 20", "Amusing...");
+    
+    
+    //m1 = new Message(u1["id"], 0, u1["author"], u1["login"], "March 18", "Researchers at Whitehead Institute have uncovered a framework for regeneration that may explain and predict how stem cells in adult, regenerating tissue determine where to form replacement structures.", [c1, c2, c3], 5);
+    m1 = new Message(u1["id"], 0, u1["author"], u1["login"], "March 18", "Researchers at Whitehead Institute have uncovered a framework for regeneration that may explain and predict how stem cells in adult, regenerating tissue determine where to form replacement structures.", [c1, c2, c3], [1, 2, 3, 4]);
+    m2 = new Message(u3["id"], 1, u3["author"], u3["login"], "March 10", "We're past our pi-themed half-way point! Over 3,141 have given to MIT today in honor of the 24-Hour Challenge! Spread the word and help us reach our ultimate goal of 6,283 donors!", undefined, [4]);
+    m3 = new Message(u2["id"], 2, u2["author"], u2["login"], "February 17", "Many thanks to the over 25 departments, offices, and student organizations that participated in Random Acts of Kindness (RAK) Week! For a look back at the fun, check our RAK Week album", undefined, [4, 3]);
+
+
+    localdb[0] = m1;
+    localdb[1] = m2;
+    localdb[2] = m3;
+
+    env.msgs = localdb;
+    //console.log(env.msgs.length);
+
+}
+
+function init(){
+    env = new Object();
+    env.noConnection = true;
+   // env.key = "FARA123";
+   // env.id_user = 2;
+    env.minId = -1;
+    env.maxId = -1;
+   // env.login = "chrisg";
+   // env.author = "Christian Mm";
+    setVirtualDB();
+}
+
 
 function profile(id, login, author){
     //document.location.href = "profile.html";
@@ -306,6 +334,30 @@ function getFromLocalDB(from, minId, maxId, nbMax){
     return tab;
 }
 
+function homepage(){
+    //document.location.href = "homepage.html"; //pour dire ou se trouve le makeConnectionPanel
+    makeMainPanel();
+}
+
+/****************************GERE LES MESSAGES/COMMENTS  DEJA DANS LA BASE DE DONNEES****************************/
+
+function completeMessages(){
+    if (!env.noConnection){
+    	$.ajax({
+            type:"GET",
+            url:"user/listMessages",
+            data:"login=" + env.login,
+            datatype:"text",
+            success:function(resp){ completeMessagesReponse(resp);},
+            error:function(XHR, textStatus,errorThrown) { alert(textStatus); }
+        })   
+    }
+    else{
+        var tab = getFromLocalDB(env.fromId, env.minId, -1, -1);
+        completeMessagesReponse(JSON.stringify(tab)); 
+    }
+}
+
 function completeMessagesReponse(rep){
     //console.log(rep);
     var tab = JSON.parse(rep, revival);
@@ -325,41 +377,12 @@ function completeMessagesReponse(rep){
     }
 }
 
-function completeMessages(){
-    if (!env.noConnection){
-    	$.ajax({
-            type:"GET",
-            url:"user/listMessages",
-            data:"login=" + env.login,
-            datatype:"text",
-            success:function(resp){ signupResponse(resp);},
-            error:function(XHR, textStatus,errorThrown) { alert(textStatus); }
-        })   
-    }
-    else{
-        var tab = getFromLocalDB(env.fromId, env.minId, -1, -1);
-        completeMessagesReponse(JSON.stringify(tab)); 
-    }
-}
 
 function develop(id){
     var m = env.msgs[id];    //QUESTION IMPORTANTE
    // console.log(m);
     var el = $("#message_" + id + " .comments-list");
     el.show("slow");
-/*
-    for (var i=0; i<m.comments.length; i++){
-        var c = m.comments[i];
-        el.append(c.getHTML());
-    }
-    el.append("<div class=\"comment-form\">\n" + 
-                "<textarea class=\"comment-input\" placeholder=\"Reply\"></textarea>\n" +
-                    "<div class=\"send-button--comment\">\n" +
-                        "<input type=\"submit\" value=\"REPLY\" onclick=\"javascript:newComment(" + id + ")\"/>\n" +
-                    "</div>\n" +
-                "</div>\n");
-*/
-
     el = $("#message_" + id + " .comments-button");
     el.replaceWith("<p class=\"comments-button\" onclick=\"javascript:hideComments(" + id + ")\">comments (" + m.comments.length + ")</p>\n");
 
@@ -374,21 +397,30 @@ function hideComments(id){
     el.replaceWith("<p class=\"comments-button\" onclick=\"javascript:develop(" + id + ")\">comments (" + m.comments.length + ")</p>\n");
 }
 
+/****************************GERER ADDNEWMESSAGE****************************/
+
+
 function newMessage(){
     var text=$(".message-input").val();
     $(".message-input").val("");
-  //  console.log(text);
     if (text != ""){
         if (!env.noConnection){
-            // requête d'ajout de message
+            $.ajax({
+                type:"GET",
+                url:"user/addmessage",
+                data:"key_user=" + env.key + "&text" + text,
+                datatype:"text",
+                success:function(resp){ newMessageReponse(resp);},
+                error:function(XHR, textStatus,errorThrown) { alert(textStatus); }
+            })   
         }
         else{
-            newMessage_response(JSON.stringify(new Message(env.id_user, env.msgs.length, env.author, env.login, new Date(), text, undefined, undefined)));
+            newMessageReponse(JSON.stringify(new Message(env.id_user, env.msgs.length, env.author, env.login, new Date(), text, undefined, undefined)));
         }
     }
 }
 
-function newMessage_response(resp){
+function newMessageReponse(resp){
     var msg = JSON.parse(resp, revival);
     //console.log(msg);
     if (msg != undefined && (msg.error == undefined)){
@@ -407,6 +439,7 @@ function newMessage_response(resp){
     }
 }
 
+/****************************GERER ADDCOMMENT****************************/
 
 function newComment(id){
     var text=$("#message_" + id + " .comment-input").val();
@@ -414,15 +447,22 @@ function newComment(id){
     //console.log(id);
     if (text != ""){
         if (!env.noConnection){
-            // requête d'ajout de commentaire
+            $.ajax({
+                type:"GET",
+                url:"user/addcomment",
+                data:"key_user=" + env.key + "&id_message" + id + "&text" + text,
+                datatype:"text",
+                success:function(resp){ newCommentReponse(resp);},
+                error:function(XHR, textStatus,errorThrown) { alert(textStatus);
+                }})
         }
         else{
-            newComment_response(id, JSON.stringify(new Comment(env.id_user, env.msgs[id].comments.length+1, env.author, env.login, new Date(), text)));
+            newCommentResponse(id, JSON.stringify(new Comment(env.id_user, env.msgs[id].comments.length+1, env.author, env.login, new Date(), text)));
         }
     }
 }
 
-function newComment_response(id, resp){
+function newCommentResponse(id, resp){
     var com = JSON.parse(resp, revival);
     //console.log(com);
     if (com != undefined && (com.error == undefined)){
@@ -453,17 +493,31 @@ function newComment_response(id, resp){
     }
 }
 
+/****************************GERER ADDLIKE****************************/
+
 function addLike(id){
     var el = $("#message_" + id + " .likes p");
-    if (!(env.msgs[id].likes.includes(env.id_user))){
-        var cpt = el.text();
-        el.text(parseInt(cpt)+1);
-        env.msgs[id].likes.push(env.id_user);
+    
+    /*if (!env.noConnection){
+        //ajax
+    }*/
+    
+        if (!(env.msgs[id].likes.includes(env.id_user))){
+            var cpt = el.text();
+            el.text(parseInt(cpt)+1);
+            env.msgs[id].likes.push(env.id_user);
 
-        var bt = $("#likes_" + id);
-        bt.replaceWith("<img id=\"likes_" + id + "\" src=\"redlike.png\" alt=\"like\" onclick=\"addLike(" + id + ");\"/>\n");
-    }
+            var bt = $("#likes_" + id);
+            bt.replaceWith("<img id=\"likes_" + id + "\" src=\"redlike.png\" alt=\"like\" onclick=\"addLike(" + id + ");\"/>\n");
+        }
 }
+
+function addLikeResponse(){
+
+}
+
+
+/****************************GERE REMOVEMESSAGE****************************/
 
 function deleteMessage(id){
     var login = $("#message_" + id + " .message-head .login").text().substr(2);
@@ -484,9 +538,26 @@ function deleteMessage_response(id, login){
 }
 
 
+/****************************GERER ADDFRIEND****************************/
+
+
 function addFollower(){
     var el = $(".profile-nbFollowers");
     var cpt = el.text();
+
+    /*if (!env.noConnection){
+        $.ajax({
+            type:"GET",
+            url:"user/addfriend",
+            data:"key=" + env.key + "&id_friend=" + env.id_user,
+            datatype:"text",
+            success:function(resp){ addFollowerResponse(resp);},
+            error:function(XHR, textStatus,errorThrown) { alert(textStatus); }
+        })
+    }
+    else{
+        addFollowerResponse("{\"key\": \"FARA123\", \"id\": 1, \"login\": \"hugowyb\", \"author\": \"Hugo Wyborska\"}")
+    }*/
 
     if((!follows[env.fromId].has(env.id_user)) && (env.login != env.fromLogin)) {
         el.text(parseInt(cpt)+1+" followers");
@@ -503,6 +574,9 @@ function addFollower(){
     }
 }
 
+/****************************GERER REMOVEFRIEND****************************/
+
+
 function removeFollower(){
     var el = $(".profile-nbFollowers");
     var cpt = el.text();
@@ -517,32 +591,14 @@ function removeFollower(){
     
 }
 
-function homepage(){
-    //document.location.href = "homepage.html"; //pour dire ou se trouve le makeConnectionPanel
-    makeMainPanel();
-}
-
-function test(){ 
 
 /*
-    c1 = new Comment("Felix Taquin", "felixt", "March 19", "That's lit ;---) keep it up !");
-    c2 = new Comment("Hugo Wyborska", "hugowyb", "March 20", "Thanks bro :--)");
-    c3 = new Comment("Christian Mm", "chrisg", "March 20", "Amusing...");
-    
-    
-    m1 = new Message("Hugo Wyborska", "hugowyb", "March 18", "Researchers at Whitehead Institute have uncovered a framework for regeneration that may explain and predict how stem cells in adult, regenerating tissue determine where to form replacement structures.", [c1, c2, c3], 5);
-    m2 = new Message("Jerry Tom Charlie Wednesday", "jerrywednesday", "March 10", "We're past our pi-themed half-way point! Over 3,141 have given to MIT today in honor of the 24-Hour Challenge! Spread the word and help us reach our ultimate goal of 6,283 donors!", undefined, 3);
-    m3 = new Message("Christian Mm", "chrisg", "February 17", "Many thanks to the over 25 departments, offices, and student organizations that participated in Random Acts of Kindness (RAK) Week! For a look back at the fun, check our RAK Week album", undefined, 6);
+function init(){
+    env = new Object();
+    env.noConnection = true;
+}*/
 
-    messages = [m1, m2, m3];
-    s= m1.getHTML() + m2.getHTML() + m3.getHTML();
-*/
-    var c1 = '{"author": "Christian Mm", "login":"chrisg", "date": "March 20", "content":"Amusing..."}';
-    var m1 = '{"author":"Hugo Wyborska", "login":"hugowyb", "date":"March 18", "content":"Researchers at Whitehead Institute have uncovered a framework for regeneration that may explain and predict how stem cells in adult, regenerating tissue determine where to form replacement structures", "comments": ['+ c1 +'], "likes":5}';
-    var o = JSON.parse(m1, revival);
-    var s = o.getHTML();
-    $(".messages-list").html(s);
-}
+/****************************GERER LE LOGIN****************************/
 
 function connection(form){
     var login = form.login.value;
@@ -575,41 +631,6 @@ function func_error(msg){
     
 }
 
-function makeConnectionPanel(){
-    var s = "<div id=\"main_connection\">" + 
-        "<div class=\"logo-connect\">" + 
-        "<img src=\"logo_blue.PNG\" alt=\"bird_logo\">" +
-        "</div>" +
-        "<h1 id=\"signin\">CONNECTION</h1>" +
-        "<form action=\"javascript:(function() { return; })\" method=\"get\" onsubmit=\"javascript:connection(this)\">" +
-        "<div class=\"ids\">" +
-            "<input type=\"text\" name=\"login\" placeholder=\"LOGIN\"/>" +
-        "</div>" +
-        "<div class=\"ids\">" +
-            "<input type=\"password\" name=\"password\" placeholder=\"********\"/>" +
-        "</div>" +
-        "<div class=\"buttons\">" +
-            "<input type=\"submit\" value=\"CONNECT\"/>" +
-        "</div>" +
-        "<div class=\"links\">" +
-            "<a id=\"link1\" href=\"reset_password.html\">Password forgotten ?</a>" +
-            "<a id=\"link2\" href=\"signup.html\">Sign up</a>" +
-        "</div>" +
-    "</form>" +
-    "</div>" ;
-
-    s += '</body class="body">' +
-        '</html>';
-    
-    $("body").html(s);
-   $("body").css("background", "#FFFFFF"); 
-}
-
-/*
-function init(){
-    env = new Object();
-    env.noConnection = true;
-}*/
 
 function connectionResponse(resp){
     //console.log(resp);
@@ -649,18 +670,32 @@ function connect(login, password){
     }
 }
 
+/****************************GERER LE LOGOUT****************************/
+
 function logout(){
     if (!env.noConnection){
         $.ajax({
             type:"GET",
-            url:"user/login",
-            data:"login=" + login + "&password=" + password,
+            url:"user/logout",
+            data:"key_user=" + env.key,
             datatype:"text",
-            success:function(resp){ connectionResponse(resp);},
+            success:function(resp){ logoutResponse(resp);},
             error:function(XHR, textStatus,errorThrown) { alert(textStatus); }
         })
     }
     else{
-        makeConnectionPanel();
+        logoutResponse("{\"key\": \"FARA123\", \"id\": 1, \"login\": \"hugowyb\", \"author\": \"Hugo Wyborska\"}");
     } 
+}
+
+function logoutResponse(resp){
+    resp = JSON.parse(resp);
+    //console.log(resp);
+    if (resp.error == undefined){
+        makeConnectionPanel();
+
+    }
+    else{
+        func_error(resp.message);
+    }
 }
