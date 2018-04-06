@@ -29,7 +29,7 @@ function Comment(id_user, id_comment, author, login, date, content){
 Comment.prototype.getHTML =
     function(){
         s = "<div class=\"comment\" id=\"comment_" + this.id_comment + "\">\n" +
-            "<p class=\"author comment-author\">" + this.author + "</p>\n" +
+            "<p class=\"author comment-author\" onclick=\"profile(" + this.id_user + ", \'" + this.login + "\', \'" + this.author +"\');\">" + this.author + "</p>\n" +
             "<p class=\"login\"> @" + this.login + "</p>\n" +
             "<p class=\"date\">" + this.date + "</p>\n" +
             "<p class=\"content\">" + this.content + "</p>\n" +
@@ -153,7 +153,7 @@ function init(){
     env.minId = -1;
     env.maxId = -1;
     env.login = "chrisg";
-    env.author = "Chris Mm";
+    env.author = "Christian Mm";
     setVirtualDB();
 }
 
@@ -372,7 +372,7 @@ function develop(id){
 }
 
 function hideComments(id){
-   // var m = env.msgs[id];
+    var m = env.msgs[id];
     var el = $("#message_" + id + " .comments-list");
     el.hide("slow");
     //el.html("");
