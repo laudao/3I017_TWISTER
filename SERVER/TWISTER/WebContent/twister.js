@@ -449,7 +449,7 @@ function newComment(id){
         if (!env.noConnection){
             $.ajax({
                 type:"GET",
-                url:"user/addcomment",
+                url:"user/addComment",
                 data:"key_user=" + env.key + "&id_message" + id + "&text" + text,
                 datatype:"text",
                 success:function(resp){ newCommentReponse(resp);},
@@ -501,7 +501,7 @@ function addLike(id){
     /*if (!env.noConnection){
        $.ajax({
                 type:"GET",
-                url:"user/addlike",
+                url:"user/addLike",
                 data:"key_user=" + env.key + "&id_message" + id +,
                 datatype:"text",
                 success:function(resp){ addLikeRespon(resp);},
@@ -532,7 +532,7 @@ function deleteMessage(id){
     if (!env.noConnection){
         $.ajax({
             type:"GET",
-            url:"user/removemessage",
+            url:"user/removeMessage",
             data:"key=" + env.key + "&id_message=" + id,
             datatype:"text",
             success:function(resp){ addFollowerResponse(resp);},
@@ -559,7 +559,7 @@ function addFollower(){
     if (!env.noConnection){
         $.ajax({
             type:"GET",
-            url:"user/addfriend",
+            url:"user/addFriend",
             data:"key=" + env.key + "&id_friend=" + env.id_user,
             datatype:"text",
             success:function(resp){ addFollowerResponse(resp);},
@@ -595,7 +595,7 @@ function removeFollower(){
     if (!env.noConnection){
         $.ajax({
             type:"GET",
-            url:"user/removefriend",
+            url:"user/removeFriend",
             data:"key=" + env.key + "&id_friend=" + env.id_user,
             datatype:"text",
             success:function(resp){ removeFollowerResponse(resp);},
