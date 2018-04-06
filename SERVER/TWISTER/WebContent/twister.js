@@ -28,14 +28,14 @@ function Comment(id_user, id_comment, author, login, date, content){
 /*Creation de la methode getHTML qui est prototypé donc reste la meme par defaut pour toutes les instances de l'objet Comment*/
 Comment.prototype.getHTML =
     function(){
-        s = "<div class=\"comment\" id=\"comment_" + this.id_comment + "\">\n" +
-            "<p class=\"author comment-author\" onclick=\"profile(" + this.id_user + ", \'" + this.login + "\', \'" + this.author +"\');\">" + this.author + "</p>\n" +
+        s = "<div class=\"comment\" id=\"comment_" + nclick=\"profile(" + this.id_user + ", \'" + this.login + "\', \'" + this.author +"\');\">" + this.author + "</p>\n" +
             "<p class=\"login\"> @" + this.login + "</p>\n" +
             "<p class=\"date\">" + this.date + "</p>\n" +
             "<p class=\"content\">" + this.content + "</p>\n" +
         "</div>\n";
         return s;
-    }
+    }this.id_comment + "\">\n" +
+            "<p class=\"author comment-author\" o
 
 /*Creation de la methode getHTML qui est prototypé donc reste la meme par defaut pour toutes les instances de l'objet Message*/
 Message.prototype.getHTML =
@@ -184,13 +184,7 @@ function makeMainPanel(fromId, fromLogin, fromAuthor, query){
                     '</div>' +
                 '</div>' +
                 '<div class="disconnect">' +
-                    '<input type="submit" id="logout" value="LOG OUT"/>' +
-                    '<script type="text/javascript">' +
-                        'document.getElementById("logout").onclick = function () {' +
-                        'location.href = "connection.html";' +
-                        'makeConnectionPanel();' + 
-                    '};' +
-                    "</script>" +
+                    '<input type="submit" id="logout" value="LOG OUT" onclick ="logout()"/>' +      
                 '</div>' + 
             '</div>' +
         '</div>';
@@ -235,7 +229,7 @@ function makeMainPanel(fromId, fromLogin, fromAuthor, query){
 
     /*On met la valeur s de la string à l'interrieur de la balise body*/
     $("body").html(s);
-
+    $("body").css("background", "#F4F4F4");
     console.log(env.login);
     console.log(env.fromLogin);
 
@@ -604,10 +598,11 @@ function makeConnectionPanel(){
     "</form>" +
     "</div>" ;
 
-    s += '</body class="body-connection">' +
+    s += '</body class="body">' +
         '</html>';
-
+    
     $("body").html(s);
+   $("body").css("background", "#FFFFFF"); 
 }
 
 /*
@@ -629,8 +624,9 @@ function connectionResponse(resp){
         console.log(env.id);
         console.log(env.login);
         //document.location.href = "homepage.html";
-        
+        $("body").html("");
         makeMainPanel();
+
     }
     else{
         func_error(resp.message);
@@ -651,4 +647,20 @@ function connect(login, password){
     else{
         connectionResponse("{\"key\": \"FARA123\", \"id\": 1, \"login\": \"hugowyb\", \"author\": \"Hugo Wyborska\"}")
     }
+}
+
+function logout(){
+    if (!env.noConnection){
+        $.ajax({
+            type:"GET",
+            url:"user/login",
+            data:"login=" + login + "&password=" + password,
+            datatype:"text",
+            success:function(resp){ connectionResponse(resp);},
+            error:function(XHR, textStatus,errorThrown) { alert(textStatus); }
+        })
+    }
+    else{
+        makeConnectionPanel();
+    } 
 }

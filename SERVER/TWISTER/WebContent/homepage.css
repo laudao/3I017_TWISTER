@@ -35,11 +35,11 @@ p {
 
 .logo:hover {
 	transition: .5s;
-	transform: rotate(20deg);
+    transform: rotate(20deg);    
 }
 
 .logo img {
-	width: 100%;
+    width: 100%;
 }
 
 .disconnect {
