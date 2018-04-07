@@ -582,7 +582,7 @@ function addFollower(){
     else{
         addFollowerResponse("{\"key\": \"FARA123\", \"id\": 1, \"login\": \"hugowyb\", \"author\": \"Hugo Wyborska\"}")
     }
-
+}
 
 function addFollowerResponse(){
     var el = $(".profile-nbFollowers");
@@ -598,6 +598,7 @@ function addFollowerResponse(){
     
     var bt = $("#ifollow")
     follows[env.fromId].add(env.id_user);
+ 
 }
 
 /****************************GERER REMOVEFRIEND****************************/
