@@ -575,8 +575,9 @@ function deleteMessage_response(id, login){
 
 function deleteComment(id){
     var comment = $("#comment_" + id);
-    var login = $("#comment_" + id + " .message-head .login").text().substr(2);
     var id_msg = comment.parent().parent().attr('id').substr(8);
+    var login = $("#message_" +  id_msg + " #comment_" + id + " .login").text().substr(2);
+
     //console.log(id_msg);
     if (!env.noConnection){
         $.ajax({
@@ -594,14 +595,23 @@ function deleteComment(id){
 }
 
 function deleteComment_response(id, login){
-    console.log(id);
+    console.log(env.login);
+    console.log(login);
     var id_msg = $("#comment_" + id).parent().parent().attr('id').substr(8);
+    console.log(env.msgs);
+    console.log(id);
 
     if (login == env.login){
-        console.log(env.msgs[id_msg].comments);
-        $("#comment_" + id).remove();
+        
         delete(env.msgs[id_msg].comments[id]);
-        console.log(env.msgs[id_msg].comments);
+        var comments_f = env.msgs[id_msg].comments.filter(c => c != undefined);
+        
+        var comment = comments_f.find(function(e) { return e.id_comment = id});
+        
+        var index = env.msgs[id_msg].comments.indexOf(comment);
+        delete(env.msgs[id_msg].comments[index]);
+        $("#comment_" + id).remove();
+        
     }
 }
 
