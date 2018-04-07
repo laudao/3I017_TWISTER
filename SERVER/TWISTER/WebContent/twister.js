@@ -498,25 +498,38 @@ function newCommentResponse(id, resp){
 function addLike(id){
     var el = $("#message_" + id + " .likes p");
     
-    /*if (!env.noConnection){
+    if (!(env.noConnection)){
        $.ajax({
                 type:"GET",
                 url:"user/addLike",
-                data:"key_user=" + env.key + "&id_message" + id +,
+                data:"key_user=" + env.key + "&id_message" + id ,
                 datatype:"text",
-                success:function(resp){ addLikeRespon(resp);},
-                error:function(XHR, textStatus,errorThrown) { alert(textStatus);
-                }})
-    }*/
-    
-        if (!(env.msgs[id].likes.includes(env.id_user))){
+                success:function(resp){ addLikeResponse(resp);},
+                error:function(XHR, textStatus,errorThrown) { alert(textStatus);}
+            })
+    }
+    else{
+        console.log(env.msgs[id].likes);
+        if (!(env.msgs[id].likes.includes(env.id_user))){ // like
             var cpt = el.text();
             el.text(parseInt(cpt)+1);
             env.msgs[id].likes.push(env.id_user);
 
             var bt = $("#likes_" + id);
             bt.replaceWith("<img id=\"likes_" + id + "\" src=\"redlike.png\" alt=\"like\" onclick=\"addLike(" + id + ");\"/>\n");
+        } else {
+            var cpt = el.text();
+            el.text(parseInt(cpt)-1);
+            var index = env.msgs[id].likes.indexOf(env.id_user);
+            delete(env.msgs[id].likes[index]);
+
+
+            var bt = $("#likes_" + id);
+            bt.replaceWith("<img id=\"likes_" + id + "\" src=\"like.png\" alt=\"like\" onclick=\"addLike(" + id + ");\"/>\n");
         }
+        console.log(env.msgs[id].likes);
+
+    }
 }
 
 function addLikeResponse(){
@@ -575,17 +588,16 @@ function addFollowerResponse(){
     var el = $(".profile-nbFollowers");
     var cpt = el.text();
     el.text(parseInt(cpt)+1+" followers");
-    followed = true;
+    
     var bt = $("#ifollow");
     bt.replaceWith("<input id=\"ifollow\" type=\"submit\" value=\"followed\" onclick=\"javascript:removeFollower()\"/>");
     var bt = $("#ifollow");
     var bt = bt.css("color","#4480f9");
     var bt = bt.css("background","#FFF");
     el.text(parseInt(cpt)+1+" followers");
-    followed = true;
+    
     var bt = $("#ifollow")
     follows[env.fromId].add(env.id_user);
-    }
 }
 
 /****************************GERER REMOVEFRIEND****************************/
