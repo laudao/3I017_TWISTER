@@ -11,12 +11,6 @@ function signup(form){
     }
 }
 
-/*
-function validateEmail(email) {
-  var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(email);
-}
-*/
 function validateName(name){
     var nameRegex = /^[a-zA-Z\-]+$/;
     return nameRegex.test(name);
@@ -25,6 +19,10 @@ function validateName(name){
 function validateLogin(login){
     var loginRegex = /^[a-zA-Z0-9]+$/;
     return loginRegex.test(login);
+}
+
+function validatePassword(password){
+    return password.length >= 5;
 }
 
 function verif_form_signup(login, password, email, first_name, last_name, confirmation){
@@ -45,6 +43,10 @@ function verif_form_signup(login, password, email, first_name, last_name, confir
     }
     if ((!validateName(first_name)) || (!validateName(last_name))){
         func_error("Invalid name");
+        return false;
+    }
+    if (!validatePassword(password)){
+        func_error("Password must contain at least 5 characters");
         return false;
     }
 
@@ -107,9 +109,9 @@ function makeSignupPanel(){
 
 function init(){
     env = new Object();
-    env.noConnection = false;
+    env.noConnection = true;
 }
-
+/*
 function signupResponse(resp){
     resp = JSON.parse(resp);
     if (resp.error == undefined){
@@ -117,14 +119,23 @@ function signupResponse(resp){
         env.id = resp.id;
         env.login = resp.login;
         
-        document.location.href = "homepage.html";
-        makeMainPanel(env.id, env.login);
+        document.location.href = "twister.html";
+    }
+    else{
+        func_error(resp.message);
+    }
+}*/
+function signupResponse(resp){
+    resp = JSON.parse(resp);
+    if (resp.error == undefined){
+        document.location.href = "twister.html";
     }
     else{
         func_error(resp.message);
     }
 }
 
+/*
 function register(login, password, email, first_name, last_name){
     if (!env.noConnection){
     	$.ajax({
@@ -138,5 +149,20 @@ function register(login, password, email, first_name, last_name){
     }
     else{
     	document.location.href = "homepage.html";
+    }
+}*/
+function register(login, password, email, first_name, last_name){
+    if (!env.noConnection){
+        $.ajax({
+            type:"GET",
+            url:"user/createUser",
+            data:"login=" + login + "&password=" + password + "&email=" + email + "&first_name=" + first_name + "&last_name=" + last_name,
+            datatype:"text",
+            success:function(resp){ signupResponse(resp);},
+            error:function(XHR, textStatus,errorThrown) { alert(textStatus); }
+        })    
+    }else{
+        signupResponse('{"":""}');
+        //document.location.href = "homepage.html";
     }
 }

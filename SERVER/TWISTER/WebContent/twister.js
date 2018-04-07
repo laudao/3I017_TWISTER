@@ -31,10 +31,17 @@ function Comment(id_user, id_comment, author, login, date, content){
 Comment.prototype.getHTML =
     function(){
         s = "<div class=\"comment\" id=\"comment_" + this.id_comment + "\">\n" +
-            "<p class=\"author comment-author\" onclick=\"profile(" + this.id_user + ", \'" + this.login + "\', \'" + this.author +"\');\">" + this.author + "</p>\n" +
-            "<p class=\"login\"> @" + this.login + "</p>\n" +
-            "<p class=\"date\">" + this.date + "</p>\n" +
-            "<p class=\"content\">" + this.content + "</p>\n" +
+                "<div class=\"message-head\">\n" + 
+                    "<div class=\"message-head--content\">\n" +
+                        "<p class=\"author comment-author\" onclick=\"profile(" + this.id_user + ", \'" + this.login + "\', \'" + this.author +"\');\">" + this.author + "</p>\n" +
+                        "<p class=\"login\"> @" + this.login + "</p>\n" +
+                        "<p class=\"date\">" + this.date + "</p>\n" +
+                    "</div>" +
+                    "<div class=\"delete\">\n" +
+                        "<img src=\"bin.png\" alt=\"delete\" onclick=\"deleteComment(" + this.id_comment +")\"/>\n" +
+                    "</div>\n" +
+                "</div>" +
+                "<p class=\"content\">" + this.content + "</p>\n" + 
             "</div>\n";
     return s;
 }
@@ -498,25 +505,38 @@ function newCommentResponse(id, resp){
 function addLike(id){
     var el = $("#message_" + id + " .likes p");
     
-    /*if (!env.noConnection){
+    if (!(env.noConnection)){
        $.ajax({
                 type:"GET",
                 url:"user/addLike",
-                data:"key_user=" + env.key + "&id_message" + id +,
+                data:"key_user=" + env.key + "&id_message" + id ,
                 datatype:"text",
-                success:function(resp){ addLikeRespon(resp);},
-                error:function(XHR, textStatus,errorThrown) { alert(textStatus);
-                }})
-    }*/
-    
-        if (!(env.msgs[id].likes.includes(env.id_user))){
+                success:function(resp){ addLikeResponse(resp);},
+                error:function(XHR, textStatus,errorThrown) { alert(textStatus);}
+            })
+    }
+    else{
+        console.log(env.msgs[id].likes);
+        if (!(env.msgs[id].likes.includes(env.id_user))){ // like
             var cpt = el.text();
             el.text(parseInt(cpt)+1);
             env.msgs[id].likes.push(env.id_user);
 
             var bt = $("#likes_" + id);
             bt.replaceWith("<img id=\"likes_" + id + "\" src=\"redlike.png\" alt=\"like\" onclick=\"addLike(" + id + ");\"/>\n");
+        } else {
+            var cpt = el.text();
+            el.text(parseInt(cpt)-1);
+            var index = env.msgs[id].likes.indexOf(env.id_user);
+            delete(env.msgs[id].likes[index]);
+
+
+            var bt = $("#likes_" + id);
+            bt.replaceWith("<img id=\"likes_" + id + "\" src=\"like.png\" alt=\"like\" onclick=\"addLike(" + id + ");\"/>\n");
         }
+        console.log(env.msgs[id].likes);
+
+    }
 }
 
 function addLikeResponse(){
@@ -551,6 +571,50 @@ function deleteMessage_response(id, login){
     }
 }
 
+/****************************GERER REMOVEMECOMMENT****************************/
+
+function deleteComment(id){
+    var comment = $("#comment_" + id);
+    var id_msg = comment.parent().parent().attr('id').substr(8);
+    var login = $("#message_" +  id_msg + " #comment_" + id + " .login").text().substr(2);
+
+    //console.log(id_msg);
+    if (!env.noConnection){
+        $.ajax({
+            type:"GET",
+            url:"user/removeComment",
+            data:"key_user=" + env.key + "&id_comment=" + id + "&id_message=" + id_msg,
+            datatype:"text",
+            success:function(resp){ addFollowerResponse(resp);},
+            error:function(XHR, textStatus,errorThrown) { alert(textStatus); }
+        })
+    }
+    else{
+        deleteComment_response(id, login);
+    }
+}
+
+function deleteComment_response(id, login){
+    console.log(env.login);
+    console.log(login);
+    var id_msg = $("#comment_" + id).parent().parent().attr('id').substr(8);
+    console.log(env.msgs);
+    console.log(id);
+
+    if (login == env.login){
+        
+        delete(env.msgs[id_msg].comments[id]);
+        var comments_f = env.msgs[id_msg].comments.filter(c => c != undefined);
+        
+        var comment = comments_f.find(function(e) { return e.id_comment = id});
+        
+        var index = env.msgs[id_msg].comments.indexOf(comment);
+        delete(env.msgs[id_msg].comments[index]);
+        $("#comment_" + id).remove();
+        
+    }
+}
+
 
 /****************************GERER ADDFRIEND****************************/
 
@@ -569,23 +633,23 @@ function addFollower(){
     else{
         addFollowerResponse("{\"key\": \"FARA123\", \"id\": 1, \"login\": \"hugowyb\", \"author\": \"Hugo Wyborska\"}")
     }
-
+}
 
 function addFollowerResponse(){
     var el = $(".profile-nbFollowers");
     var cpt = el.text();
     el.text(parseInt(cpt)+1+" followers");
-    followed = true;
+    
     var bt = $("#ifollow");
     bt.replaceWith("<input id=\"ifollow\" type=\"submit\" value=\"followed\" onclick=\"javascript:removeFollower()\"/>");
     var bt = $("#ifollow");
     var bt = bt.css("color","#4480f9");
     var bt = bt.css("background","#FFF");
     el.text(parseInt(cpt)+1+" followers");
-    followed = true;
+    
     var bt = $("#ifollow")
     follows[env.fromId].add(env.id_user);
-    }
+ 
 }
 
 /****************************GERER REMOVEFRIEND****************************/
@@ -727,3 +791,4 @@ function logoutResponse(resp){
         func_error(resp.message);
     }
 }
+

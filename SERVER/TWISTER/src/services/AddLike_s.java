@@ -18,7 +18,7 @@ import errorJSON.ErrorJSON;
 public class AddLike_s {
 	public static JSONObject addLike(String key_user, String id_message) throws JSONException, SQLException, UnknownHostException{
 		JSONObject json = null;
-	//	String id_user = null;
+		String id_user = null;
 	//	String login_user = null;
 	//	String name_user = null;
 
@@ -34,14 +34,14 @@ public class AddLike_s {
 			return ErrorJSON.serviceRefused("missing parameter id_message",-1);
 		}
 			
-	//	id_user = ConnectionTools.getId_from_key_user(key_user, c);
+		id_user = ConnectionTools.getId_from_key_user(key_user, c);
 	//	login_user = UserTools.getLogin(id_user, c);
 	//	name_user = UserTools.getName(id_user, c);
 
-		MessageTools.addLike(id_message, coll);
+		MessageTools.addLike(id_message, Integer.parseInt(id_user), coll);
 		//MessageTools.addComment(id_user, id_message, text, coll);
 			
-		json = ErrorJSON.serviceAccepted("text",1);
+		json = ErrorJSON.serviceAccepted("ok",1);
 			
 		return json;
 			
