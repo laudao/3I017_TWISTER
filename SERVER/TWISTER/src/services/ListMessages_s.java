@@ -21,8 +21,9 @@ import errorJSON.ErrorJSON;
 public class ListMessages_s {
 	public static JSONObject list_messages() throws JSONException, UnknownHostException, SQLException{
 		JSONObject json = null;
+        DBCollection coll = Database.getMongocollection("messages");
 			
-			json = MessageTools.getMessages_within_hour();
+		json = MessageTools.getMessages_within_hour(coll);
 		
         return json;
 		

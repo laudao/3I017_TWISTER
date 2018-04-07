@@ -22,7 +22,6 @@ public class ListMessages extends HttpServlet{
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		PrintWriter out;
 		JSONObject res = null;
-		String key = request.getParameter();
 		out = response.getWriter();
 		
 		try{
