@@ -339,7 +339,7 @@ function homepage(){
     makeMainPanel();
 }
 
-/****************************GERE LES MESSAGES/COMMENTS  DEJA DANS LA BASE DE DONNEES****************************/
+/****************************GERE LES MESSAGES/COMMENTS DEJA DANS LA BASE DE DONNEES****************************/
 
 function completeMessages(){
     if (!env.noConnection){

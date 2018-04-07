@@ -49,6 +49,10 @@
 		<servlet-name>addLike</servlet-name> 
 		<servlet-class>servlets.AddLike</servlet-class> 
 	</servlet>
+	<servlet> 
+		<servlet-name>listMessages</servlet-name> 
+		<servlet-class>servlets.ListMessages</servlet-class> 
+	</servlet>
 
 	<servlet-mapping> 
 		<servlet-name>createUser</servlet-name> 
@@ -97,6 +101,10 @@
 	<servlet-mapping> 
 		<servlet-name>addLike</servlet-name> 
 		<url-pattern>/user/addLike</url-pattern> 
+	</servlet-mapping>
+	<servlet-mapping> 
+		<servlet-name>listMessages</servlet-name> 
+		<url-pattern>/user/listMessages</url-pattern> 
 	</servlet-mapping>
 
 	<resource-ref>
