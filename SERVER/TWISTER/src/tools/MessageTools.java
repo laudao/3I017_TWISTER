@@ -54,6 +54,29 @@ public class MessageTools {
 		}
 		return new JSONObject().put("messages", ret);
 	}
+
+	//renvoie la liste des twist de tous les utilisateurs qui ont été twisté il y a moins de 1 heure 
+	
+	public static JSONObject getMessages_within_hour(DBCollection coll) throws JSONException{
+		BasicDBObject query = new BasicDBObject();
+		GregorianCalendar calendar = new java.util.GregorianCalendar();
+		calendar.add(calendar.HOUR-1);
+		Date d = calendar.getTime();
+		query.put("date",new BasicDBObject("$ge",d));
+		DBCursor cursor = coll.find(query);
+		JSONArray ret = new JSONArray();
+		while(cursor.hasNext()){
+			DBObject b = cursor.next();
+			JSONObject j = new JSONObject();
+			j.put("id_mess", b.get("_id"));
+			j.put("content", b.get("text"));
+			
+			// get comments
+			
+			ret.put(j);
+		}
+		return new JSONObject().put("messages", ret);
+	}
 	
 	public static void removeMessage(String id_message,DBCollection coll){
 		BasicDBObject query = new BasicDBObject();
@@ -100,7 +123,7 @@ public class MessageTools {
 		GregorianCalendar calendar = new java.util.GregorianCalendar();
 		Date d = calendar.getTime();
 		
-		DBObject searchQuery = new BasicDBObject("_id", new ObjectId(id_message));
+		DBObject Query = new BasicDBObject("_id", new ObjectId(id_message));
 		
 		DBObject comment = new BasicDBObject();
 		comment.put("id_comment", new ObjectId());
