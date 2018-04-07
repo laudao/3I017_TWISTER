@@ -31,10 +31,17 @@ function Comment(id_user, id_comment, author, login, date, content){
 Comment.prototype.getHTML =
     function(){
         s = "<div class=\"comment\" id=\"comment_" + this.id_comment + "\">\n" +
-            "<p class=\"author comment-author\" onclick=\"profile(" + this.id_user + ", \'" + this.login + "\', \'" + this.author +"\');\">" + this.author + "</p>\n" +
-            "<p class=\"login\"> @" + this.login + "</p>\n" +
-            "<p class=\"date\">" + this.date + "</p>\n" +
-            "<p class=\"content\">" + this.content + "</p>\n" +
+                "<div class=\"message-head\">\n" + 
+                    "<div class=\"message-head--content\">\n" +
+                        "<p class=\"author comment-author\" onclick=\"profile(" + this.id_user + ", \'" + this.login + "\', \'" + this.author +"\');\">" + this.author + "</p>\n" +
+                        "<p class=\"login\"> @" + this.login + "</p>\n" +
+                        "<p class=\"date\">" + this.date + "</p>\n" +
+                    "</div>" +
+                    "<div class=\"delete\">\n" +
+                        "<img src=\"bin.png\" alt=\"delete\" onclick=\"deleteComment(" + this.id_comment +")\"/>\n" +
+                    "</div>\n" +
+                "</div>" +
+                "<p class=\"content\">" + this.content + "</p>\n" + 
             "</div>\n";
     return s;
 }
@@ -564,6 +571,40 @@ function deleteMessage_response(id, login){
     }
 }
 
+/****************************GERER REMOVEMECOMMENT****************************/
+
+function deleteComment(id){
+    var comment = $("#comment_" + id);
+    var login = $("#comment_" + id + " .message-head .login").text().substr(2);
+    var id_msg = comment.parent().parent().attr('id').substr(8);
+    //console.log(id_msg);
+    if (!env.noConnection){
+        $.ajax({
+            type:"GET",
+            url:"user/removeComment",
+            data:"key_user=" + env.key + "&id_comment=" + id + "&id_message=" + id_msg,
+            datatype:"text",
+            success:function(resp){ addFollowerResponse(resp);},
+            error:function(XHR, textStatus,errorThrown) { alert(textStatus); }
+        })
+    }
+    else{
+        deleteComment_response(id, login);
+    }
+}
+
+function deleteComment_response(id, login){
+    console.log(id);
+    var id_msg = $("#comment_" + id).parent().parent().attr('id').substr(8);
+
+    if (login == env.login){
+        console.log(env.msgs[id_msg].comments);
+        $("#comment_" + id).remove();
+        delete(env.msgs[id_msg].comments[id]);
+        console.log(env.msgs[id_msg].comments);
+    }
+}
+
 
 /****************************GERER ADDFRIEND****************************/
 
@@ -740,3 +781,4 @@ function logoutResponse(resp){
         func_error(resp.message);
     }
 }
+
