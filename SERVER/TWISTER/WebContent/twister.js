@@ -215,6 +215,7 @@ function makeMainPanel(fromId, fromLogin, fromAuthor, query){
             $("#ifollow").replaceWith("<input id=\"ifollow\" type=\"submit\" value=\"followed\" onclick=\"javascript:removeFollower()\"/>");
             $("#ifollow").css("color","#4480f9");
             $("#ifollow").css("background","#FFF");
+            $("#ifollow").css("box-shadow", "0px 0px 8px -4px rgba(0,0,255,0.8)");
         }
     }
 }
@@ -655,6 +656,7 @@ function addFollowerResponse(){
     var bt = $("#ifollow");
     var bt = bt.css("color","#4480f9");
     var bt = bt.css("background","#FFF");
+    var bt = bt.css("box-shadow", "0px 0px 8px -4px rgba(0,0,255,0.8)");
     el.text(parseInt(cpt)+1+" followers");
     
     var bt = $("#ifollow")
