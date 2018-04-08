@@ -516,7 +516,17 @@ function addLike(id){
             })
     }
     else{
-        console.log(env.msgs[id].likes);
+        addLikeResponse(id, "{\"key\": \"FARA123\", \"id\": 1, \"login\": \"hugowyb\", \"author\": \"Hugo Wyborska\"}");
+
+    }
+}
+
+function addLikeResponse(id, resp){
+    var r = JSON.parse(resp, revival);
+    var el = $("#message_" + id + " .likes p");
+
+    console.log(env.msgs[id].likes);
+    if (r.error == undefined){
         if (!(env.msgs[id].likes.includes(env.id_user))){ // like
             var cpt = el.text();
             el.text(parseInt(cpt)+1);
@@ -534,13 +544,11 @@ function addLike(id){
             var bt = $("#likes_" + id);
             bt.replaceWith("<img id=\"likes_" + id + "\" src=\"like.png\" alt=\"like\" onclick=\"addLike(" + id + ");\"/>\n");
         }
-        console.log(env.msgs[id].likes);
-
+        
     }
-}
-
-function addLikeResponse(){
-
+    else{
+        alert("Error: cannot add like");
+    }
 }
 
 
