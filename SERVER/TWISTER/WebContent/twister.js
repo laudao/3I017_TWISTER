@@ -31,8 +31,8 @@ function Comment(id_user, id_comment, author, login, date, content){
 Comment.prototype.getHTML =
     function(){
         s = "<div class=\"comment\" id=\"comment_" + this.id_comment + "\">\n" +
-                "<div class=\"message-head\">\n" + 
-                    "<div class=\"message-head--content\">\n" +
+                "<div class=\"comment-head\">\n" + 
+                    "<div class=\"comment-head--content\">\n" +
                         "<p class=\"author comment-author\" onclick=\"profile(" + this.id_user + ", \'" + this.login + "\', \'" + this.author +"\');\">" + this.author + "</p>\n" +
                         "<p class=\"login\"> @" + this.login + "</p>\n" +
                         "<p class=\"date\">" + this.date + "</p>\n" +
@@ -547,7 +547,8 @@ function addLikeResponse(){
 /****************************GERER REMOVEMESSAGE****************************/
 
 function deleteMessage(id){
-    var login = $("#message_" + id + " .message-head .login").text().substr(2);
+    var login = $("#message_" + id + " .message-head .message-head--content .login").text().substr(2);
+    console.log(login);
     //console.log(login);
     if (!env.noConnection){
         $.ajax({
@@ -555,7 +556,7 @@ function deleteMessage(id){
             url:"user/removeMessage",
             data:"key=" + env.key + "&id_message=" + id,
             datatype:"text",
-            success:function(resp){ addFollowerResponse(resp);},
+            success:function(resp){ deleteMessageResponse(resp);},
             error:function(XHR, textStatus,errorThrown) { alert(textStatus); }
         })
     }
@@ -565,6 +566,7 @@ function deleteMessage(id){
 }
 
 function deleteMessage_response(id, login){
+    console.log(login);
     if (login == env.login){
         $("#message_" + id).remove();
         delete(env.msgs[id]);
