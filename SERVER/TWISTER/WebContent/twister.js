@@ -31,8 +31,8 @@ function Comment(id_user, id_comment, author, login, date, content){
 Comment.prototype.getHTML =
     function(){
         s = "<div class=\"comment\" id=\"comment_" + this.id_comment + "\">\n" +
-                "<div class=\"message-head\">\n" + 
-                    "<div class=\"message-head--content\">\n" +
+                "<div class=\"comment-head\">\n" + 
+                    "<div class=\"comment-head--content\">\n" +
                         "<p class=\"author comment-author\" onclick=\"profile(" + this.id_user + ", \'" + this.login + "\', \'" + this.author +"\');\">" + this.author + "</p>\n" +
                         "<p class=\"login\"> @" + this.login + "</p>\n" +
                         "<p class=\"date\">" + this.date + "</p>\n" +
@@ -215,6 +215,7 @@ function makeMainPanel(fromId, fromLogin, fromAuthor, query){
             $("#ifollow").replaceWith("<input id=\"ifollow\" type=\"submit\" value=\"followed\" onclick=\"javascript:removeFollower()\"/>");
             $("#ifollow").css("color","#4480f9");
             $("#ifollow").css("background","#FFF");
+            $("#ifollow").css("box-shadow", "0px 0px 8px -4px rgba(0,0,255,0.8)");
         }
     }
 }
@@ -516,7 +517,17 @@ function addLike(id){
             })
     }
     else{
-        console.log(env.msgs[id].likes);
+        addLikeResponse(id, "{\"key\": \"FARA123\", \"id\": 1, \"login\": \"hugowyb\", \"author\": \"Hugo Wyborska\"}");
+
+    }
+}
+
+function addLikeResponse(id, resp){
+    var r = JSON.parse(resp, revival);
+    var el = $("#message_" + id + " .likes p");
+
+    console.log(env.msgs[id].likes);
+    if (r.error == undefined){
         if (!(env.msgs[id].likes.includes(env.id_user))){ // like
             var cpt = el.text();
             el.text(parseInt(cpt)+1);
@@ -534,20 +545,19 @@ function addLike(id){
             var bt = $("#likes_" + id);
             bt.replaceWith("<img id=\"likes_" + id + "\" src=\"like.png\" alt=\"like\" onclick=\"addLike(" + id + ");\"/>\n");
         }
-        console.log(env.msgs[id].likes);
-
+        
     }
-}
-
-function addLikeResponse(){
-
+    else{
+        alert("Error: cannot add like");
+    }
 }
 
 
 /****************************GERER REMOVEMESSAGE****************************/
 
 function deleteMessage(id){
-    var login = $("#message_" + id + " .message-head .login").text().substr(2);
+    var login = $("#message_" + id + " .message-head .message-head--content .login").text().substr(2);
+    console.log(login);
     //console.log(login);
     if (!env.noConnection){
         $.ajax({
@@ -555,7 +565,7 @@ function deleteMessage(id){
             url:"user/removeMessage",
             data:"key=" + env.key + "&id_message=" + id,
             datatype:"text",
-            success:function(resp){ addFollowerResponse(resp);},
+            success:function(resp){ deleteMessageResponse(resp);},
             error:function(XHR, textStatus,errorThrown) { alert(textStatus); }
         })
     }
@@ -565,6 +575,7 @@ function deleteMessage(id){
 }
 
 function deleteMessage_response(id, login){
+    console.log(login);
     if (login == env.login){
         $("#message_" + id).remove();
         delete(env.msgs[id]);
@@ -645,6 +656,7 @@ function addFollowerResponse(){
     var bt = $("#ifollow");
     var bt = bt.css("color","#4480f9");
     var bt = bt.css("background","#FFF");
+    var bt = bt.css("box-shadow", "0px 0px 8px -4px rgba(0,0,255,0.8)");
     el.text(parseInt(cpt)+1+" followers");
     
     var bt = $("#ifollow")

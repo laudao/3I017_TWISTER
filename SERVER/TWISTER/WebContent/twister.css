@@ -220,6 +220,11 @@ p {
     justify-content: space-between;
 }
 
+.comment-head {
+    display: flex;
+    justify-content: space-between;
+}
+
 .likes {
     display: flex;
 }
