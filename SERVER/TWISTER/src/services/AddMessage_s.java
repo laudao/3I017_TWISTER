@@ -39,7 +39,7 @@ public class AddMessage_s {
 		login_user = UserTools.getLogin(id_user, c);
 		name_user = UserTools.getName(id_user, c);
 
-		MessageTools.addMessage(name_user, login_user, text, coll);
+		MessageTools.addMessage(id_user, name_user, login_user, text, coll);
 		//MessageTools.addMessage(id_user, text, coll);
 		
 		json = ErrorJSON.serviceAccepted("text",1);

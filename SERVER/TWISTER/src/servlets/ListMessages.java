@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import services.ListMessages_s;
 import services.Search_s;
 
 public class ListMessages extends HttpServlet{
@@ -22,6 +23,7 @@ public class ListMessages extends HttpServlet{
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		PrintWriter out;
 		JSONObject res = null;
+		String login = request.getParameter("login");
 		out = response.getWriter();
 		
 		try{

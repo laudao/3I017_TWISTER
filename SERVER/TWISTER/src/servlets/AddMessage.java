@@ -22,7 +22,7 @@ public class AddMessage extends HttpServlet{
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		PrintWriter out;
 		JSONObject res = null;
-		String key = request.getParameter("key");
+		String key = request.getParameter("key_user");
 		String text = request.getParameter("text");
 		out = response.getWriter();
 		
