@@ -116,7 +116,7 @@ function makeConnectionPanel(){
         s += '</body class="body">' +
             '</html>';
         
-        $("body").html(s);
+       $("body").html(s);
        $("body").css("background", "#FFFFFF"); 
     }
 
@@ -129,10 +129,11 @@ function makeMainPanel(fromId, fromLogin, fromAuthor, query){
     if (fromId == undefined){
         fromId = -1;
     }
+    
     env.fromId = fromId;
     env.fromLogin = fromLogin;
-    console.log(fromLogin);
-    console.log(fromId);
+    console.log("fromLogin : ", fromLogin);
+    console.log("fromId : ", fromId);
 
     // html du header
     var s = '<div class="header">' +
@@ -193,8 +194,7 @@ function makeMainPanel(fromId, fromLogin, fromAuthor, query){
     /*On met la valeur s de la string à l'interrieur de la balise body*/
     $("body").html(s);
     $("body").css("background", "#F4F4F4");
-    console.log(env.login);
-    console.log(env.fromLogin);
+
 
     /* pour que message-form occupe soit caché tout en conservant sa place dans le flux (pour l'affichage) */
     if ((env.fromLogin != undefined) && (env.login!= env.fromLogin)){
@@ -287,7 +287,7 @@ function setVirtualDB(){
 
 function init(){
     env = new Object();
-    env.noConnection = true;
+    env.noConnection = false;
    // env.key = "FARA123";
    // env.id_user = 2;
     env.minId = -1;
@@ -367,13 +367,13 @@ function completeMessages(){
 }
 
 function completeMessagesReponse(rep){
-    //console.log(rep);
+    console.log(rep);
     var tab = JSON.parse(rep, revival);
 
     var s = "";
     for (var i=0; i<tab.length; i++){
         var m = tab[i];
-        env.msgs[m.id] = m;
+        env.msgs[m.id_msg] = m;
         if (m.id > env.maxId){
             env.maxId = m.id;
         }
@@ -410,12 +410,13 @@ function hideComments(id){
 
 function newMessage(){
     var text=$(".message-input").val();
+    console.log(text);
     $(".message-input").val("");
     if (text != ""){
         if (!env.noConnection){
             $.ajax({
                 type:"GET",
-                url:"user/addmessage",
+                url:"user/addMessage",
                 data:"key_user=" + env.key + "&text" + text,
                 datatype:"text",
                 success:function(resp){ newMessageReponse(resp);},
@@ -430,7 +431,7 @@ function newMessage(){
 
 function newMessageReponse(resp){
     var msg = JSON.parse(resp, revival);
-    //console.log(msg);
+    console.log(msg);
     if (msg != undefined && (msg.error == undefined)){
         var el = $(".messages-list");
 
@@ -635,7 +636,7 @@ function addFollower(){
         $.ajax({
             type:"GET",
             url:"user/addFriend",
-            data:"key=" + env.key + "&id_friend=" + env.id_user,
+            data:"key_user=" + env.key + "&id_friend=" + env.id_user,
             datatype:"text",
             success:function(resp){ addFollowerResponse(resp);},
             error:function(XHR, textStatus,errorThrown) { alert(textStatus); }
@@ -746,8 +747,8 @@ function connectionResponse(resp){
         env.login = resp.login;
         env.author = resp.author;
         
-        console.log(env.id);
-        console.log(env.login);
+        console.log("id_user : ", env.id_user);
+        console.log("login : ", env.login);
         //document.location.href = "homepage.html";
         $("body").html("");
         makeMainPanel();
@@ -794,7 +795,7 @@ function logout(){
 
 function logoutResponse(resp){
     resp = JSON.parse(resp);
-    //console.log(resp);
+    console.log(resp);
     if (resp.error == undefined){
         makeConnectionPanel();
 

@@ -31,10 +31,10 @@ public class Login extends HttpServlet{
 			out.println(res.toString());
 		}catch(JSONException e){
 			out.println("JSONException");
-			out.println(res.toString());
+			//out.println(res.toString());
 		} catch (SQLException e) {
 			out.println("SQLException");
-			out.println(res.toString());
+			//out.println(res.toString());
 		}
 		
 	}

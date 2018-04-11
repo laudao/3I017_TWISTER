@@ -38,7 +38,7 @@ public class AddLike_s {
 	//	login_user = UserTools.getLogin(id_user, c);
 	//	name_user = UserTools.getName(id_user, c);
 
-		MessageTools.addLike(id_message, Integer.parseInt(id_user), coll);
+		MessageTools.addLike(id_message, id_user, coll);
 		//MessageTools.addComment(id_user, id_message, text, coll);
 			
 		json = ErrorJSON.serviceAccepted("ok",1);

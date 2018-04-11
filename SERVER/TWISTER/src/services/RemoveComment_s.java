@@ -45,7 +45,7 @@ public class RemoveComment_s {
 			return ErrorJSON.serviceRefused("permission denied",-1);
 		}
 		
-		MessageTools.removeComment(id_message, id_comment, coll);
+		MessageTools.removeComment(id_message, id_comment, id_user, coll);
 		
 		json = ErrorJSON.serviceAccepted("key",1);
 		

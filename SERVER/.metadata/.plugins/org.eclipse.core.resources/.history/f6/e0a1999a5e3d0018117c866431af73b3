@@ -1,0 +1,54 @@
+package services;
+
+import java.net.UnknownHostException;
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import tools.ConnectionTools;
+import tools.MessageTools;
+import tools.UserTools;
+import bd.Database;
+
+import com.mongodb.DBCollection;
+
+import errorJSON.ErrorJSON;
+
+public class RemoveMessage_s {
+	public static JSONObject removeMessage(String key_user, String id_message) throws JSONException, SQLException, UnknownHostException{
+		JSONObject json = null;
+		String id_user = null;
+		String login_user = null;
+		Connection c = Database.getMySQLConnection();
+		
+		DBCollection coll = Database.getMongocollection("messages");
+		
+		if(key_user==null){
+			return ErrorJSON.serviceRefused("missing parameter key",-1);
+		}
+		
+		if(id_message==null){
+			return ErrorJSON.serviceRefused("missing parameter id_message",-1);
+		}
+		
+		id_user = ConnectionTools.getId_from_key_user(key_user, c);
+		login_user = UserTools.getLogin(id_user, c);
+
+		if(!MessageTools.exists(id_message,coll)){
+			return ErrorJSON.serviceRefused("message does not exist",-1);
+		}
+		
+		if(!MessageTools.check_author(login_user,id_message,coll)){
+			return ErrorJSON.serviceRefused("permission denied",-1);
+		}
+		
+		MessageTools.removeMessage(id_message,coll);
+		
+		json = ErrorJSON.serviceAccepted("text",1);
+		
+		return json;
+	
+	}
+}
