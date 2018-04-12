@@ -1,5 +1,6 @@
 package tools;
 
+import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
@@ -17,7 +18,7 @@ import com.mongodb.DBObject;
 
 public class MessageTools {
 	
-	public static String getNextId(String collectionName) {
+	public static double getNextId(String collectionName) throws UnknownHostException {
 		DBCollection counters = Database.getMongocollection("counters");		
 		
 		DBObject update = new BasicDBObject();
@@ -25,20 +26,20 @@ public class MessageTools {
 		DBObject query = new BasicDBObject();
 		
 		query.put("_id", collectionName);
-		change.put("next", Integer.valueOf(1));
+		change.put("next",1);
 		update.put("$inc", change);
 		
 		//DBObject res = counters.findAndModify(query, new BasicDBObject(), new BasicDBObject(), false, update, true, true);
 		DBObject res = counters.findAndModify(query, update);
-		return res.get("next").toString();
+		return (Double) res.get("next");
 		
 	}
 	
-	public static void addMessage(String id, String name, String login, String text, DBCollection coll){
+	public static void addMessage(String id, String name, String login, String text, DBCollection coll) throws UnknownHostException{
 		BasicDBObject obj = new BasicDBObject();
 		GregorianCalendar calendar = new java.util.GregorianCalendar();
 		Date d = calendar.getTime();
-		obj.put("id_msg", counters("messages"));
+		obj.put("id_msg", getNextId("messages"));
 		obj.put("author", name);
 		obj.put("id_user", id);
 		obj.put("login", login);
@@ -76,7 +77,7 @@ public class MessageTools {
 	public static JSONObject getMessages_within_hour(DBCollection coll) throws JSONException{
 		BasicDBObject query = new BasicDBObject();
 		GregorianCalendar calendar = new java.util.GregorianCalendar();
-		calendar.add(calendar.HOUR, -1);
+		calendar.add(calendar.HOUR, -20);
 		Date d = calendar.getTime();
 		query.put("date",new BasicDBObject("$gte",d));
 		DBCursor cursor = coll.find(query);
@@ -101,7 +102,7 @@ public class MessageTools {
 	
 	public static void removeMessage(String id_message,DBCollection coll){
 		BasicDBObject query = new BasicDBObject();
-		query.put("id_msg", new ObjectId(id_message));
+		query.put("id_msg", Integer.parseInt(id_message));
 		
 		coll.remove(query);
 	}
@@ -130,7 +131,7 @@ public class MessageTools {
 	}
 
 
-	public static void addComment(String id_user, String name_user, String login_user, String id_message, String text, DBCollection coll){
+	public static void addComment(String id_user, String name_user, String login_user, String id_message, String text, DBCollection coll) throws UnknownHostException{
 		GregorianCalendar calendar = new java.util.GregorianCalendar();
 		Date d = calendar.getTime();
 		
@@ -138,7 +139,7 @@ public class MessageTools {
 		
 
 		DBObject comment = new BasicDBObject();
-		comment.put("id_comment", counters("comments"));
+		comment.put("id_comment", getNextId("comments"));
 		comment.put("id_user", id_user);
 		comment.put("author", name_user);
 		comment.put("login", login_user);
@@ -152,18 +153,20 @@ public class MessageTools {
 	
 	public static void addLike(String id_message, String id_user, DBCollection coll){
 		DBObject searchQuery = new BasicDBObject("id_msg", Integer.parseInt(id_message));
-		DBObject searchQuery2 = (DBObject) searchQuery.put("likes", id_user); // chercher id_user dans le tableau de likes 
+		//DBObject searchQuery2 = (DBObject) searchQuery.put("likes", id_user); // chercher id_user dans le tableau de likes 
 		//DBCursor cursor = coll.find(searchQuery);
-		DBCursor cursor2 = coll.find(searchQuery2);
+		//DBCursor cursor2 = coll.find(searchQuery2);
 		DBObject action;
-		
+		action = new BasicDBObject("$push", new BasicDBObject().append("likes", id_user));
+
+		/*
 		if (!cursor2.hasNext()){ // ajouter un like
 			// ajouter l'utilisateur dans le tableau de ceux ayant liké
 			action = new BasicDBObject("$push", new BasicDBObject().append("likes", id_user));
 		}
 		else{ // enlever un like
 			action = new BasicDBObject("$pull", new BasicDBObject().append("likes", id_user));
-		}
+		}*/
 	
 		coll.update(searchQuery, action);
 

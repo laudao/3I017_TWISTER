@@ -23,7 +23,7 @@ public class AddMessage extends HttpServlet{
 		PrintWriter out;
 		JSONObject res = null;
 		String key = request.getParameter("key_user");
-		String text = request.getParameter("text");
+		String text = request.getParameter("content");
 		out = response.getWriter();
 		
 		try{

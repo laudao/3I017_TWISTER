@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
+	<section name="org.eclipse.wst.jsdt.internal.ui.text.QuickOutline">
+		<item value="false" key="org.eclipse.wst.jsdt.internal.ui.text.JavaOutlineInformationControlDIALOG_USE_PERSISTED_LOCATION"/>
+		<item value="false" key="org.eclipse.wst.jsdt.internal.ui.text.JavaOutlineInformationControlDIALOG_USE_PERSISTED_SIZE"/>
+		<item value="false" key="GoIntoTopLevelTypeAction.isChecked"/>
+	</section>
 	<section name="completion_proposal_size">
 	</section>
 	<section name="JavaElementSearchActions">

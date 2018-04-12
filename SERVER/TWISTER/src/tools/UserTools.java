@@ -100,6 +100,35 @@ public class UserTools {
 		return res;
 	}
 
-	
+	public static String[] getAllUsers(Connection c) throws SQLException{
+		String s1 = "SELECT COUNT(*) FROM USERS;" ;
+		Statement st1 = c.createStatement();
+		ResultSet rs1 = st1.executeQuery(s1);
+		int n;
+		
+		if (rs1.next()){
+			n = rs1.getInt(1); 
+		}else{
+			n = 0;
+		}
+		System.out.println(n);
+		
+		st1.close();
+		
+		String s = "SELECT * FROM USERS;";
+		Statement st = c.createStatement();
+		ResultSet cursor = st.executeQuery(s);
+		String[] users = new String[n];
+		int i = 0;
+		
+		while (cursor.next()){
+			users[i] = cursor.getString("id");
+			i++;
+		}
+		
+		st.close();
+		return users;
+	}
+		
 
 }

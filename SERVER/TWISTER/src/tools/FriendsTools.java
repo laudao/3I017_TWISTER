@@ -52,4 +52,33 @@ public class FriendsTools {
 		st.close();
 		return res;
 	}
+	
+	public static String[] getFriends(String source, Connection c) throws SQLException{
+		String s1 = "SELECT COUNT(*) FROM FRIENDS WHERE source = " + source + ";";
+		Statement st1 = c.createStatement();
+		ResultSet cursor1 = st1.executeQuery(s1);
+		
+		int nb_friends;
+		
+		if (cursor1.next()){
+			nb_friends = cursor1.getInt(1);
+		}else{
+			nb_friends = 0;
+		}
+		st1.close();
+		
+		String s = "SELECT cible FROM FRIENDS WHERE source = " + source + ";";
+		Statement st = c.createStatement();
+		ResultSet cursor = st.executeQuery(s);
+		String[] friends = new String[nb_friends];
+		int i = 0;
+		
+		while (cursor.next()){
+			friends[i] = cursor.getString("cible");
+			i++;
+		}
+		
+		st.close();
+		return friends;
+	}
 }

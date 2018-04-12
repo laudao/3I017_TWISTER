@@ -53,6 +53,10 @@
 		<servlet-name>listMessages</servlet-name> 
 		<servlet-class>servlets.ListMessages</servlet-class> 
 	</servlet>
+	<servlet> 
+		<servlet-name>getFollowing</servlet-name> 
+		<servlet-class>servlets.GetFollowing</servlet-class> 
+	</servlet>
 
 	<servlet-mapping> 
 		<servlet-name>createUser</servlet-name> 
@@ -106,7 +110,11 @@
 		<servlet-name>listMessages</servlet-name> 
 		<url-pattern>/user/listMessages</url-pattern> 
 	</servlet-mapping>
-
+	<servlet-mapping> 
+		<servlet-name>getFollowing</servlet-name> 
+		<url-pattern>/friends/getFollowing</url-pattern> 
+	</servlet-mapping>
+	
 	<resource-ref>
 		<description>DB Connection</description>
   		<res-ref-name>jdbc/db</res-ref-name>
