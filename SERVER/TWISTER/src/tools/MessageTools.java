@@ -17,34 +17,28 @@ import com.mongodb.DBObject;
 
 public class MessageTools {
 	
-	public static int counter(String name) {
-		DBCollection counters = Database.getMongocollection("counters");
-		BasicDBObject o_id = new BasicDBObject();
-		BasicDBObject o_query = new BasicDBObject();
-		BasicDBObject o_update = new BasicDBObject();
-		BasicDBObject o_inc = new BasicDBObject();
-		BasicDBObject o_next = new BasicDBObject();
-		BasicDBObject o_new = new BasicDBObject();
-		BasicDBObject o_upsert = new BasicDBObject();
-		BasicDBObject o1 = new BasicDBObject();
+	public static String getNextId(String collectionName) {
+		DBCollection counters = Database.getMongocollection("counters");		
 		
-		o_id.put("_id", name);
-		o_next.put("next", 1);
-		o_inc.put("$inc", o_next);
+		DBObject update = new BasicDBObject();
+		DBObject change = new BasicDBObject();
+		DBObject query = new BasicDBObject();
 		
-		o1.put("query", o_id);
-		o1.put("update", o_inc);
-		o1.put("new", true);
-		o1.put("upsert", true);
+		query.put("_id", collectionName);
+		change.put("next", Integer.valueOf(1));
+		update.put("$inc", change);
 		
-		DBObject ret = counters.findAndModify(o1);
-		return ret.get(next);
+		//DBObject res = counters.findAndModify(query, new BasicDBObject(), new BasicDBObject(), false, update, true, true);
+		DBObject res = counters.findAndModify(query, update);
+		return res.get("next").toString();
+		
 	}
 	
 	public static void addMessage(String id, String name, String login, String text, DBCollection coll){
 		BasicDBObject obj = new BasicDBObject();
 		GregorianCalendar calendar = new java.util.GregorianCalendar();
 		Date d = calendar.getTime();
+		obj.put("id_msg", counters("messages"));
 		obj.put("author", name);
 		obj.put("id_user", id);
 		obj.put("login", login);
@@ -63,7 +57,7 @@ public class MessageTools {
 			DBObject b = cursor.next();
 			JSONObject j = new JSONObject();
 			//j.put("id_msg", b.get("_id"));
-			j.put("_id", b.get("_id"));
+			j.put("id_msg", b.get("id_msg"));
 			j.put("id_user", b.get("id_user"));
 			j.put("author", b.get("author"));
 			j.put("login", b.get("login"));
@@ -91,7 +85,7 @@ public class MessageTools {
 			DBObject b = cursor.next();
 			JSONObject j = new JSONObject();
 			//j.put("id_msg", b.get("_id"));
-			j.put("_id", b.get("_id"));
+			j.put("id_msg", b.get("id_msg"));
 			j.put("id_user", b.get("id_user"));
 			j.put("author", b.get("author"));
 			j.put("login", b.get("login"));
@@ -107,7 +101,7 @@ public class MessageTools {
 	
 	public static void removeMessage(String id_message,DBCollection coll){
 		BasicDBObject query = new BasicDBObject();
-		query.put("_id", new ObjectId(id_message));
+		query.put("id_msg", new ObjectId(id_message));
 		
 		coll.remove(query);
 	}
@@ -115,7 +109,7 @@ public class MessageTools {
 	public static boolean check_author(String login_user, String id_message, DBCollection coll){
 		BasicDBObject query = new BasicDBObject();
 		query.put("login", login_user);
-		query.put("_id", id_message);
+		query.put("id_msg", Integer.parseInt(id_message));
 		
 		DBCursor cursor = coll.find(query);
 		if (cursor.hasNext()){
@@ -126,7 +120,7 @@ public class MessageTools {
 	
 	public static boolean exists(String id_message, DBCollection coll){
 		BasicDBObject query = new BasicDBObject();
-		query.put("_id", id_message);
+		query.put("id_msg", Integer.parseInt(id_message));
 		
 		DBCursor cursor = coll.find(query);
 		if (cursor.hasNext()){
@@ -140,11 +134,11 @@ public class MessageTools {
 		GregorianCalendar calendar = new java.util.GregorianCalendar();
 		Date d = calendar.getTime();
 		
-		DBObject searchQuery = new BasicDBObject("_id", new ObjectId(id_message));
+		DBObject searchQuery = new BasicDBObject("id_msg", Integer.parseInt(id_message));
 		
 
 		DBObject comment = new BasicDBObject();
-		comment.put("id_comment", new ObjectId());
+		comment.put("id_comment", counters("comments"));
 		comment.put("id_user", id_user);
 		comment.put("author", name_user);
 		comment.put("login", login_user);
@@ -157,7 +151,7 @@ public class MessageTools {
 	}
 	
 	public static void addLike(String id_message, String id_user, DBCollection coll){
-		DBObject searchQuery = new BasicDBObject("_id", new ObjectId(id_message));
+		DBObject searchQuery = new BasicDBObject("id_msg", Integer.parseInt(id_message));
 		DBObject searchQuery2 = (DBObject) searchQuery.put("likes", id_user); // chercher id_user dans le tableau de likes 
 		//DBCursor cursor = coll.find(searchQuery);
 		DBCursor cursor2 = coll.find(searchQuery2);
@@ -177,9 +171,9 @@ public class MessageTools {
 
 
 	public static void removeComment(String id_message, String id_comment, String id_user, DBCollection coll){
-		DBObject searchQuery = new BasicDBObject("_id", new ObjectId(id_message));
+		DBObject searchQuery = new BasicDBObject("id_msg", Integer.parseInt(id_message));
 		
-		DBObject comment = new BasicDBObject("id_comment", new ObjectId(id_comment));
+		DBObject comment = new BasicDBObject("id_comment", Integer.parseInt(id_comment));
 		
 		
 		DBObject pull = new BasicDBObject("$pull", new BasicDBObject().append("comments", comment));
@@ -191,14 +185,14 @@ public class MessageTools {
 	public static boolean check_remove_comment(String login_user, String id_message, String id_comment, DBCollection coll) {
 		BasicDBObject query = new BasicDBObject();
 		query.put("login", login_user);
-		query.put("_id", new ObjectId(id_message));
+		query.put("id_msg", Integer.parseInt(id_message));
 
 		DBCursor cursor = coll.find(query);
 		if (cursor.hasNext()){
 			return true;
 		}else{
 			BasicDBObject comment = new BasicDBObject();
-			comment.put("id_comment", new ObjectId(id_comment));
+			comment.put("id_comment", Integer.parseInt(id_comment));
 			comment.put("login", login_user);
 			
 			DBCursor other_cursor = coll.find(comment);
