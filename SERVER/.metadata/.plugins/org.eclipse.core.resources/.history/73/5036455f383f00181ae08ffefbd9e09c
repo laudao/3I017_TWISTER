@@ -669,7 +669,7 @@ function deleteComment(id){
             url:"user/removeComment",
             data:"key_user=" + env.key + "&id_comment=" + id + "&id_message=" + id_msg,
             datatype:"text",
-            success:function(resp){ deleteCommentResponse(resp);},
+            success:function(resp){ addFollowerResponse(resp);},
             error:function(XHR, textStatus,errorThrown) { alert(textStatus); }
         })
     }

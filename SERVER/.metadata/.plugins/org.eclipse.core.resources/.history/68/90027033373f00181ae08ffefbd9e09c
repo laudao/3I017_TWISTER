@@ -49,7 +49,7 @@ Comment.prototype.getHTML =
 /*Creation de la methode getHTML qui est prototypé donc reste la meme par defaut pour toutes les instances de l'objet Message*/
 Message.prototype.getHTML =
     function(){
-        s = "<div class=\"message\" id=\"message_" + this.id_msg + "\">\n" +
+        s = "<div class=\"message\" id=message_" + this.id_msg + ">\n" +
 				"<div class=\"message-head\">\n" + 
 					"<div class=\"message-head--content\">\n" +
 						"<p class=\"author\" onclick=\"profile(" + this.id_user + ", \'" + this.login + "\', \'" + this.author +"\');\">" + this.author + "</p>\n" +
@@ -164,7 +164,7 @@ function makeMainPanel(fromId, fromLogin, fromAuthor, query){
             '<p class="profile-login">@'+ fromLogin +'</p> '+
             '<p class="profile-nbFollowers">' + env.followedBy[fromId].length + ' followers</p>'+  
                         '<div id="follow" class="send-button-prof">'+
-                                "<input id=\"ifollow\" type=\"submit\" value=\"follow\" onclick=\"javascript:addFollower(" + fromId + ")\"/>" +
+                                "<input id=\"ifollow\" type=\"submit\" value=\"follow\" onclick=\"javascript:addFollower()\"/>" +
                          '</div> '+
             '</div>' ;
     }
@@ -208,7 +208,7 @@ function makeMainPanel(fromId, fromLogin, fromAuthor, query){
 
     console.log(env.msgs);
     env.msgs.forEach(function(msg) {
-    	$("#message_" + msg.id_msg + " .comments-list").hide();    
+    	$("\"#message_" + msg.id_msg + "\" .comments-list").hide();    
     });
     
     if (env.fromId >= 0){ // page d'un utilisateur
@@ -669,7 +669,7 @@ function deleteComment(id){
             url:"user/removeComment",
             data:"key_user=" + env.key + "&id_comment=" + id + "&id_message=" + id_msg,
             datatype:"text",
-            success:function(resp){ deleteCommentResponse(resp);},
+            success:function(resp){ addFollowerResponse(resp);},
             error:function(XHR, textStatus,errorThrown) { alert(textStatus); }
         })
     }
@@ -703,12 +703,12 @@ function deleteComment_response(id, login){
 /****************************GERER ADDFRIEND****************************/
 
 
-function addFollower(id_friend){
+function addFollower(){
     if (!env.noConnection){
         $.ajax({
             type:"GET",
-            url:"friends/addFriend",
-            data:"key_user=" + env.key + "&id_friend=" + id_friend,
+            url:"user/addFriend",
+            data:"key_user=" + env.key + "&id_friend=" + env.id_user,
             datatype:"text",
             success:function(resp){ addFollowerResponse(resp);},
             error:function(XHR, textStatus,errorThrown) { alert(textStatus); }
@@ -719,7 +719,7 @@ function addFollower(id_friend){
     }
 }
 
-function addFollowerResponse(resp){
+function addFollowerResponse(){
     var el = $(".profile-nbFollowers");
     var cpt = el.text();
     el.text(parseInt(cpt)+1+" followers");
@@ -744,7 +744,7 @@ function removeFollower(){
     if (!env.noConnection){
         $.ajax({
             type:"GET",
-            url:"friends/removeFriend",
+            url:"user/removeFriend",
             data:"key=" + env.key + "&id_friend=" + env.id_user,
             datatype:"text",
             success:function(resp){ removeFollowerResponse(resp);},

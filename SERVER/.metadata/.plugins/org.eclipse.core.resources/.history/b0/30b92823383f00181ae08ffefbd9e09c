@@ -164,7 +164,7 @@ function makeMainPanel(fromId, fromLogin, fromAuthor, query){
             '<p class="profile-login">@'+ fromLogin +'</p> '+
             '<p class="profile-nbFollowers">' + env.followedBy[fromId].length + ' followers</p>'+  
                         '<div id="follow" class="send-button-prof">'+
-                                "<input id=\"ifollow\" type=\"submit\" value=\"follow\" onclick=\"javascript:addFollower(" + fromId + ")\"/>" +
+                                "<input id=\"ifollow\" type=\"submit\" value=\"follow\" onclick=\"javascript:addFollower()\"/>" +
                          '</div> '+
             '</div>' ;
     }
@@ -669,7 +669,7 @@ function deleteComment(id){
             url:"user/removeComment",
             data:"key_user=" + env.key + "&id_comment=" + id + "&id_message=" + id_msg,
             datatype:"text",
-            success:function(resp){ deleteCommentResponse(resp);},
+            success:function(resp){ addFollowerResponse(resp);},
             error:function(XHR, textStatus,errorThrown) { alert(textStatus); }
         })
     }
@@ -719,7 +719,7 @@ function addFollower(id_friend){
     }
 }
 
-function addFollowerResponse(resp){
+function addFollowerResponse(){
     var el = $(".profile-nbFollowers");
     var cpt = el.text();
     el.text(parseInt(cpt)+1+" followers");

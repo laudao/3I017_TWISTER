@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="services.GetFollowers_s"/>
+<fullyQualifiedTypeName name="tools.FriendsTools"/>
 <fullyQualifiedTypeName name="tools.UserTools"/>
 </qualifiedTypeNameHistroy>
