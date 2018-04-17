@@ -50,29 +50,29 @@ Comment.prototype.getHTML =
 Message.prototype.getHTML =
     function(){
         s = "<div class=\"message\" id=\"message_" + this.id_msg + "\">\n" +
-				"<div class=\"message-head\">\n" + 
-					"<div class=\"message-head--content\">\n" +
-						"<p class=\"author\" onclick=\"profile(" + this.id_user + ", \'" + this.login + "\', \'" + this.author +"\');\">" + this.author + "</p>\n" +
+                "<div class=\"message-head\">\n" + 
+                    "<div class=\"message-head--content\">\n" +
+                        "<p class=\"author\" onclick=\"profile(" + this.id_user + ", \'" + this.login + "\', \'" + this.author +"\');\">" + this.author + "</p>\n" +
 
-						//"<p id=\"author_" + this.id_user +"\" class=\"author\">" + this.author + "</p>\n" +
-						"<p class=\"login\"> @" +this.login + "</p>\n" +
-						"<p class=\"date\">" + this.date + "</p>\n" +
+                        //"<p id=\"author_" + this.id_user +"\" class=\"author\">" + this.author + "</p>\n" +
+                        "<p class=\"login\"> @" +this.login + "</p>\n" +
+                        "<p class=\"date\">" + this.date + "</p>\n" +
                     "</div>\n" +
                     "<div class=\"delete\">\n" +
-						"<img src=\"bin.png\" alt=\"delete\" onclick=\"deleteMessage(" + this.id_msg +")\"/>\n" +
+                        "<img src=\"bin.png\" alt=\"delete\" onclick=\"deleteMessage(" + this.id_msg +")\"/>\n" +
                     "</div>\n" +
                 "</div>\n" +
-				"<p class=\"content\">" + this.content + "</p>\n" +
-					"<div class=\"message-action\">\n" +
-						"<div class=\"likes\">\n" +
-							"<img id=\"likes_" + this.id_msg + "\" src=\"like.png\" alt=\"like\" onclick=\"addLike(" + this.id_msg + ");\"/>\n" +
-							"<p>" + this.likes.length + "</p>\n" +
-						"</div>\n" + 
-						"<div class=\"comments\">" +
-							"<p class=\"comments-button\" onclick=\"javascript:develop(" + this.id_msg + ")\">comments (" + this.comments.length + ")</p>\n" +
-						"</div>\n" +
-					"</div>\n" + 
-					"<div class=\"comments-list\">\n";
+                "<p class=\"content\">" + this.content + "</p>\n" +
+                    "<div class=\"message-action\">\n" +
+                        "<div class=\"likes\">\n" +
+                            "<img id=\"likes_" + this.id_msg + "\" src=\"like.png\" alt=\"like\" onclick=\"addLike(" + this.id_msg + ");\"/>\n" +
+                            "<p>" + this.likes.length + "</p>\n" +
+                        "</div>\n" + 
+                        "<div class=\"comments\">" +
+                            "<p class=\"comments-button\" onclick=\"javascript:develop(" + this.id_msg + ")\">comments (" + this.comments.length + ")</p>\n" +
+                        "</div>\n" +
+                    "</div>\n" + 
+                    "<div class=\"comments-list\">\n";
     
         for (var i=0; i<this.comments.length; i++){
             s += this.comments[i].getHTML();  
@@ -124,7 +124,7 @@ function makeConnectionPanel(){
 function makeMainPanel(fromId, fromLogin, fromAuthor, query){
     env.minId = -1;
     env.maxId = -1;
-	
+    
     if (fromId == undefined){
         fromId = -1;
     }
@@ -162,7 +162,7 @@ function makeMainPanel(fromId, fromLogin, fromAuthor, query){
             '<div class="profile">' +
             '<p class="profile-author">' + fromAuthor +'</p>'+
             '<p class="profile-login">@'+ fromLogin +'</p> '+
-            '<p class="profile-nbFollowers">' + env.followedBy[fromId].length + ' followers</p>'+  
+            '<p class="profile-nbFollowers">' + getNumberFollowers(fromId) + ' followers</p>'+  
                         '<div id="follow" class="send-button-prof">'+
                                 "<input id=\"ifollow\" type=\"submit\" value=\"follow\" onclick=\"javascript:addFollower(" + fromId + ")\"/>" +
                          '</div> '+
@@ -208,14 +208,20 @@ function makeMainPanel(fromId, fromLogin, fromAuthor, query){
 
     console.log(env.msgs);
     env.msgs.forEach(function(msg) {
-    	$("#message_" + msg.id_msg + " .comments-list").hide();    
+        $("#message_" + msg.id_msg + " .comments-list").hide();    
     });
     
     if (env.fromId >= 0){ // page d'un utilisateur
+        following = [];
+        env.follows.forEach(function(e){ // récupération des utilisateurs que suit env.id_user
+            if (e.id_user == env.id_user){
+                following = e.following;
+            }
+        })
         if (env.id_user == env.fromId){ // page de l'utilisateur connecté
             $("#ifollow").hide();        
         }
-        else if (follows[fromId].has(env.id_user)){ // l'utilisateur connecté le suit déjà, proposer de ne plus suivre
+        else if (following.includes(env.fromId)){ // l'utilisateur connecté le suit déjà, proposer de ne plus suivre
             $("#ifollow").replaceWith("<input id=\"ifollow\" type=\"submit\" value=\"followed\" onclick=\"javascript:removeFollower()\"/>");
             $("#ifollow").css("color","#4480f9");
             $("#ifollow").css("background","#FFF");
@@ -224,27 +230,28 @@ function makeMainPanel(fromId, fromLogin, fromAuthor, query){
     }
 }
 
+
 revival = 
     function(key, val) {
-		//console.log(val);
-		if (key == 'messages'){
+        //console.log(val);
+        if (key == 'messages'){
 
-			return val;
-		}
+            return val;
+        }
         if (val.error == undefined){
-        	
+            
             //if (val.comments != undefined){ // message
-        	if (val.id_msg != undefined){
-        		
-            	return new Message(val.id_user, val.id_msg, val.author, val.login, val.date, val.content,val.comments, val.likes);
+            if (val.id_msg != undefined){
+                
+                return new Message(val.id_user, val.id_msg, val.author, val.login, val.date, val.content,val.comments, val.likes);
             }
             else if (val.content != undefined){ // commentaire
                 
-            	return new Comment(val.id_user, val.id_comment, val.author, val.login, val.date, val.content);
+                return new Comment(val.id_user, val.id_comment, val.author, val.login, val.date, val.content);
             }
             else if (key == "date"){
-            	
-            	return val.substring(0, 10);
+                
+                return val.substring(0, 10);
             }
         } else { // erreur
             return Object(val); // objet générique contenant seulement l'attribut error
@@ -308,53 +315,40 @@ function init(){
     //setVirtualDB();
 }
 
+/****************************GERE LES FOLLOWERS****************************/
+
 function getFollowing(){
-	if (!env.noConnection){
-    	$.ajax({
+    if (!env.noConnection){
+        $.ajax({
             type:"GET",
             url:"friends/getFollowing",
             datatype:"text",
             success:function(resp){ getFollowingResponse(resp);},
             error:function(XHR, textStatus,errorThrown) { alert(textStatus); }
         })   
-    }	
+    }   
 }
 
 function getFollowingResponse(resp){
-	env.follows = [];
-	env.followedBy = [];
-	var tab = JSON.parse(resp, revival);
+    env.follows = [];
+    var tab = JSON.parse(resp, revival);
     console.log("following : ", tab);
-    tab = tab.follow;
-    
-    for (var i=0; i<tab.length; i++){
-    	id_user = tab[i].id_user;
-
-    	env.followedBy[id_user] = [];
-    }
-    
-    for (var i=0; i<tab.length; i++){
-    	id_user = tab[i].id_user;
-    	
-    	console.log(id_user);
-    	env.follows[id_user] = tab[i].following;
-    	for (var j=0; j<tab[i].following.length; j++){
-    		id_friend = tab[i].following[j]
-    		
-    		env.followedBy[id_friend].push(id_user);
-    		
-    	}
-    }
-    console.log(env.followedBy);
-    //env.follows = tab.follows;
-    	
+    env.follows = tab.follow; // tableau de {"id_user": id, "following": [id1, id2...]}
+        
 }
 
+/* à partir de env.follows, récupère pour un utilisateur donné le nombre de followers */
+function getNumberFollowers(id_user){
+    n = 0;
+    env.follows.forEach(function (e) {
+        if (e.following.includes(id_user)){ // e.following : tableau des utilisateurs suivis
+            n += 1;
+        } 
+    })
+    return n;
+}
 
 function profile(id, login, author){
-    //document.location.href = "profile.html";
-    //console.log(login);
-
     makeMainPanel(id, login, author, env.query);
 }
 
@@ -396,7 +390,6 @@ function getFromLocalDB(from, minId, maxId, nbMax){
 }
 
 function homepage(){
-    //document.location.href = "homepage.html"; //pour dire ou se trouve le makeConnectionPanel
     makeMainPanel();
 }
 
@@ -404,7 +397,7 @@ function homepage(){
 
 function completeMessages(){
     if (!env.noConnection){
-    	$.ajax({
+        $.ajax({
             type:"GET",
             url:"user/listMessages",
             datatype:"text",
@@ -419,17 +412,16 @@ function completeMessages(){
 }
 
 function completeMessagesReponse(rep){
-    
     var tab = JSON.parse(rep, revival);
     if (!env.noConnection){
-    	tab = tab.messages;
+        tab = tab.messages;
     }
 
     var s = "";
     for (var i=0; i<tab.length; i++){
-    	var m = tab[i];
-        console.log(m);
-        env.msgs[m.id_msg] = m;
+        var m = tab[i];
+        //console.log(m);
+        env.msgs.push(m);
         if (m.id_msg > env.maxId){
             env.maxId = m.id;
         }
@@ -439,19 +431,30 @@ function completeMessagesReponse(rep){
         }
         // page de profil
         if (env.fromId >= 0){
-        	// afficher les propres messages de l'utilisateur et les messages des personnes qu'il suit
-        	if ((env.follows[env.fromId].includes(m.id_user)) || (env.fromId == m.id_user)){
-        		$(".messages-list").prepend(m.getHTML());
-        	}
-    	}else{
-    		$(".messages-list").prepend(m.getHTML());
-    	}
+            following = [];
+            env.follows.forEach(function(e){
+                if e.id_user == env.fromId{
+                    following = e.following;
+                } 
+            })
+
+            if ((following.includes(m.id_user)) || (env.fromId == m.id_user)){
+                $(".messages-list").prepend(m.getHTML());
+            }
+        }else{
+            $(".messages-list").prepend(m.getHTML());
+        }
     }
 }
 
 
 function develop(id){
-    var m = env.msgs[id];   
+    env.msgs.forEach(function (msg){
+        if (msg.id_msg == id){
+            m = msg;
+        }
+    })
+      
    // console.log(m);
     var el = $("#message_" + id + " .comments-list");
     el.show("slow");
@@ -461,10 +464,13 @@ function develop(id){
 }
 
 function hideComments(id){
-    var m = env.msgs[id];
+    env.msgs.forEach(function (msg){
+        if (msg.id_msg == id){
+            m = msg;
+        }
+    })
     var el = $("#message_" + id + " .comments-list");
     el.hide("slow");
-    //el.html("");
     var el = $("#message_" + id + " .comments-button");
     el.replaceWith("<p class=\"comments-button\" onclick=\"javascript:develop(" + id + ")\">comments (" + m.comments.length + ")</p>\n");
 }
@@ -498,12 +504,9 @@ function newMessageReponse(resp){
     console.log(msg);
     if (msg != undefined && (msg.error == undefined)){
         var el = $(".messages-list");
-
-        //el.prepend(msg.getHTML());
         el.html("");
-    	completeMessages();
+        completeMessages();
         env.msgs.push(msg);
-
     }
 }
 
@@ -547,14 +550,15 @@ function newCommentResponse(id, resp){
                     "</div>\n" +
                 "</div>\n");
 
-        env.msgs[id].comments.push(com);
+        env.msgs.forEach(function (msg){
+            if (msg.id_msg == id){
+                m = msg;
+            }
+        })
+        
+        m.comments.push(com);
+        $("#message_" + id + " .comments-button").text("comments (" + m.comments.length + ")");
 
-        $("#message_" + id + " .comments-button").text("comments (" + env.msgs[id].comments.length + ")");
-
-/*        if (env.noConnection){
-            localdb[id] = env.msgs[id];
-        }
-*/
     }
     else{
         alert("Error: cannot add comment");
@@ -585,22 +589,27 @@ function addLike(id){
 
 function addLikeResponse(id, resp){
     console.log(resp);
-	var r = JSON.parse(resp, revival);
+    var r = JSON.parse(resp, revival);
     var el = $("#message_" + id + " .likes p");
 
     console.log(env.msgs[id].likes);
     if (r.error == undefined){
-        if (!(env.msgs[id].likes.includes(env.id_user))){ // like
+        env.msgs.forEach(function (msg){
+            if (msg.id_msg == id){
+                index = env.msgs.indexOf(msg);
+            }
+        })
+        if (!(env.msgs[index].likes.includes(env.id_user))){ // like
             var cpt = el.text();
             el.text(parseInt(cpt)+1);
-            env.msgs[id].likes.push(env.id_user);
+            env.msgs[index].likes.push(env.id_user);
             console.log(env.msgs[id].likes);
             var bt = $("#likes_" + id);
             bt.replaceWith("<img id=\"likes_" + id + "\" src=\"redlike.png\" alt=\"like\" onclick=\"addLike(" + id + ");\"/>\n");
         } else {
             var cpt = el.text();
             el.text(parseInt(cpt)-1);
-            var index = env.msgs[id].likes.indexOf(env.id_user);
+            var index_user = env.msgs[index].likes.indexOf(env.id_user);
             delete(env.msgs[id].likes[index]);
 
 
@@ -637,15 +646,21 @@ function deleteMessage(id){
 }
 
 function deleteMessageResponse(id, resp){
-	console.log(resp);
+    console.log(resp);
 
-	var r = JSON.parse(resp, revival);
-	if (r.error != undefined){
+    var r = JSON.parse(resp, revival);
+    if (r.error != undefined){
         alert("Error: cannot remove message");
 
     }else{
-    	$("#message_" + id).remove();
-        delete(env.msgs[id]);
+        $("#message_" + id).remove();
+        
+        env.msgs.forEach(function (msg){
+            if (msg.id_msg == id){
+                index = env.msgs.indexOf(msg);
+            }
+        })
+        delete(env.msgs[index]);
     }
 }
 
@@ -663,7 +678,7 @@ function deleteComment(id){
             url:"user/removeComment",
             data:"key_user=" + env.key + "&id_comment=" + id + "&id_message=" + id_msg,
             datatype:"text",
-            success:function(resp){ deleteCommentResponse(resp);},
+            success:function(resp){ deleteCommentResponse(id, resp);},
             error:function(XHR, textStatus,errorThrown) { alert(textStatus); }
         })
     }
@@ -673,25 +688,27 @@ function deleteComment(id){
 }
 
 function deleteComment_response(id, resp){
-    //console.log(env.login);
-    //console.log(login);
+    console.log(env.login);
+    console.log(login);
     var r = JSON.parse(resp, revival);
     if (r.error == undefined){
         var id_msg = $("#comment_" + id).parent().parent().attr('id').substr(8);
-        //console.log(env.msgs);
-        //console.log(id);
-        
-        delete(env.msgs[id_msg].comments[id]);
-        var comments_f = env.msgs[id_msg].comments.filter(c => c != undefined);
-        
-        var comment = comments_f.find(function(e) { return e.id_comment = id});
-        
-        var index = env.msgs[id_msg].comments.indexOf(comment);
-        delete(env.msgs[id_msg].comments[index]);
+    
+        env.msgs.forEach(function (msg){
+            if (msg.id_msg == id_msg){
+                index_msg = env.msgs.indexOf(msg);
+                msg.comments.forEach(function (comment){
+                    if comment.id_comment == id{
+                        index_comment = env.msgs[index_msg].indexOf(comment);
+                    }
+                })
+            }
+        })
+        delete(m.comments[index_msg].comments[index_comment]);
         $("#comment_" + id).remove();
         
     }else{
-        alert("Error: cannot remove comment");
+        alert("Error : cannot remove comment");
     }
 }
 
@@ -731,9 +748,14 @@ function addFollowerResponse(resp){
         el.text(parseInt(cpt)+1+" followers");
     
         var bt = $("#ifollow")
-        env.follows[env.id_user].push(env.fromId);
+        env.follows.forEach(function(e){
+            if (e.id_user == env.id_user){
+                index = follows.indexOf(e);
+            }
+        })
+        env.follows[index].push(env.fromId);
     }else{
-        alert("Error: cannot follow " + env.fromId);
+        alert("Error: cannot follow " + env.fromLogin);
     }
  
 }
@@ -759,6 +781,8 @@ function removeFollower(){
     }
 }
 
+
+
 function removeFollowerResponse(resp){
     var r = JSON.parse(resp, revival);
     if (r.error == undefined){
@@ -767,12 +791,17 @@ function removeFollowerResponse(resp){
         el.text(parseInt(cpt)-1+" followers");
         var bt = $("#ifollow");
         bt.replaceWith("<input id=\"ifollow\" type=\"submit\" value=\"follow\" onclick=\"javascript:addFollower()\"/>");
-        //env.follows[env.fromId].delete(env.id_user);
-        delete(env.follow[env.id_user][env.fromId]);
+        env.follows.forEach(function(e){
+            if (e.id_user == env.id_user){
+                index = follows.indexOf(e);
+            }
+        })
+        delete(env.follows[index].indexOf(env.fromId));
     }else{
-        alert("Error : cannot unfollow " + env.fromLogin);
+        alert("Error : cannot unfollow " + env.fromId);
     }
 }
+
 
 /****************************GERER LE LOGIN****************************/
 
