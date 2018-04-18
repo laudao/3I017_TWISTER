@@ -83,6 +83,14 @@
     letter-spacing: 1px;
 }
 
+.ok_msg { 
+    font-size: 15px;
+    font-weight: 300;
+    font-family: sans-serif;
+    color: green;
+    letter-spacing: 1px;
+}
+
 .logo img {
     width: 80px;
 }

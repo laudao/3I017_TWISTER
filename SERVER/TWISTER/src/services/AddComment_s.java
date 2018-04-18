@@ -43,10 +43,10 @@ public class AddComment_s {
 		login_user = UserTools.getLogin(id_user, c);
 		name_user = UserTools.getName(id_user, c);
 
-		MessageTools.addComment(id_user, name_user, login_user, id_message, text, coll);
+		json = MessageTools.addComment(id_user, name_user, login_user, id_message, text, coll);
 		//MessageTools.addComment(id_user, id_message, text, coll);
 			
-		json = ErrorJSON.serviceAccepted("text",1);
+		//json = ErrorJSON.serviceAccepted("text",1);
 			
 		return json;
 			

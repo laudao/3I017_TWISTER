@@ -1,0 +1,501 @@
+#main_connection {
+	text-align: center;
+	margin: auto;
+	width: 300px;
+	margin-top: 125px;
+}
+
+#main_connection .ids{
+    margin-bottom: 10px;
+}
+
+#main_connection .ids input{
+	width: calc(100% - 40px);
+    padding: 10px 20px;
+    border-radius: 3px;
+    border: none;
+    background: #EEE;
+}
+
+#main_connection .buttons input{
+    border-radius: 29px;
+    width: 100%;
+    padding: 14px;
+    background: #4480f9;
+    border: none;
+    margin: 10px 0px;
+    cursor: pointer;
+    transition: 0.5s;
+    color: #FFF;
+    font-weight: 500;
+    letter-spacing: 2px;
+    outline: none;
+}
+
+#main_connection .buttons input:hover{
+	transition: 0.5s;
+	box-shadow: 0px 4px 10px -5px rgba(0,0,255,0.8);
+	transform: translateY(-4px)
+}
+#main_connection .buttons input:hover{
+    outline: none;
+}
+
+.links{
+	display: flex;
+    justify-content: space-between;
+}
+
+.links a {
+	font-family: sans-serif;
+    font-size: 14px;
+    color: #4480f9;
+    margin-top: 5px;
+}
+
+#signin{
+	margin-bottom: 25px;
+    margin-top: 25px;
+	font-size: 18px;
+    font-weight: 300;
+    font-family: sans-serif;
+    color: #333;
+    letter-spacing: 1px;
+}
+
+.logo-connect img {
+	width: 100px;
+}
+
+.err_msg { 
+    margin-bottom: 15px;
+    font-size: 15px;
+    font-weight: 300;
+    font-family: sans-serif;
+    color: red;
+    letter-spacing: 1px;
+}
+
+.body-connection {
+    margin: 0;
+    background: #ffffff;
+}
+
+body {
+	margin: 0;
+	background: #F4F4F4;
+}
+
+p {
+	font-family: sans-serif;
+	margin: 0;
+}
+
+.header {
+	background: #ffffff;
+    width: 100%;
+    height: 64px;
+    box-shadow: 0px 0px 10px -4px rgba(0,63,150,1);
+    z-index: 99;
+    position: fixed;
+    top: 0;	
+}
+
+.header-wrapper {
+	width: 1000px;
+	justify-content: space-between;
+    display: flex;
+    margin: auto;
+}
+
+.logo {
+	width: 52px;
+    height: 52px;
+    margin-left: 20px;
+    margin-top: 6px;
+    transition: .5s;
+    cursor: pointer;
+
+}
+
+.logo:hover {
+	transition: .5s;
+	transform: rotate(20deg);
+}
+
+.logo img {
+	width: 100%;
+}
+
+.disconnect {
+	margin-right: 20px;
+}
+
+.disconnect input {
+	border-radius: 29px;
+    width: 100%;
+    padding: 14px;
+    border: none;
+    margin: 10px 0px;
+    cursor: pointer;
+    transition: 0.5s;
+    outline: none;
+    background: #EEE;
+    color: #333;
+    font-weight: 600;
+}
+
+.disconnect input:hover {
+	transition: 0.5s;
+	box-shadow: 0px 4px 10px -5px rgba(0,0,255,0.8);
+	transform: translateY(-2px)
+}
+
+.search-zone input {
+	width: 470px;
+    padding: 15px 60px 15px 25px;
+    border-radius: 3px;
+    border: none;
+    background: #EEE;
+    margin: 10px 10px 10px 220px;
+}
+
+.search-zone {
+	position: relative;
+}
+
+.search-button {
+	position: absolute;
+    top: 7px;
+    right: 10px;
+    padding: 14px 19px;
+    cursor: pointer;
+    opacity: 0.50;
+    transition: 0.5s;
+}
+
+.search-button:hover {
+	transition: 0.5s;
+	opacity: 0.9;
+	transform: scale(1.04, 1.04);
+}
+
+.search-button img{
+	width: 20px;
+}
+
+.wrapper {
+	width: 1000px;
+    margin: 64px auto;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+}
+
+.stats {
+    width: 285px;
+    height: 500px;
+    background: #FFF;
+    margin-top: 25px;
+    display: inline-block;
+}
+
+.messages {
+    width: 685px;
+    display: inline-block;
+    margin-top: 25px;
+}
+
+.messages-list {
+	background: #fff;
+}
+
+.message {
+	border-bottom: 1px solid #EEE;
+	padding: 25px 25px;
+}
+
+.message-head {
+	display: flex;
+    justify-content: space-between;
+}
+
+.comment-head {
+    display: flex;
+    justify-content: space-between;
+}
+
+.likes {
+    display: flex;
+}
+
+.likes img {
+	width: 20px;
+	height: 20px;
+	display: inline-block;
+	cursor: pointer;
+	opacity: 0.5;
+}
+
+.likes img:hover {
+	opacity: 1;
+}
+
+.likes p {
+	display: inline-block;
+    padding-bottom: 0px;
+    font-size: 15px;
+    margin-top: 2px;
+    margin-left: 3px;
+}
+
+.author {
+    font-weight: 700;
+    line-height: 1.5;
+    display: inline-block;
+    color: #333;
+    font-size: 16px;
+    cursor:pointer;
+}
+
+.date {
+	display: inline-block;
+    font-size: 14px;
+    font-weight: 500;
+    color: #757575;
+}
+
+.login {
+	display: inline-block;
+    margin-left: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #757575;
+}
+
+.content {
+	font-weight: 300;
+    font-size: 15px;
+    margin-top: 5px;
+}
+
+.message-action {
+	display: flex;
+    margin-top: 10px;
+    justify-content: space-between;
+}
+
+.comments-button {
+	color: #757575;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 15px;
+	transition: .5s;
+}
+
+.comments-button:hover {
+	transition: .5s;
+	color: #4480f9;
+}
+
+.delete img{
+	width: 20px;
+	height:	20px;
+	opacity: 0.5;
+	cursor: pointer;
+}
+
+.delete img:hover{
+	opacity: 1;
+}
+
+.hidden {
+	transition: .5;
+	display: none;
+}
+
+.new-message {
+	background: #FFF;
+	margin-bottom: 20px;
+}
+
+.message-form {
+	border-bottom: 1px solid #EEE;
+	padding: 25px 25px 15px 25px;	
+}
+
+.message-input {
+	width: 585px;
+    height: 75px;
+    padding: 15px 25px 15px 25px;
+    border-radius: 4px;
+    border: none;
+    background: #fff;
+    resize: none;
+    border: 2px solid #4480f999;
+
+	font-weight: 300;
+    font-size: 15px;
+}
+
+.send-button {
+	text-align: right;
+}
+
+.send-button input {
+	margin-top: 8px;
+	border-radius: 29px;
+    width: 100px;
+    padding: 14px;
+    border: none;
+    cursor: pointer;
+    transition: 0.5s;
+    outline: none;
+    background: #4480f9;
+    color: #FFF;
+    font-weight: 300;
+	letter-spacing: 2px;
+}
+.send-button input:hover {
+	transition: 0.5s;
+	box-shadow: 0px 4px 10px -5px rgba(0,0,255,0.8);
+	transform: translateY(-2px);
+}
+
+.comments-list {
+	border-left: 4px solid #DDD;
+    border-radius: 3px;
+    margin-top: 10px;
+    padding: 0px 0px 0px 40px;
+}
+
+.comment {
+	padding-top: 10px;
+	padding-bottom: 10px;
+    border-top: 1px solid #EEE;
+}
+
+.comment-author {
+	font-size: 15px;
+}
+
+.comment-form {
+    display: flex;
+    justify-content: space-between;
+}
+
+.comment-input {
+	width: 420px;
+    height: 25px;
+	margin-bottom: 10px;
+    padding: 15px 25px 15px 25px;
+    border-radius: 4px;
+    border: none;
+    background: #fff;
+    resize: none;
+    border: 2px solid #ddd;
+    font-weight: 300;
+    font-size: 15px;
+}
+
+.send-button--comment input {
+	margin-top: 8px;
+	border-radius: 29px;
+    width: 100px;
+    padding: 14px;
+    border: none;
+    cursor: pointer;
+    transition: 0.5s;
+    outline: none;
+    background: #ddd;
+    color: #333;
+    font-weight: 300;
+	letter-spacing: 2px;
+}
+.send-button--comment input:hover {
+	transition: 0.5s;
+	box-shadow: 0px 4px 10px -5px rgba(0,0,255,0.8);
+	transform: translateY(-2px);
+}
+
+.profile {
+    width: 285px;
+    height: 285px;
+    background: #FFF;
+    margin-top: 25px;
+    display: inline-block;
+}
+
+.profile-author{
+    line-height: 1.5;
+    color: #333;
+    font-weight: 700;
+    height: 25px;
+    /* margin-bottom: 5px; */
+    padding: 10px 25px 5px 10px;
+    border: none;
+    resize: none;
+    font-size: 18px;
+    display:inline-block;
+    /* text-align: center; */
+}
+
+.profile-login{
+    font-size: 15px;
+    padding: 0px 25px 15px 10px;
+}
+
+.profile-bio{
+    font-size: 15px;
+    padding: 0px 25px 15px 10px;
+}
+
+.profile-nbFollowers{
+    font-size: 15px;
+    padding: 0px 25px 15px 10px;
+}
+
+#follow{
+    text-align: center;
+}
+
+#unfollow{
+    text-align: center;
+}
+
+#follow input {
+    margin-top: 8px;
+    border-radius: 29px;
+  width: 100px;
+  padding: 8px;
+  border: none;
+  cursor: pointer;
+  transition: 0.5s;
+  outline: none;
+  background: #4480f9;
+  color: #FFF;
+  font-weight: 300;
+    letter-spacing: 2px;
+}
+
+
+#unfollow input {
+    margin-top: Opx;
+    border-radius: 29px;
+  width: 100px;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+  transition: 0.5s;
+  outline: none;
+  background: #4480f9;
+  color: #FFF;
+  font-weight: 300;
+    letter-spacing: 2px;
+}
+
+.send-button-prof input:hover {
+    transition: 0.5s;
+    box-shadow: 0px 4px 10px -5px rgba(0,0,255,0.8);
+    transform: translateY(-2px);
+}

@@ -23,7 +23,7 @@ public class ListMessages_s {
 		JSONObject json = null;
         DBCollection coll = Database.getMongocollection("messages");
 			
-		json = MessageTools.getMessages_within_hour(coll);
+		json = MessageTools.getMessages_within_month(coll);
 		
         return json;
 		

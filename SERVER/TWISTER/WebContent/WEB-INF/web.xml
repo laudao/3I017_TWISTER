@@ -57,6 +57,10 @@
 		<servlet-name>getFollowing</servlet-name> 
 		<servlet-class>servlets.GetFollowing</servlet-class> 
 	</servlet>
+	<servlet> 
+		<servlet-name>removeLike</servlet-name> 
+		<servlet-class>servlets.RemoveLike</servlet-class> 
+	</servlet>
 
 	<servlet-mapping> 
 		<servlet-name>createUser</servlet-name> 
@@ -113,6 +117,10 @@
 	<servlet-mapping> 
 		<servlet-name>getFollowing</servlet-name> 
 		<url-pattern>/friends/getFollowing</url-pattern> 
+	</servlet-mapping>
+	<servlet-mapping> 
+		<servlet-name>removeLike</servlet-name> 
+		<url-pattern>/user/removeLike</url-pattern> 
 	</servlet-mapping>
 	
 	<resource-ref>

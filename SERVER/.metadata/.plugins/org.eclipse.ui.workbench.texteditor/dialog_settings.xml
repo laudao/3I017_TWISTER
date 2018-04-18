@@ -2,20 +2,20 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="t&apos;y " key="selection"/>
+		<item value="twister.html" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="twister.html"/>
+			<item value="onsubmit"/>
 			<item value="t&apos;y "/>
 			<item value="from"/>
 			<item value="completeMe"/>
 			<item value="includes"/>
 			<item value="completeMess"/>
 			<item value="getFollowers"/>
-			<item value="init()"/>
-			<item value="init"/>
 		</list>
 		<list key="replacehistory">
 		</list>
@@ -23,8 +23,8 @@
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
 		<item value="289" key="DIALOG_WIDTH"/>
 		<item value="1|Cantarell|11.0|0|GTK|1|" key="DIALOG_FONT_NAME"/>
-		<item value="824" key="DIALOG_HEIGHT"/>
-		<item value="1134" key="DIALOG_X_ORIGIN"/>
-		<item value="227" key="DIALOG_Y_ORIGIN"/>
+		<item value="854" key="DIALOG_HEIGHT"/>
+		<item value="671" key="DIALOG_X_ORIGIN"/>
+		<item value="199" key="DIALOG_Y_ORIGIN"/>
 	</section>
 </section>

@@ -7,6 +7,7 @@ function signup(form){
     var confirmation = form.confirmation.value;
 
     if (verif_form_signup(login, password, email, first_name, last_name, confirmation)){
+    	console.log("???");
     	register(login, password, email, first_name, last_name)
     }
 }
@@ -64,6 +65,12 @@ function func_error(msg){
     }
 }
 
+function func_ok(){
+    var msg_box = "<div class=\"ok_msg\">Welcome to Twister!</div>";
+    $("form").prepend(msg_box); 
+    
+}
+
 function cancel(){
     document.location.href = "twister.html"; //pour dire ou se trouve le makeConnectionPanel
     makeConnectionPanel();
@@ -109,7 +116,7 @@ function makeSignupPanel(){
 
 function init(){
     env = new Object();
-    env.noConnection = true;
+    env.noConnection = false;
 }
 /*
 function signupResponse(resp){
@@ -128,7 +135,8 @@ function signupResponse(resp){
 function signupResponse(resp){
     resp = JSON.parse(resp);
     if (resp.error == undefined){
-        document.location.href = "twister.html";
+    	func_ok();
+    	//document.location.href = "twister.html";
     }
     else{
         func_error(resp.message);
