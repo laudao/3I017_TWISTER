@@ -149,8 +149,9 @@ function makeMainPanel(fromId, fromLogin, fromAuthor, query){
                 '<div class="disconnect">' +
                     '<input type="submit" id="logout" value="LOG OUT" onclick ="logout()"/>' +      
                 '</div>' +
-                '<div class="user-profile">' +
-                '<input type="submit" id="button-user--profile" value="'+env.login+'" onclick ="makeMainPanel(' + env.id_user + ',\"' + env.login + '\",' + env.author + ')"/>' +      
+                '<div class="user-profile">' + 
+                "<img src=\"profile.png\" alt=\"bird_logo\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + 
+
                 '</div>' + 
             '</div>' +
         '</div>';
@@ -160,7 +161,7 @@ function makeMainPanel(fromId, fromLogin, fromAuthor, query){
             '<div class="stats">' +
             '</div>' ; 
     }
-    else{ // page d'un utilisateur
+    if (env.fromId > 0) { // page d'un utilisateur
         s += '<div class="wrapper">' + 
             '<div class="profile">' +
             '<p class="profile-author">' + fromAuthor +'</p>'+
@@ -205,13 +206,7 @@ function makeMainPanel(fromId, fromLogin, fromAuthor, query){
     completeMessages();
 
     
-    
-
-    console.log(env.msgs);
-   /* env.msgs.forEach(function(msg) {
-    	console.log("#message_" + msg.id_msg + " .comments-list");
-        $("#message_" + msg.id_msg + " .comments-list").hide();    
-    });*/
+    if(!env.noConnection){
     
     if (env.fromId >= 0){ // page d'un utilisateur
         following = [];
@@ -229,6 +224,25 @@ function makeMainPanel(fromId, fromLogin, fromAuthor, query){
             $("#ifollow").css("background","#FFF");
             $("#ifollow").css("box-shadow", "0px 0px 8px -4px rgba(0,0,255,0.8)");
         }
+    }
+
+    else{
+        for (var i=0; i<env.msgs.length; i++){
+            $("#message_" + i + " .comments-list").hide();
+        }
+    
+        if (env.fromId >= 0){ // page d'un utilisateur
+            if (env.id_user == env.fromId){ // page de l'utilisateur connecté
+                $("#ifollow").hide();        
+            }
+            else if (follows[fromId].has(env.id_user)){ // l'utilisateur connecté le suit déjà, proposer de ne plus suivre
+                $("#ifollow").replaceWith("<input id=\"ifollow\" type=\"submit\" value=\"followed\" onclick=\"javascript:removeFollower()\"/>");
+                $("#ifollow").css("color","#4480f9");
+                $("#ifollow").css("background","#FFF");
+            }
+        }
+    }
+    
     }
 }
 
@@ -305,16 +319,16 @@ function setVirtualDB(){
 
 function init(){
     env = new Object();
-    env.noConnection = false;
-   // env.key = "FARA123";
-   // env.id_user = 2;
+    env.noConnection = true;
+    env.key = "FARA123";
+    env.id_user = 2;
     env.minId = -1;
     env.maxId = -1;
     env.msgs = [];
     getFollowing();
-   // env.login = "chrisg";
-   // env.author = "Christian Mm";
-    //setVirtualDB();
+    env.login = "chrisg";
+    env.author = "Christian Mm";
+    setVirtualDB();
 }
 
 /****************************GERE LES FOLLOWERS****************************/
@@ -341,13 +355,19 @@ function getFollowingResponse(resp){
 
 /* à partir de env.follows, récupère pour un utilisateur donné le nombre de followers */
 function getNumberFollowers(id_user){
-    n = 0;
-    console.log(env.follows);s
-    env.follows.forEach(function (e) {
-        if (e.following.includes(id_user.toString())){ // e.following : tableau des utilisateurs suivis
-            n = n + 1;
-        } 
-    })
+    
+    if(!env.noConnection){
+        n = 0;
+        console.log(env.follows);s
+        env.follows.forEach(function (e) {
+            if (e.following.includes(id_user.toString())){ // e.following : tableau des utilisateurs suivis
+                n = n + 1;
+            } 
+        })
+    }
+    else{
+        n=follows[id_user].size;
+    }
     return n;
 }
 
@@ -410,7 +430,7 @@ function completeMessages(){
     }
     else{
         var tab = getFromLocalDB(env.fromId, env.minId, -1, -1);
-        completeMessagesResponse(JSON.stringify(tab)); 
+        completeMessagesResponselocal(JSON.stringify(tab)); 
     }
 }
 
@@ -461,6 +481,26 @@ function completeMessagesResponse(rep){
     }
 }
 
+function completeMessagesResponselocal(rep){
+        //console.log(rep);
+        var tab = JSON.parse(rep, revival);
+    
+        var s = "";
+        for (var i=0; i<tab.length; i++){
+            var m = tab[i];
+            env.msgs[m.id] = m;
+            if (m.id > env.maxId){
+                env.maxId = m.id;
+            }
+            if ((env.minId < 0) || (m.id < env.minId)){
+                env.minId = m.id;  
+     
+            }
+            $(".messages-list").append(m.getHTML());
+        }
+    }
+    
+
 
 function develop(id){
     env.msgs.forEach(function (msg){
@@ -508,7 +548,7 @@ function newMessage(){
             })   
         }
         else{
-            newMessageReponse(JSON.stringify(new Message(env.id_user, env.msgs.length, env.author, env.login, new Date(), text, undefined, undefined)));
+            newMessageReponselocal(JSON.stringify(new Message(env.id_user, env.msgs.length, env.author, env.login, new Date(), text, undefined, undefined)));
         }
     }
 }
@@ -522,6 +562,18 @@ function newMessageReponse(resp){
         //env.msgs.push(msg);
         completeMessages();
         
+    }
+}
+
+function newMessageReponselocal(resp){
+    var msg = JSON.parse(resp, revival);
+    //console.log(msg);
+    if (msg != undefined && (msg.error == undefined)){
+        var el = $(".messages-list");
+
+        el.prepend(msg.getHTML());
+
+        env.msgs.push(msg);
     }
 }
 
