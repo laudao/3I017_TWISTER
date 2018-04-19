@@ -47,6 +47,7 @@ Comment.prototype.getHTML =
         s = "<div class=\"comment\" id=\"comment_" + this.id_comment + "\">\n" +
                 "<div class=\"comment-head\">\n" + 
                     "<div class=\"comment-head--content\">\n" +
+                    "<img src=\"egg.jpg\" alt=\"bird_logo\" id=\"profile-use\" onclick=\"profile(" + this.id_user + ", \'" + this.login + "\', \'" + this.author +"\');\">" + 
                         "<p class=\"author comment-author\" onclick=\"profile(" + this.id_user + ", \'" + this.login + "\', \'" + this.author +"\');\">" + this.author + "</p>\n" +
                         "<p class=\"login\"> @" + this.login + "</p>\n" +
                         "<p class=\"date\">" + this.date + "</p>\n" +
@@ -66,7 +67,7 @@ Message.prototype.getHTML =
         s = "<div class=\"message\" id=\"message_" + this.id_msg + "\">\n" +
                 "<div class=\"message-head\">\n" + 
                     "<div class=\"message-head--content\">\n" +
-                    "<img src=\"egg.jpg\" alt=\"bird_logo\" id=\"profile-use\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + 
+                    "<img src=\"egg.jpg\" alt=\"bird_logo\" id=\"profile-use\" onclick=\"profile(" + this.id_user + ", \'" + this.login + "\', \'" + this.author +"\');\">" + 
                     "<p class=\"author\" onclick=\"profile(" + this.id_user + ", \'" + this.login + "\', \'" + this.author +"\');\">" + this.author + "</p>\n" + 
                         //"<p id=\"author_" + this.id_user +"\" class=\"author\">" + this.author + "</p>\n" +
                         "<p class=\"login\"> @" +this.login + "</p>\n" +
@@ -199,6 +200,7 @@ function makeMainPanel(fromId, fromLogin, fromAuthor, query){
     if (env.fromId > 0) { // page d'un utilisateur
         s += '<div class="wrapper">' + 
             '<div class="profile">' +
+            "<img src=\"egg.jpg\" alt=\"bird_logo\" id=\"profile-use-img\" \">" + 
             '<p class="profile-author">' + fromAuthor +'</p>'+
             '<p class="profile-login">@'+ fromLogin +'</p> '+
             '<p class="profile-nbFollowers">' + getNumberFollowers(fromId) + ' followers</p>' + 

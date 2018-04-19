@@ -82,7 +82,7 @@
 }
 
 body {
-	margin: 0;
+    margin: 0;
 	background: #F4F4F4;
 }
 
@@ -188,8 +188,6 @@ p {
 #profile-use  img {
 	width: 50%;
 }
-
-
 .search-zone input {
 	width: 470px;
     padding: 15px 60px 15px 25px;
@@ -320,6 +318,10 @@ p {
 
 #profile-use-2 img {
 	width: 50%;
+}
+#profile-use-img {
+    width: 70%;
+    margin-left: 45px;
 }
 
 .date {
@@ -485,7 +487,7 @@ p {
 .profile {
     width: 285px;
     height: 285px;
-    background: #FFF;
+    background:#F4F4F4;
     margin-top: 25px;
     display: inline-block;
 }
@@ -500,23 +502,33 @@ p {
     border: none;
     resize: none;
     font-size: 18px;
+    margin-left: 45px;
     display:inline-block;
     /* text-align: center; */
+}
+
+#profile-use-img {
+    width: 70%;
+    margin-left: 45px;
+    margin-top:20px;
 }
 
 .profile-login{
     font-size: 15px;
     padding: 0px 25px 15px 10px;
+    margin-left: 45px;
 }
 
 .profile-bio{
     font-size: 15px;
     padding: 0px 25px 15px 10px;
+    margin-left: 45px;
 }
 
 .profile-nbFollowers{
     font-size: 15px;
     padding: 0px 25px 15px 10px;
+    margin-left: 45px;
 }
 
 #follow{
@@ -540,6 +552,7 @@ p {
   color: #FFF;
   font-weight: 300;
     letter-spacing: 2px;
+    margin-left: 0px;
 }
 
 
@@ -556,6 +569,7 @@ p {
   color: #FFF;
   font-weight: 300;
     letter-spacing: 2px;
+    margin-left: 45px;
 }
 
 .send-button-prof input:hover {
