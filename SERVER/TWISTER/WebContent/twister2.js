@@ -321,13 +321,13 @@ function init(){
     env = new Object();
     env.noConnection = true;
     env.key = "FARA123";
-    env.id_user = 2;
+    env.id_user = 1;
     env.minId = -1;
     env.maxId = -1;
     env.msgs = [];
     getFollowing();
-    env.login = "chrisg";
-    env.author = "Christian Mm";
+    env.login = "hugowyb";
+    env.author = "Hugo wyborska";
     setVirtualDB();
 }
 
@@ -757,7 +757,7 @@ function deleteMessage(id){
         })
     }
     else{
-        deleteMessageResponse(id, login);
+        deleteMessageResponselocal(id, login);
     }
 }
 
@@ -780,6 +780,14 @@ function deleteMessageResponse(id, resp){
     }
 }
 
+function deleteMessageResponselocal(id, login){
+
+    if (login == env.login){
+        $("#message_" + id).remove();
+        delete(env.msgs[id]);
+    }
+}
+
 /****************************GERER REMOVEMECOMMENT****************************/
 
 function deleteComment(id){
@@ -799,7 +807,7 @@ function deleteComment(id){
         })
     }
     else{
-        deleteComment_response(id, login);
+        deleteCommentResponse(id, login);
     }
 }
 
@@ -827,7 +835,6 @@ function deleteCommentResponse(id, resp){
     }
 }
 
-
 /****************************GERER ADDFRIEND****************************/
 
 
@@ -843,7 +850,7 @@ function addFollower(){
         })
     }
     else{
-        addFollowerResponse("{\"key\": \"FARA123\", \"id\": 1, \"login\": \"hugowyb\", \"author\": \"Hugo Wyborska\"}")
+        addFollowerResponselocal("{\"key\": \"FARA123\", \"id\": 1, \"login\": \"hugowyb\", \"author\": \"Hugo Wyborska\"}")
     }
 }
 
@@ -875,6 +882,23 @@ function addFollowerResponse(resp){
  
 }
 
+function addFollowerResponselocal(resp){
+    var el = $(".profile-nbFollowers");
+    var cpt = el.text();
+    el.text(parseInt(cpt)+1+" followers");
+    followed = true;
+    var bt = $("#ifollow");
+    bt.replaceWith("<input id=\"ifollow\" type=\"submit\" value=\"followed\" onclick=\"javascript:removeFollower()\"/>");
+    var bt = $("#ifollow");
+    var bt = bt.css("color","#4480f9");
+    var bt = bt.css("background","#FFF");
+    el.text(parseInt(cpt)+1+" followers");
+    followed = true;
+    var bt = $("#ifollow")
+    follows[env.fromId].add(env.id_user);
+}
+
+
 /****************************GERER REMOVEFRIEND****************************/
 
 
@@ -891,7 +915,7 @@ function removeFollower(){
     }
     else{
         if(follows[env.fromId].has(env.id_user)){
-            removeFollowerResponse("{\"key\": \"FARA123\", \"id\": 1, \"login\": \"hugowyb\", \"author\": \"Hugo Wyborska\"}")
+            removeFollowerResponselocal("{\"key\": \"FARA123\", \"id\": 1, \"login\": \"hugowyb\", \"author\": \"Hugo Wyborska\"}")
         }
     }
 }
@@ -916,6 +940,15 @@ function removeFollowerResponse(resp){
     }else{
         alert("Error : cannot unfollow " + env.fromId);
     }
+}
+
+function removeFollowerResponselocal(resp){
+        var el = $(".profile-nbFollowers");
+        var cpt = el.text();
+        el.text(parseInt(cpt)-1+" followers");
+        var bt = $("#ifollow");
+        bt.replaceWith("<input id=\"ifollow\" type=\"submit\" value=\"follow\" onclick=\"javascript:addFollower()\"/>");
+        follows[env.fromId].delete(env.id_user);
 }
 
 
