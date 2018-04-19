@@ -27,6 +27,20 @@ function Comment(id_user, id_comment, author, login, date, content){
     this.content = content;
 }
 
+function User(id_user,author, login){
+    this.id_user = id_user;
+    this.author = author;
+    this.login = login;
+}
+
+User.prototype.getHTML = 
+    function(){
+        s ="<p class=\"author\" onclick=\"profile(" + this.id_user + ", \'" + this.login + "\', \'" + this.author +"\');\">" + this.author + "</p>\n" + 
+           "<p class=\"login\"> @" +this.login + "</p>\n" 
+
+        return s;
+    }
+
 /*Creation de la methode getHTML qui est prototypé donc reste la meme par defaut pour toutes les instances de l'objet Comment*/
 Comment.prototype.getHTML =
     function(){
@@ -52,8 +66,8 @@ Message.prototype.getHTML =
         s = "<div class=\"message\" id=\"message_" + this.id_msg + "\">\n" +
                 "<div class=\"message-head\">\n" + 
                     "<div class=\"message-head--content\">\n" +
-                        "<p class=\"author\" onclick=\"profile(" + this.id_user + ", \'" + this.login + "\', \'" + this.author +"\');\">" + this.author + "</p>\n" +
-
+                    "<img src=\"egg.jpg\" alt=\"bird_logo\" id=\"profile-use\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + 
+                    "<p class=\"author\" onclick=\"profile(" + this.id_user + ", \'" + this.login + "\', \'" + this.author +"\');\">" + this.author + "</p>\n" + 
                         //"<p id=\"author_" + this.id_user +"\" class=\"author\">" + this.author + "</p>\n" +
                         "<p class=\"login\"> @" +this.login + "</p>\n" +
                         "<p class=\"date\">" + this.date + "</p>\n" +
@@ -159,8 +173,29 @@ function makeMainPanel(fromId, fromLogin, fromAuthor, query){
     if (env.fromId < 0){ // page d'accueil
         s += '<div class="wrapper">' + 
             '<div class="stats">' +
+            '<p class="stats2">Most popular accounts :</p>' +
+            CompleteUsersResponse(env.id_user,env.login,env.author) +
+               /* "<img src=\"egg.jpg\" alt=\"bird_logo\" id=\"profile-use-2\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + 
+                "<p class=\"author\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + this.author + "</p>\n" + 
+                    "<p class=\"login\"> @" +env.login + "</p>\n" +
+                    "<img src=\"egg.jpg\" alt=\"bird_logo\" id=\"profile-use-2\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + 
+                "<p class=\"author\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + this.author + "</p>\n" + 
+                    "<p class=\"login\"> @" +env.login + "</p>\n" +
+                    "<img src=\"egg.jpg\" alt=\"bird_logo\" id=\"profile-use-2\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + 
+                "<p class=\"author\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + this.author + "</p>\n" + 
+                    "<p class=\"login\"> @" +env.login + "</p>\n" +
+                    "<img src=\"egg.jpg\" alt=\"bird_logo\" id=\"profile-use-2\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + 
+                "<p class=\"author\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + this.author + "</p>\n" + 
+                    "<p class=\"login\"> @" +env.login + "</p>\n" +
+                    "<img src=\"egg.jpg\" alt=\"bird_logo\" id=\"profile-use-2\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + 
+                "<p class=\"author\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + this.author + "</p>\n" + 
+                    "<p class=\"login\"> @" +env.login + "</p>\n" +*/
+           // {"id_user": 1, "author": "Hugo Wyborska","login": "hugowyb"}.getHTML() +
             '</div>' ; 
+        console.log("allo")
     }
+
+
     if (env.fromId > 0) { // page d'un utilisateur
         s += '<div class="wrapper">' + 
             '<div class="profile">' +
@@ -194,6 +229,7 @@ function makeMainPanel(fromId, fromLogin, fromAuthor, query){
         '</html>';
 
     /*On met la valeur s de la string à l'interrieur de la balise body*/
+    //$(".stat2").append({"id_user": 1, "author": "Hugo Wyborska","login": "hugowyb"}.getHTML());
     $("body").html(s);
     $("body").css("background", "#F4F4F4");
 
@@ -202,9 +238,9 @@ function makeMainPanel(fromId, fromLogin, fromAuthor, query){
     if ((env.fromLogin != undefined) && (env.login!= env.fromLogin)){
         $(".message-form").hide();
     } 
-    
+    console.log("hello")
     completeMessages();
-
+    //completeUsers();
     
     if(!env.noConnection){
     
@@ -329,6 +365,8 @@ function init(){
     env.login = "hugowyb";
     env.author = "Hugo wyborska";
     setVirtualDB();
+    env.user = {"id": 1, "login": "hugowyb", "author": "Hugo Wyborska"};
+
 }
 
 /****************************GERE LES FOLLOWERS****************************/
@@ -482,6 +520,7 @@ function completeMessagesResponse(rep){
 }
 
 function completeMessagesResponselocal(rep){
+
         //console.log(rep);
         var tab = JSON.parse(rep, revival);
     
@@ -498,8 +537,54 @@ function completeMessagesResponselocal(rep){
             }
             $(".messages-list").append(m.getHTML());
         }
+} 
+
+function completeUsers(id,login,author){
+    if (!env.noConnection){
+        $.ajax({
+            type:"GET",
+            url:"user/listMessages",
+            datatype:"text",
+            success:function(resp){ completeMessagesResponse(resp);},
+            error:function(XHR, textStatus,errorThrown) { alert(textStatus); }
+        })   
     }
+    else{
+        var tab = getFromLocalDB(env.fromId, env.minId, -1, -1);
+        CompleteUsersResponse(JSON.stringify(tab)); 
+    }
+}
+
+function CompleteUsersResponse(id,login,author) {
+    var followings = follows[id];
+    //var f = follows[followings[0].id];
+
+    /*for (i=0;i<5;i++){
+    /*s+= "<img src=\"egg.jpg\" alt=\"bird_logo\" id=\"profile-use-2\" onclick=\"profile(" + f[i].id + ", \'" + f[i].login + "\', \'" + f[i].author +"\');\">" + 
+    "<p class=\"author\" onclick=\"profile(" + f[i].id + ", \'" + f[i].login + "\', \'" + f[i].author +"\');\">" + f[i].author + "</p>\n" 
+
+    }*/
+    s="<img src=\"egg.jpg\" alt=\"bird_logo\" id=\"profile-use-2\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + 
+                "<p class=\"author\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + "Dyves Saint Laurent"+ "</p>\n" + 
+                   // "<p class=\"login\"> @" +env.login + "</p>\n" +
+                    "<img src=\"egg.jpg\" alt=\"bird_logo\" id=\"profile-use-2\" onclick=\"profile(" + 2 + ", \'" + "chrisg" + "\', \'" + "Christian MM" +"\');\">" + 
+                "<p class=\"author\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + "Jerry Wednesday" + "</p>\n" + 
+                   // "<p class=\"login\"> @" +"chrisg" + "</p>\n" +
+                    "<img src=\"egg.jpg\" alt=\"bird_logo\" id=\"profile-use-2\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + 
+                "<p class=\"author\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + "Hugo Wyborska" + "</p>\n" + 
+                    //"<p class=\"login\"> @" +env.login + "</p>\n" +
+                    "<img src=\"egg.jpg\" alt=\"bird_logo\" id=\"profile-use-2\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + 
+                "<p class=\"author\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + "Christian MMMM" + "</p>\n" + 
+                   // "<p class=\"login\"> @" +env.login + "</p>\n" +
+                    "<img src=\"egg.jpg\" alt=\"bird_logo\" id=\"profile-use-2\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + 
+                "<p class=\"author\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + "Javad Ezati" + "</p>\n" 
+                  //  "<p class=\"login\"> @" +env.login + "</p>\n" 
+           // {"id_user": 1, "author": "Hugo Wyborska","login": "hugowyb"}.getHTML() +
     
+    return s;
+}
+
+
 
 
 function develop(id){

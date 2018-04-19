@@ -173,6 +173,23 @@ p {
 }
 
 
+#profile-use {
+	width: 52px;
+    height: 52px;
+    
+    margin-left: 0px;
+    margin-top: 0px;
+    margin-bottom: -10px;
+    transition: .5s;
+    cursor: pointer;
+
+}
+
+#profile-use  img {
+	width: 50%;
+}
+
+
 .search-zone input {
 	width: 470px;
     padding: 15px 60px 15px 25px;
@@ -222,6 +239,13 @@ p {
     display: inline-block;
 }
 
+.stats2 {
+    background: #FFF;
+    width: 285px;
+    margin-top: 25px;
+    margin-left: 20px;
+    display: inline-block;
+}
 .messages {
     width: 685px;
     display: inline-block;
@@ -277,7 +301,25 @@ p {
     display: inline-block;
     color: #333;
     font-size: 16px;
+    margin-bottom: 20px;
+    margin-left :20px;
     cursor:pointer;
+}
+
+
+#profile-use-2 {
+	width: 52px;
+    height: 52px;
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-bottom: -10px;
+    transition: .5s;
+    cursor: pointer;
+
+}
+
+#profile-use-2 img {
+	width: 50%;
 }
 
 .date {
