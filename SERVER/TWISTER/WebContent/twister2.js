@@ -27,12 +27,27 @@ function Comment(id_user, id_comment, author, login, date, content){
     this.content = content;
 }
 
+function User(id_user,author, login){
+    this.id_user = id_user;
+    this.author = author;
+    this.login = login;
+}
+
+User.prototype.getHTML = 
+    function(){
+        s ="<p class=\"author\" onclick=\"profile(" + this.id_user + ", \'" + this.login + "\', \'" + this.author +"\');\">" + this.author + "</p>\n" + 
+           "<p class=\"login\"> @" +this.login + "</p>\n" 
+
+        return s;
+    }
+
 /*Creation de la methode getHTML qui est prototypé donc reste la meme par defaut pour toutes les instances de l'objet Comment*/
 Comment.prototype.getHTML =
     function(){
         s = "<div class=\"comment\" id=\"comment_" + this.id_comment + "\">\n" +
                 "<div class=\"comment-head\">\n" + 
                     "<div class=\"comment-head--content\">\n" +
+                    "<img src=\"egg.jpg\" alt=\"bird_logo\" id=\"profile-use\" onclick=\"profile(" + this.id_user + ", \'" + this.login + "\', \'" + this.author +"\');\">" + 
                         "<p class=\"author comment-author\" onclick=\"profile(" + this.id_user + ", \'" + this.login + "\', \'" + this.author +"\');\">" + this.author + "</p>\n" +
                         "<p class=\"login\"> @" + this.login + "</p>\n" +
                         "<p class=\"date\">" + this.date + "</p>\n" +
@@ -52,8 +67,8 @@ Message.prototype.getHTML =
         s = "<div class=\"message\" id=\"message_" + this.id_msg + "\">\n" +
                 "<div class=\"message-head\">\n" + 
                     "<div class=\"message-head--content\">\n" +
-                        "<p class=\"author\" onclick=\"profile(" + this.id_user + ", \'" + this.login + "\', \'" + this.author +"\');\">" + this.author + "</p>\n" +
-
+                    "<img src=\"egg.jpg\" alt=\"bird_logo\" id=\"profile-use\" onclick=\"profile(" + this.id_user + ", \'" + this.login + "\', \'" + this.author +"\');\">" + 
+                    "<p class=\"author\" onclick=\"profile(" + this.id_user + ", \'" + this.login + "\', \'" + this.author +"\');\">" + this.author + "</p>\n" + 
                         //"<p id=\"author_" + this.id_user +"\" class=\"author\">" + this.author + "</p>\n" +
                         "<p class=\"login\"> @" +this.login + "</p>\n" +
                         "<p class=\"date\">" + this.date + "</p>\n" +
@@ -149,8 +164,9 @@ function makeMainPanel(fromId, fromLogin, fromAuthor, query){
                 '<div class="disconnect">' +
                     '<input type="submit" id="logout" value="LOG OUT" onclick ="logout()"/>' +      
                 '</div>' +
-                '<div class="user-profile">' +
-                '<input type="submit" id="button-user--profile" value="'+env.login+'" onclick ="makeMainPanel(' + env.id_user + ',\"' + env.login + '\",' + env.author + ')"/>' +      
+                '<div class="user-profile">' + 
+                "<img src=\"profile.png\" alt=\"bird_logo\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + 
+
                 '</div>' + 
             '</div>' +
         '</div>';
@@ -158,11 +174,33 @@ function makeMainPanel(fromId, fromLogin, fromAuthor, query){
     if (env.fromId < 0){ // page d'accueil
         s += '<div class="wrapper">' + 
             '<div class="stats">' +
+            '<p class="stats2">Most popular accounts :</p>' +
+            CompleteUsersResponse(env.id_user,env.login,env.author) +
+               /* "<img src=\"egg.jpg\" alt=\"bird_logo\" id=\"profile-use-2\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + 
+                "<p class=\"author\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + this.author + "</p>\n" + 
+                    "<p class=\"login\"> @" +env.login + "</p>\n" +
+                    "<img src=\"egg.jpg\" alt=\"bird_logo\" id=\"profile-use-2\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + 
+                "<p class=\"author\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + this.author + "</p>\n" + 
+                    "<p class=\"login\"> @" +env.login + "</p>\n" +
+                    "<img src=\"egg.jpg\" alt=\"bird_logo\" id=\"profile-use-2\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + 
+                "<p class=\"author\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + this.author + "</p>\n" + 
+                    "<p class=\"login\"> @" +env.login + "</p>\n" +
+                    "<img src=\"egg.jpg\" alt=\"bird_logo\" id=\"profile-use-2\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + 
+                "<p class=\"author\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + this.author + "</p>\n" + 
+                    "<p class=\"login\"> @" +env.login + "</p>\n" +
+                    "<img src=\"egg.jpg\" alt=\"bird_logo\" id=\"profile-use-2\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + 
+                "<p class=\"author\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + this.author + "</p>\n" + 
+                    "<p class=\"login\"> @" +env.login + "</p>\n" +*/
+           // {"id_user": 1, "author": "Hugo Wyborska","login": "hugowyb"}.getHTML() +
             '</div>' ; 
+        console.log("allo")
     }
-    else{ // page d'un utilisateur
+
+
+    if (env.fromId > 0) { // page d'un utilisateur
         s += '<div class="wrapper">' + 
             '<div class="profile">' +
+            "<img src=\"egg.jpg\" alt=\"bird_logo\" id=\"profile-use-img\" \">" + 
             '<p class="profile-author">' + fromAuthor +'</p>'+
             '<p class="profile-login">@'+ fromLogin +'</p> '+
             '<p class="profile-nbFollowers">' + getNumberFollowers(fromId) + ' followers</p>' + 
@@ -193,6 +231,7 @@ function makeMainPanel(fromId, fromLogin, fromAuthor, query){
         '</html>';
 
     /*On met la valeur s de la string à l'interrieur de la balise body*/
+    //$(".stat2").append({"id_user": 1, "author": "Hugo Wyborska","login": "hugowyb"}.getHTML());
     $("body").html(s);
     $("body").css("background", "#F4F4F4");
 
@@ -201,17 +240,11 @@ function makeMainPanel(fromId, fromLogin, fromAuthor, query){
     if ((env.fromLogin != undefined) && (env.login!= env.fromLogin)){
         $(".message-form").hide();
     } 
-    
+    console.log("hello")
     completeMessages();
-
+    //completeUsers();
     
-    
-
-    console.log(env.msgs);
-   /* env.msgs.forEach(function(msg) {
-    	console.log("#message_" + msg.id_msg + " .comments-list");
-        $("#message_" + msg.id_msg + " .comments-list").hide();    
-    });*/
+    if(!env.noConnection){
     
     if (env.fromId >= 0){ // page d'un utilisateur
         following = [];
@@ -229,6 +262,25 @@ function makeMainPanel(fromId, fromLogin, fromAuthor, query){
             $("#ifollow").css("background","#FFF");
             $("#ifollow").css("box-shadow", "0px 0px 8px -4px rgba(0,0,255,0.8)");
         }
+    }
+
+    else{
+        for (var i=0; i<env.msgs.length; i++){
+            $("#message_" + i + " .comments-list").hide();
+        }
+    
+        if (env.fromId >= 0){ // page d'un utilisateur
+            if (env.id_user == env.fromId){ // page de l'utilisateur connecté
+                $("#ifollow").hide();        
+            }
+            else if (follows[fromId].has(env.id_user)){ // l'utilisateur connecté le suit déjà, proposer de ne plus suivre
+                $("#ifollow").replaceWith("<input id=\"ifollow\" type=\"submit\" value=\"followed\" onclick=\"javascript:removeFollower()\"/>");
+                $("#ifollow").css("color","#4480f9");
+                $("#ifollow").css("background","#FFF");
+            }
+        }
+    }
+    
     }
 }
 
@@ -305,16 +357,18 @@ function setVirtualDB(){
 
 function init(){
     env = new Object();
-    env.noConnection = false;
-   // env.key = "FARA123";
-   // env.id_user = 2;
+    env.noConnection = true;
+    env.key = "FARA123";
+    env.id_user = 1;
     env.minId = -1;
     env.maxId = -1;
     env.msgs = [];
     getFollowing();
-   // env.login = "chrisg";
-   // env.author = "Christian Mm";
-    //setVirtualDB();
+    env.login = "hugowyb";
+    env.author = "Hugo wyborska";
+    setVirtualDB();
+    env.user = {"id": 1, "login": "hugowyb", "author": "Hugo Wyborska"};
+
 }
 
 /****************************GERE LES FOLLOWERS****************************/
@@ -341,13 +395,19 @@ function getFollowingResponse(resp){
 
 /* à partir de env.follows, récupère pour un utilisateur donné le nombre de followers */
 function getNumberFollowers(id_user){
-    n = 0;
-    console.log(env.follows);s
-    env.follows.forEach(function (e) {
-        if (e.following.includes(id_user.toString())){ // e.following : tableau des utilisateurs suivis
-            n = n + 1;
-        } 
-    })
+    
+    if(!env.noConnection){
+        n = 0;
+        console.log(env.follows);s
+        env.follows.forEach(function (e) {
+            if (e.following.includes(id_user.toString())){ // e.following : tableau des utilisateurs suivis
+                n = n + 1;
+            } 
+        })
+    }
+    else{
+        n=follows[id_user].size;
+    }
     return n;
 }
 
@@ -410,7 +470,7 @@ function completeMessages(){
     }
     else{
         var tab = getFromLocalDB(env.fromId, env.minId, -1, -1);
-        completeMessagesResponse(JSON.stringify(tab)); 
+        completeMessagesResponselocal(JSON.stringify(tab)); 
     }
 }
 
@@ -461,6 +521,73 @@ function completeMessagesResponse(rep){
     }
 }
 
+function completeMessagesResponselocal(rep){
+
+        //console.log(rep);
+        var tab = JSON.parse(rep, revival);
+    
+        var s = "";
+        for (var i=0; i<tab.length; i++){
+            var m = tab[i];
+            env.msgs[m.id] = m;
+            if (m.id > env.maxId){
+                env.maxId = m.id;
+            }
+            if ((env.minId < 0) || (m.id < env.minId)){
+                env.minId = m.id;  
+     
+            }
+            $(".messages-list").append(m.getHTML());
+        }
+} 
+
+function completeUsers(id,login,author){
+    if (!env.noConnection){
+        $.ajax({
+            type:"GET",
+            url:"user/listMessages",
+            datatype:"text",
+            success:function(resp){ completeMessagesResponse(resp);},
+            error:function(XHR, textStatus,errorThrown) { alert(textStatus); }
+        })   
+    }
+    else{
+        var tab = getFromLocalDB(env.fromId, env.minId, -1, -1);
+        CompleteUsersResponse(JSON.stringify(tab)); 
+    }
+}
+
+function CompleteUsersResponse(id,login,author) {
+    var followings = follows[id];
+    //var f = follows[followings[0].id];
+
+    /*for (i=0;i<5;i++){
+    /*s+= "<img src=\"egg.jpg\" alt=\"bird_logo\" id=\"profile-use-2\" onclick=\"profile(" + f[i].id + ", \'" + f[i].login + "\', \'" + f[i].author +"\');\">" + 
+    "<p class=\"author\" onclick=\"profile(" + f[i].id + ", \'" + f[i].login + "\', \'" + f[i].author +"\');\">" + f[i].author + "</p>\n" 
+
+    }*/
+    s="<img src=\"egg.jpg\" alt=\"bird_logo\" id=\"profile-use-2\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + 
+                "<p class=\"author\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + "Dyves Saint Laurent"+ "</p>\n" + 
+                   // "<p class=\"login\"> @" +env.login + "</p>\n" +
+                    "<img src=\"egg.jpg\" alt=\"bird_logo\" id=\"profile-use-2\" onclick=\"profile(" + 2 + ", \'" + "chrisg" + "\', \'" + "Christian MM" +"\');\">" + 
+                "<p class=\"author\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + "Jerry Wednesday" + "</p>\n" + 
+                   // "<p class=\"login\"> @" +"chrisg" + "</p>\n" +
+                    "<img src=\"egg.jpg\" alt=\"bird_logo\" id=\"profile-use-2\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + 
+                "<p class=\"author\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + "Hugo Wyborska" + "</p>\n" + 
+                    //"<p class=\"login\"> @" +env.login + "</p>\n" +
+                    "<img src=\"egg.jpg\" alt=\"bird_logo\" id=\"profile-use-2\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + 
+                "<p class=\"author\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + "Christian MMMM" + "</p>\n" + 
+                   // "<p class=\"login\"> @" +env.login + "</p>\n" +
+                    "<img src=\"egg.jpg\" alt=\"bird_logo\" id=\"profile-use-2\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + 
+                "<p class=\"author\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + "Javad Ezati" + "</p>\n" 
+                  //  "<p class=\"login\"> @" +env.login + "</p>\n" 
+           // {"id_user": 1, "author": "Hugo Wyborska","login": "hugowyb"}.getHTML() +
+    
+    return s;
+}
+
+
+
 
 function develop(id){
     env.msgs.forEach(function (msg){
@@ -508,7 +635,7 @@ function newMessage(){
             })   
         }
         else{
-            newMessageReponse(JSON.stringify(new Message(env.id_user, env.msgs.length, env.author, env.login, new Date(), text, undefined, undefined)));
+            newMessageReponselocal(JSON.stringify(new Message(env.id_user, env.msgs.length, env.author, env.login, new Date(), text, undefined, undefined)));
         }
     }
 }
@@ -522,6 +649,18 @@ function newMessageReponse(resp){
         //env.msgs.push(msg);
         completeMessages();
         
+    }
+}
+
+function newMessageReponselocal(resp){
+    var msg = JSON.parse(resp, revival);
+    //console.log(msg);
+    if (msg != undefined && (msg.error == undefined)){
+        var el = $(".messages-list");
+
+        el.prepend(msg.getHTML());
+
+        env.msgs.push(msg);
     }
 }
 
@@ -705,7 +844,7 @@ function deleteMessage(id){
         })
     }
     else{
-        deleteMessageResponse(id, login);
+        deleteMessageResponselocal(id, login);
     }
 }
 
@@ -728,6 +867,14 @@ function deleteMessageResponse(id, resp){
     }
 }
 
+function deleteMessageResponselocal(id, login){
+
+    if (login == env.login){
+        $("#message_" + id).remove();
+        delete(env.msgs[id]);
+    }
+}
+
 /****************************GERER REMOVEMECOMMENT****************************/
 
 function deleteComment(id){
@@ -747,7 +894,7 @@ function deleteComment(id){
         })
     }
     else{
-        deleteComment_response(id, login);
+        deleteCommentResponse(id, login);
     }
 }
 
@@ -775,7 +922,6 @@ function deleteCommentResponse(id, resp){
     }
 }
 
-
 /****************************GERER ADDFRIEND****************************/
 
 
@@ -791,7 +937,7 @@ function addFollower(){
         })
     }
     else{
-        addFollowerResponse("{\"key\": \"FARA123\", \"id\": 1, \"login\": \"hugowyb\", \"author\": \"Hugo Wyborska\"}")
+        addFollowerResponselocal("{\"key\": \"FARA123\", \"id\": 1, \"login\": \"hugowyb\", \"author\": \"Hugo Wyborska\"}")
     }
 }
 
@@ -823,6 +969,23 @@ function addFollowerResponse(resp){
  
 }
 
+function addFollowerResponselocal(resp){
+    var el = $(".profile-nbFollowers");
+    var cpt = el.text();
+    el.text(parseInt(cpt)+1+" followers");
+    followed = true;
+    var bt = $("#ifollow");
+    bt.replaceWith("<input id=\"ifollow\" type=\"submit\" value=\"followed\" onclick=\"javascript:removeFollower()\"/>");
+    var bt = $("#ifollow");
+    var bt = bt.css("color","#4480f9");
+    var bt = bt.css("background","#FFF");
+    el.text(parseInt(cpt)+1+" followers");
+    followed = true;
+    var bt = $("#ifollow")
+    follows[env.fromId].add(env.id_user);
+}
+
+
 /****************************GERER REMOVEFRIEND****************************/
 
 
@@ -839,7 +1002,7 @@ function removeFollower(){
     }
     else{
         if(follows[env.fromId].has(env.id_user)){
-            removeFollowerResponse("{\"key\": \"FARA123\", \"id\": 1, \"login\": \"hugowyb\", \"author\": \"Hugo Wyborska\"}")
+            removeFollowerResponselocal("{\"key\": \"FARA123\", \"id\": 1, \"login\": \"hugowyb\", \"author\": \"Hugo Wyborska\"}")
         }
     }
 }
@@ -864,6 +1027,15 @@ function removeFollowerResponse(resp){
     }else{
         alert("Error : cannot unfollow " + env.fromId);
     }
+}
+
+function removeFollowerResponselocal(resp){
+        var el = $(".profile-nbFollowers");
+        var cpt = el.text();
+        el.text(parseInt(cpt)-1+" followers");
+        var bt = $("#ifollow");
+        bt.replaceWith("<input id=\"ifollow\" type=\"submit\" value=\"follow\" onclick=\"javascript:addFollower()\"/>");
+        follows[env.fromId].delete(env.id_user);
 }
 
 
