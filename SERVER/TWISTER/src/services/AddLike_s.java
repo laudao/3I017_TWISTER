@@ -33,7 +33,11 @@ public class AddLike_s {
 		if (id_message == null){
 			return ErrorJSON.serviceRefused("missing parameter id_message",-1);
 		}
-			
+		
+		if(!ConnectionTools.connection_within_hour(key_user,c)){
+			return ErrorJSON.serviceRefused("Connection expired",-1);
+		}
+		
 		id_user = ConnectionTools.getId_from_key_user(key_user, c);
 	//	login_user = UserTools.getLogin(id_user, c);
 	//	name_user = UserTools.getName(id_user, c);

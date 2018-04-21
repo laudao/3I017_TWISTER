@@ -35,9 +35,13 @@ public class AddMessage_s {
 			return ErrorJSON.serviceRefused("missing parameter text",-1);
 		}
 		
+		if(!ConnectionTools.connection_within_hour(key_user,c)){
+			return ErrorJSON.serviceRefused("Connection expired",-1);
+		}
+		
 		id_user = ConnectionTools.getId_from_key_user(key_user, c);
 		login_user = UserTools.getLogin(id_user, c);
-		name_user = UserTools.getName(id_user, c);
+		name_user = UserTools.getName(Integer.parseInt(id_user), c);
 
 		MessageTools.addMessage(id_user, name_user, login_user, text, coll);
 		//MessageTools.addMessage(id_user, text, coll);

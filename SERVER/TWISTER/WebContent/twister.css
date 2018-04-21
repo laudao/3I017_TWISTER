@@ -157,7 +157,7 @@ p {
     height: 52px;
     
     margin-left: 20px;
-    margin-top: 0px;
+    margin-top: 13px;
     transition: .5s;
     cursor: pointer;
 
@@ -169,7 +169,7 @@ p {
 }
 
 .user-profile  img {
-	width: 150%;
+	width: 100%;
 }
 
 

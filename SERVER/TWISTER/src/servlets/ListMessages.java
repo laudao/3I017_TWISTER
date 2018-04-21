@@ -24,9 +24,10 @@ public class ListMessages extends HttpServlet{
 		PrintWriter out;
 		JSONObject res = null;
 		out = response.getWriter();
-		
+		String key = request.getParameter("key_user");
+
 		try{
-			res=ListMessages_s.list_messages();
+			res=ListMessages_s.list_messages(key);
 			out.println(res.toString());
 		}catch(JSONException e){
 			out.println("JSONException");

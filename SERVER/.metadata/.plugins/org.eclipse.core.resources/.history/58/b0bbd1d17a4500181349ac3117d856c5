@@ -1,0 +1,35 @@
+package services;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import tools.ConnectionTools;
+import tools.FriendsTools;
+import tools.MessageTools;
+import tools.UserTools;
+import bd.Database;
+import java.util.HashMap;
+
+public class GetMostPopular_s {
+
+	public static JSONObject getMostPopular() throws SQLException, JSONException {
+		Connection c = Database.getMySQLConnection();
+		JSONObject json = new JSONObject();
+		HashMap<String, Integer> hm = FriendsTools.getMostPopular(c);
+		
+		for(Map.Entry<String, HashMap> entry : selects.entrySet()) {
+		    String key = entry.getKey();
+		    HashMap value = entry.getValue();
+
+		    // do what you have to do here
+		    // In your case, another loop.
+		}
+		
+		return new JSONObject().put("follow", ret);
+	}
+
+}

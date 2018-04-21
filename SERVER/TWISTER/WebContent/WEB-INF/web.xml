@@ -61,6 +61,10 @@
 		<servlet-name>removeLike</servlet-name> 
 		<servlet-class>servlets.RemoveLike</servlet-class> 
 	</servlet>
+	<servlet> 
+		<servlet-name>getMostPopular</servlet-name> 
+		<servlet-class>servlets.GetMostPopular</servlet-class> 
+	</servlet>
 
 	<servlet-mapping> 
 		<servlet-name>createUser</servlet-name> 
@@ -122,6 +126,11 @@
 		<servlet-name>removeLike</servlet-name> 
 		<url-pattern>/user/removeLike</url-pattern> 
 	</servlet-mapping>
+	<servlet-mapping> 
+		<servlet-name>getMostPopular</servlet-name> 
+		<url-pattern>/friends/getMostPopular</url-pattern> 
+	</servlet-mapping>
+	
 	
 	<resource-ref>
 		<description>DB Connection</description>

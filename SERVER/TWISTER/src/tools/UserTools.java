@@ -69,7 +69,7 @@ public class UserTools {
 		return res;
 	}
 
-	public static String getName(String id, Connection c) throws SQLException {
+	public static String getName(int id, Connection c) throws SQLException {
 		String query = "SELECT prenom, nom FROM USERS WHERE id = " + id + ";";
 		Statement st = c.createStatement();
 		ResultSet rs = st.executeQuery(query);

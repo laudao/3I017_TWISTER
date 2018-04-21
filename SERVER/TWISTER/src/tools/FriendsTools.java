@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
 
 public class FriendsTools {
 
@@ -80,5 +81,20 @@ public class FriendsTools {
 		
 		st.close();
 		return friends;
+	}
+	
+	public static HashMap<String, Integer> getMostPopular(Connection c) throws SQLException{
+		String query = "SELECT COUNT(f.source) AS nb_followers, u.login FROM FRIENDS f, USERS u WHERE u.id = f.cible GROUP BY f.cible, u.login ORDER BY nb_followers DESC LIMIT 5;";
+		Statement st = c.createStatement();
+		ResultSet r = st.executeQuery(query);
+		HashMap<String,Integer> hm = new HashMap<String, Integer>();
+		
+		
+		while (r.next()){
+			hm.put(r.getString(2), r.getInt(1));
+		}
+		
+		st.close();
+		return hm;
 	}
 }

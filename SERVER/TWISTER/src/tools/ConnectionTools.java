@@ -3,6 +3,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Random;
 
 public class ConnectionTools {
@@ -71,7 +74,9 @@ public class ConnectionTools {
 	}
 	
 	public static boolean insertConnexion(String key_user, int id_user, Connection c) throws SQLException {
-		String update = "INSERT INTO SESSIONS VALUES(\"" + key_user + "\", " + id_user + ", true);";
+		//GregorianCalendar calendar = new java.util.GregorianCalendar();
+		//Date d = calendar.getTime();
+		String update = "INSERT INTO SESSIONS VALUES(\"" + key_user + "\", " + id_user + ", NOW());";
 		Statement st = c.createStatement();
 		int res = st.executeUpdate(update);
 		st.close();
@@ -80,6 +85,41 @@ public class ConnectionTools {
 		}else{
 			return false;
 		}
+	}
+	
+	public static boolean connection_within_hour(String key_user, Connection c) throws SQLException {
+		GregorianCalendar calendar = new java.util.GregorianCalendar();
+		Date d = calendar.getTime();
+		String query = "SELECT last_date FROM SESSIONS WHERE key_user=\"" + key_user + "\";";
+		
+		Statement st = c.createStatement();
+		ResultSet rs = st.executeQuery(query);
+		
+		Date last_date = null;
+		Date new_date = d;
+		
+		if (rs.next()){
+			last_date = rs.getTimestamp(1);
+		}
+		GregorianCalendar cal = new java.util.GregorianCalendar();
+		cal.setTime(last_date);
+		last_date = cal.getTime();
+		
+		
+
+		st.close();
+
+		String update = "UPDATE SESSIONS SET last_date = NOW() WHERE key_user=\"" + key_user + "\";";
+		st = c.createStatement();
+		int res = st.executeUpdate(update);
+		st.close();
+		
+		//Date d1 = new SimpleDateFormat("yyyy-M-dd HH:mm:ss").parse(last_date));
+		//Date d2 = new SimpleDateFormat("yyyy-M-dd HH:mm:ss").parse(new_date));
+
+		long diff = new_date.getTime() - last_date.getTime();
+		return diff<7200000 ;
 		
 	}
+	
 }

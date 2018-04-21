@@ -175,7 +175,7 @@ function makeMainPanel(fromId, fromLogin, fromAuthor, query){
         s += '<div class="wrapper">' + 
             '<div class="stats">' +
             '<p class="stats2">Most popular accounts :</p>' +
-            CompleteUsersResponse(env.id_user,env.login,env.author) +
+            getMostPopular() +
                /* "<img src=\"egg.jpg\" alt=\"bird_logo\" id=\"profile-use-2\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + 
                 "<p class=\"author\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + this.author + "</p>\n" + 
                     "<p class=\"login\"> @" +env.login + "</p>\n" +
@@ -289,7 +289,9 @@ revival =
     function(key, val) {
         //console.log(val);
         if (key == 'messages'){
-
+            return val;
+        }
+        if (key == 'most popular'){
             return val;
         }
         if (val.error == undefined){
@@ -357,17 +359,45 @@ function setVirtualDB(){
 
 function init(){
     env = new Object();
-    env.noConnection = true;
-    env.key = "FARA123";
+    env.noConnection = false;
+    if (env.noConnection){
+    	env.login = "hugowyb";
+        env.author = "Hugo wyborska";
+    	env.key = "FARA123";
+    	setVirtualDB();
+        env.user = {"id": 1, "login": "hugowyb", "author": "Hugo Wyborska"};
+    }
     env.id_user = 1;
     env.minId = -1;
     env.maxId = -1;
     env.msgs = [];
     getFollowing();
-    env.login = "hugowyb";
-    env.author = "Hugo wyborska";
-    setVirtualDB();
-    env.user = {"id": 1, "login": "hugowyb", "author": "Hugo Wyborska"};
+    
+    
+}
+
+/****************************GERE LES PLUS POPULAIRES****************************/
+
+function getMostPopular()){
+    if (!env.noConnection){
+        $.ajax({
+            type:"GET",
+            url:"friends/getMostPopular",
+            datatype:"text",
+            success:function(resp){ getMostPopularResponse(resp);},
+            error:function(XHR, textStatus,errorThrown) { alert(textStatus); }
+        })   
+    }   
+}
+
+function getMostPopularResponse(resp){
+	s = "";
+    var f = JSON.parse(resp, revival);
+    for (var key in f) {
+    	s +=  "<img src=\"egg.jpg\" alt=\"egg_logo\" id=\"profile-use-2\">" + 
+        "<p class=\"author\">" + f[key] + "</p>\n";
+    }
+    return s;
 
 }
 
@@ -456,13 +486,21 @@ function homepage(){
     makeMainPanel();
 }
 
+function expireSession(){
+	$("body").html("");
+	logout();
+	alert("Connection expired: you have been logged out");	
+}
+
 /****************************GERE LES MESSAGES/COMMENTS DEJA DANS LA BASE DE DONNEES****************************/
 
 function completeMessages(){
+	console.log(env.key);
     if (!env.noConnection){
         $.ajax({
             type:"GET",
             url:"user/listMessages",
+            data:"key_user=" + env.key,
             datatype:"text",
             success:function(resp){ completeMessagesResponse(resp);},
             error:function(XHR, textStatus,errorThrown) { alert(textStatus); }
@@ -476,48 +514,52 @@ function completeMessages(){
 
 function completeMessagesResponse(rep){
     env.msgs = [];
-
+    console.log(rep);
     var tab = JSON.parse(rep, revival);
-    if (!env.noConnection){
+    
+
+    if ((tab.error != undefined) && (tab.message == "Connection expired")){
+    	expireSession();
+    }
+    else{
         tab = tab.messages;
-    }
-
-    var s = "";
-    for (var i=0; i<tab.length; i++){
-        var m = tab[i];
-        //console.log(m);
-        env.msgs.push(m);
-        console.log(env.msgs);
-        if (m.id_msg > env.maxId){
-            env.maxId = m.id;
-        }
-        if ((env.minId < 0) || (m.id_msg < env.minId)){
-            env.minId = m.id_msg;  
- 
-        }
-        // page de profil
-        if (env.fromId >= 0){
-            following = [];
-            env.follows.forEach(function(e){
-                if (e.id_user == env.fromId){
-                    following = e.following;
-                } 
-            })
-
-            if ((following.includes(m.id_user)) || (env.fromId == m.id_user)){
-                $(".messages-list").prepend(m.getHTML());
-            }
-        }else{
-            $(".messages-list").prepend(m.getHTML());
-        }
-    }
-    for (var i=0; i<env.msgs.length; i++){
-    	var id = env.msgs[i].id_msg
-        $("#message_" + env.msgs[i].id_msg + " .comments-list").hide();
-        if (env.msgs[i].likes.includes(env.id_user.toString())){
-        	var bt = $("#likes_" + id);
-            bt.replaceWith("<img id=\"likes_" + id + "\" src=\"redlike.png\" alt=\"like\" onclick=\"likeOrUnlike(" + id + ");\"/>\n");
-        }
+	    var s = "";
+	    for (var i=0; i<tab.length; i++){
+	        var m = tab[i];
+	        //console.log(m);
+	        env.msgs.push(m);
+	        console.log(env.msgs);
+	        if (m.id_msg > env.maxId){
+	            env.maxId = m.id;
+	        }
+	        if ((env.minId < 0) || (m.id_msg < env.minId)){
+	            env.minId = m.id_msg;  
+	 
+	        }
+	        // page de profil
+	        if (env.fromId >= 0){
+	            following = [];
+	            env.follows.forEach(function(e){
+	                if (e.id_user == env.fromId){
+	                    following = e.following;
+	                } 
+	            })
+	
+	            if ((following.includes(m.id_user)) || (env.fromId == m.id_user)){
+	                $(".messages-list").prepend(m.getHTML());
+	            }
+	        }else{
+	            $(".messages-list").prepend(m.getHTML());
+	        }
+	    }
+	    for (var i=0; i<env.msgs.length; i++){
+	    	var id = env.msgs[i].id_msg
+	        $("#message_" + env.msgs[i].id_msg + " .comments-list").hide();
+	        if (env.msgs[i].likes.includes(env.id_user.toString())){
+	        	var bt = $("#likes_" + id);
+	            bt.replaceWith("<img id=\"likes_" + id + "\" src=\"redlike.png\" alt=\"like\" onclick=\"likeOrUnlike(" + id + ");\"/>\n");
+	        }
+	    }
     }
 }
 
@@ -546,6 +588,7 @@ function completeUsers(id,login,author){
         $.ajax({
             type:"GET",
             url:"user/listMessages",
+            data:"key_user=" + env.key,
             datatype:"text",
             success:function(resp){ completeMessagesResponse(resp);},
             error:function(XHR, textStatus,errorThrown) { alert(textStatus); }
@@ -558,7 +601,7 @@ function completeUsers(id,login,author){
 }
 
 function CompleteUsersResponse(id,login,author) {
-    var followings = follows[id];
+    //var followings = env.follows[id];
     //var f = follows[followings[0].id];
 
     /*for (i=0;i<5;i++){
@@ -630,29 +673,36 @@ function newMessage(){
                 url:"user/addMessage",
                 data:"key_user=" + env.key + "&content=" + text,
                 datatype:"text",
-                success:function(resp){ newMessageReponse(resp);},
+                success:function(resp){ newMessageResponse(resp);},
                 error:function(XHR, textStatus,errorThrown) { alert(textStatus); }
             })   
         }
         else{
-            newMessageReponselocal(JSON.stringify(new Message(env.id_user, env.msgs.length, env.author, env.login, new Date(), text, undefined, undefined)));
+            newMessageResponselocal(JSON.stringify(new Message(env.id_user, env.msgs.length, env.author, env.login, new Date(), text, undefined, undefined)));
         }
     }
 }
 
-function newMessageReponse(resp){
+function newMessageResponse(resp){
     var msg = JSON.parse(resp, revival);
     console.log(msg);
+    
     if (msg != undefined && (msg.error == undefined)){
         var el = $(".messages-list");
         el.html("");
         //env.msgs.push(msg);
         completeMessages();
-        
+    }else{
+    	if (msg.message == "Connection expired"){
+    		expireSession();
+    	}
+    	else{
+    		alert("Error: cannot add message");
+    	}
     }
 }
 
-function newMessageReponselocal(resp){
+function newMessageResponselocal(resp){
     var msg = JSON.parse(resp, revival);
     //console.log(msg);
     if (msg != undefined && (msg.error == undefined)){
@@ -691,7 +741,7 @@ function newCommentResponse(id, resp, text){
 	console.log(resp)
     var com = JSON.parse(resp, revival);
     console.log(com);
-	
+    
     if (com != undefined && (com.error == undefined)){
     	
         var el = $("#message_" + id + " .comments-list");
@@ -718,7 +768,12 @@ function newCommentResponse(id, resp, text){
 
     }
     else{
-        alert("Error: cannot add comment");
+    	if (com.message == "Connection expired"){
+    		expireSession();
+    		return;
+    	}else{
+    		alert("Error: cannot add comment");
+    	}
     }
 }
 
@@ -765,7 +820,6 @@ function addLikeResponse(id, resp){
     var r = JSON.parse(resp, revival);
     var el = $("#message_" + id + " .likes p");
 
-
     if (r.error == undefined){
         env.msgs.forEach(function (msg){
             if (msg.id_msg == id){
@@ -781,7 +835,12 @@ function addLikeResponse(id, resp){
         
     }
     else{
-        alert("Error: cannot add like");
+    	if (r.message == "Connection expired"){
+    		expireSession();
+    		return;
+    	}else{
+    		alert("Error: cannot add like");
+    	}
     }
 }
 function removeLike(id){
@@ -823,7 +882,12 @@ function removeLikeResponse(id,resp){
         bt.replaceWith("<img id=\"likes_" + id + "\" src=\"like.png\" alt=\"like\" onclick=\"likeOrUnlike(" + id + ");\"/>\n");
     }
     else{
-        alert("Error: cannot add like");
+    	if (r.message == "Connection expired"){
+    		expireSession();
+    		return;
+    	}else{
+    		alert("Error: cannot remove like");
+    	}
     }
 }
 
@@ -853,8 +917,12 @@ function deleteMessageResponse(id, resp){
 
     var r = JSON.parse(resp, revival);
     if (r.error != undefined){
-        alert("Error: cannot remove message");
-
+    	if (r.message == "Connection expired"){
+    		expireSession();
+    		return;
+    	}else{
+    		alert("Error: cannot delete message");
+    	}
     }else{
         $("#message_" + id).remove();
         
@@ -918,7 +986,12 @@ function deleteCommentResponse(id, resp){
         $("#comment_" + id).remove();
         
     }else{
-        alert("Error : cannot remove comment");
+    	if (r.message == "Connection expired"){
+    		expireSession();
+    		return;
+    	}else{
+    		alert("Error: cannot delete comment");
+    	}
     }
 }
 
@@ -964,7 +1037,12 @@ function addFollowerResponse(resp){
         })
         env.follows[index].following.push(env.fromId.toString());
     }else{
-        alert("Error: cannot follow " + env.fromLogin);
+    	if (r.message == "Connection expired"){
+    		expireSession();
+    		return;
+    	}else{
+    		alert("Error: cannot follow");
+    	}
     }
  
 }
@@ -1025,7 +1103,12 @@ function removeFollowerResponse(resp){
         var index_friend = env.follows[index].following.indexOf(env.fromId.toString());
         delete(env.follows[index].following[index_friend]);
     }else{
-        alert("Error : cannot unfollow " + env.fromId);
+    	if (r.message == "Connection expired"){
+    		expireSession();
+    		return;
+    	}else{
+    		alert("Error: cannot unfollow");
+    	}
     }
 }
 

@@ -38,6 +38,10 @@ public class AddFriend_s {
 			return ErrorJSON.serviceRefused("User is already friend", -1);
 		}
 		
+		if(!ConnectionTools.connection_within_hour(key_user,c)){
+			return ErrorJSON.serviceRefused("Connection expired",-1);
+		}
+		
 		FriendsTools.addFriend(id_user, id_friend, c);
 		
 		json = ErrorJSON.serviceAccepted("key",1);

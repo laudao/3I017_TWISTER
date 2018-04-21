@@ -39,6 +39,10 @@ public class RemoveFriend_s {
 			return ErrorJSON.serviceRefused("User is not in friends list", -1);
 		}
 		
+		if(!ConnectionTools.connection_within_hour(key,c)){
+			return ErrorJSON.serviceRefused("Connection expired",-1);
+		}
+		
 		FriendsTools.removeFriend(id_user, id_friend, c);
 		
 		json = ErrorJSON.serviceAccepted("key",1);

@@ -44,6 +44,10 @@ public class RemoveMessage_s {
 			return ErrorJSON.serviceRefused("permission denied",-1);
 		}
 		
+		if(!ConnectionTools.connection_within_hour(key_user,c)){
+			return ErrorJSON.serviceRefused("Connection expired",-1);
+		}
+		
 		MessageTools.removeMessage(id_message,coll);
 		
 		json = ErrorJSON.serviceAccepted("text",1);

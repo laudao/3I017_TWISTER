@@ -45,6 +45,10 @@ public class RemoveComment_s {
 			return ErrorJSON.serviceRefused("permission denied",-1);
 		}
 		
+		if(!ConnectionTools.connection_within_hour(key,c)){
+			return ErrorJSON.serviceRefused("Connection expired",-1);
+		}
+		
 		MessageTools.removeComment(id_message, id_comment, id_user, coll);
 		
 		json = ErrorJSON.serviceAccepted("key",1);

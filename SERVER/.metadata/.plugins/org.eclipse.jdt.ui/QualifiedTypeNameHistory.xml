@@ -3,4 +3,16 @@
 <fullyQualifiedTypeName name="services.GetFollowers_s"/>
 <fullyQualifiedTypeName name="tools.FriendsTools"/>
 <fullyQualifiedTypeName name="tools.UserTools"/>
+<fullyQualifiedTypeName name="services.RemoveLike_s"/>
+<fullyQualifiedTypeName name="java.text.SimpleDateFormat"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="java.util.HashSet"/>
+<fullyQualifiedTypeName name="com.mongodb.BasicDBObject"/>
+<fullyQualifiedTypeName name="com.mongodb.DBCursor"/>
+<fullyQualifiedTypeName name="com.mongodb.DBObject"/>
+<fullyQualifiedTypeName name="java.util.Comparator"/>
+<fullyQualifiedTypeName name="java.util.Map"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="java.util.HashMap"/>
+<fullyQualifiedTypeName name="services.GetMostPopular_s"/>
 </qualifiedTypeNameHistroy>

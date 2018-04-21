@@ -25,6 +25,7 @@ public class CreateUser_s {
 		if (!UserTools.insertUser(login, password, name, lastName, email, c)){
 			return ErrorJSON.serviceRefused("User not inserted", 1000);
 		}
+		
 		c.close();
 		json = new JSONObject();
 		json.put("", "");

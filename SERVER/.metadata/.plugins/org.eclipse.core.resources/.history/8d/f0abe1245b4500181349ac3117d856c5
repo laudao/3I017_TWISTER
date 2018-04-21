@@ -1,0 +1,28 @@
+package test;
+
+import java.sql.SQLException;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import services.ListMessages_s;
+
+public class TestListMessages {
+
+	public static void main(String[] args) {
+		JSONObject json = null;
+		try {
+			try {
+				json = ListMessages_s.list_messages();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		System.out.println(json.toString());
+
+	}
+
+}
