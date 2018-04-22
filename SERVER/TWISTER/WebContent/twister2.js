@@ -173,27 +173,13 @@ function makeMainPanel(fromId, fromLogin, fromAuthor, query){
 
     if (env.fromId < 0){ // page d'accueil
         s += '<div class="wrapper">' + 
-            '<div class="stats">' +
-            '<p class="stats2">Most popular accounts :</p>' +
-            getMostPopular() +
-               /* "<img src=\"egg.jpg\" alt=\"bird_logo\" id=\"profile-use-2\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + 
-                "<p class=\"author\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + this.author + "</p>\n" + 
-                    "<p class=\"login\"> @" +env.login + "</p>\n" +
-                    "<img src=\"egg.jpg\" alt=\"bird_logo\" id=\"profile-use-2\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + 
-                "<p class=\"author\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + this.author + "</p>\n" + 
-                    "<p class=\"login\"> @" +env.login + "</p>\n" +
-                    "<img src=\"egg.jpg\" alt=\"bird_logo\" id=\"profile-use-2\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + 
-                "<p class=\"author\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + this.author + "</p>\n" + 
-                    "<p class=\"login\"> @" +env.login + "</p>\n" +
-                    "<img src=\"egg.jpg\" alt=\"bird_logo\" id=\"profile-use-2\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + 
-                "<p class=\"author\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + this.author + "</p>\n" + 
-                    "<p class=\"login\"> @" +env.login + "</p>\n" +
-                    "<img src=\"egg.jpg\" alt=\"bird_logo\" id=\"profile-use-2\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + 
-                "<p class=\"author\" onclick=\"profile(" + env.id_user + ", \'" + env.login + "\', \'" + env.author +"\');\">" + this.author + "</p>\n" + 
-                    "<p class=\"login\"> @" +env.login + "</p>\n" +*/
-           // {"id_user": 1, "author": "Hugo Wyborska","login": "hugowyb"}.getHTML() +
+            //'<div class="stats">' +
+            //'<p class="stats2">Most popular accounts :</p>' +
+            '<div class="stats">' +            
+            '<div class="stats-title"><p>Most popular accounts</p></div>' +
             '</div>' ; 
-        console.log("allo")
+
+        //console.log("allo")
     }
 
 
@@ -240,8 +226,9 @@ function makeMainPanel(fromId, fromLogin, fromAuthor, query){
     if ((env.fromLogin != undefined) && (env.login!= env.fromLogin)){
         $(".message-form").hide();
     } 
-    console.log("hello")
+    
     completeMessages();
+    getMostPopular();
     //completeUsers();
     
     if(!env.noConnection){
@@ -359,7 +346,7 @@ function setVirtualDB(){
 
 function init(){
     env = new Object();
-    env.noConnection = false;
+    env.noConnection = true;
     if (env.noConnection){
     	env.login = "hugowyb";
         env.author = "Hugo wyborska";
@@ -378,7 +365,8 @@ function init(){
 
 /****************************GERE LES PLUS POPULAIRES****************************/
 
-function getMostPopular()){
+function getMostPopular(){
+    console.log("allo?");
     if (!env.noConnection){
         $.ajax({
             type:"GET",
@@ -387,18 +375,46 @@ function getMostPopular()){
             success:function(resp){ getMostPopularResponse(resp);},
             error:function(XHR, textStatus,errorThrown) { alert(textStatus); }
         })   
-    }   
+    } 
+    else{
+        getMostPopularResponse('{"most popular": {"dyvessaintlaurent":502, "hugowyb":460, "chrisg": 432, "jerryw": 387, "colonelblotto": 341}}');  
+    } 
 }
 
 function getMostPopularResponse(resp){
 	s = "";
+    console.log(resp);
     var f = JSON.parse(resp, revival);
-    for (var key in f) {
-    	s +=  "<img src=\"egg.jpg\" alt=\"egg_logo\" id=\"profile-use-2\">" + 
-        "<p class=\"author\">" + f[key] + "</p>\n";
-    }
-    return s;
+    console.log(f);
+    if (f.error == undefined){
+        f = f['most popular'];
 
+        var sortable = [];
+        for (var key in f){
+            sortable.push([key, f[key]]);
+        }
+
+        sortable.sort(function (a,b){
+            a = a[1];
+            b = b[1];
+
+            return a < b ? 1 : (a > b ? -1 : 0);
+        })
+        
+        console.log(sortable);
+        for (var i=0; i<sortable.length; i++) {
+        	s +=  "<div class=\"popular-user\"/>" +
+            "<img src=\"egg.jpg\" alt=\"egg_logo\" id=\"profile-use-2\"/>" + 
+            "<p class=\"author\">" + sortable[i][0] + " (" + sortable[i][1] + ") </p>\n" +
+            "</div>";
+        }
+
+        var el = $(".stats");
+        el.append(s);
+    }   
+    else{
+        alert("Cannot get most popular accounts");
+    }
 }
 
 /****************************GERE LES FOLLOWERS****************************/
@@ -1180,6 +1196,7 @@ function connectionResponse(resp){
 }
 
 function connect(login, password){
+    console.log(env.noConnection);
     if (!env.noConnection){
         $.ajax({
             type:"GET",
