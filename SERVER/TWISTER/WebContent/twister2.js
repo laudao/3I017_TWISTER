@@ -158,7 +158,7 @@ function makeMainPanel(fromId, fromLogin, fromAuthor, query){
                 '<div class="search-zone">' +
                     '<input type="text" placeholder="SEARCH"/>' +
                     '<div class="search-button">' +
-                        '<img src="search.png" alt="search"/>'+
+                        '<img src="search.png" alt="search" onclick="search()"/>'+
                     '</div>' +
                 '</div>' +
                 '<div class="disconnect">' +
@@ -189,7 +189,10 @@ function makeMainPanel(fromId, fromLogin, fromAuthor, query){
             "<img src=\"egg.jpg\" alt=\"bird_logo\" id=\"profile-use-img\" \">" + 
             '<p class="profile-author">' + fromAuthor +'</p>'+
             '<p class="profile-login">@'+ fromLogin +'</p> '+
-            '<p class="profile-nbFollowers">' + getNumberFollowers(fromId) + ' followers</p>' + 
+            '<p class="profile-nbFollowers">' + getNumberFollowers(fromId) + ' followers</p>' +            
+            '<p class="profile-nbFollowing">' + getNumberFollowing(fromId) + ' following</p>' + 
+            '<p class="profile-nbMessages">' + getNumberMessages(fromId) + ' twists</p>' + 
+            
                         '<div id="follow" class="send-button-prof">'+
                                 "<input id=\"ifollow\" type=\"submit\" value=\"follow\" onclick=\"javascript:addFollower(" + fromId + ")\"/>" +
                          '</div> '+
@@ -346,7 +349,7 @@ function setVirtualDB(){
 
 function init(){
     env = new Object();
-    env.noConnection = true;
+    env.noConnection = false;
     if (env.noConnection){
     	env.login = "hugowyb";
         env.author = "Hugo wyborska";
@@ -361,6 +364,79 @@ function init(){
     getFollowing();
     
     
+}
+
+function search(){
+	console.log("allo?");
+    var text=$(".search-zone input").val();
+    if (!env.noConnection){
+        $.ajax({
+            type:"GET",
+            url:"user/search",
+            data:"key_user=" + env.key +"&query=" + text,
+            datatype:"text",
+            success:function(resp){ searchResponse(resp);},
+            error:function(XHR, textStatus,errorThrown) { alert(textStatus); }
+        })   
+    } 
+
+    
+}
+
+function searchResponse(resp){
+	s = "";
+    env.msgs = [];
+    var el = $(".messages-list");
+    el.html("");
+    console.log(resp);
+    var tab = JSON.parse(resp, revival);
+    console.log(tab);
+    if (tab.error == undefined){
+    	tab = tab.messages;
+	    var s = "";
+	    if (tab.length == 0){
+	    	alert("No twist with the given keywords");
+	    }
+	    for (var i=0; i<tab.length; i++){
+	        var m = tab[i];
+	        //console.log(m);
+	        env.msgs.push(m);
+	        console.log(env.msgs);
+	        if (m.id_msg > env.maxId){
+	            env.maxId = m.id;
+	        }
+	        if ((env.minId < 0) || (m.id_msg < env.minId)){
+	            env.minId = m.id_msg;  
+	 
+	        }
+	        // page de profil
+	        if (env.fromId >= 0){
+	            following = [];
+	            env.follows.forEach(function(e){
+	                if (e.id_user == env.fromId){
+	                    following = e.following;
+	                } 
+	            })
+	
+	            if ((following.includes(m.id_user)) || (env.fromId == m.id_user)){
+	                $(".messages-list").append(m.getHTML());
+	            }
+	        }else{
+	            $(".messages-list").append(m.getHTML());
+	        }
+	    }
+	    for (var i=0; i<env.msgs.length; i++){
+	    	var id = env.msgs[i].id_msg
+	        $("#message_" + env.msgs[i].id_msg + " .comments-list").hide();
+	        if (env.msgs[i].likes.includes(env.id_user.toString())){
+	        	var bt = $("#likes_" + id);
+	            bt.replaceWith("<img id=\"likes_" + id + "\" src=\"redlike.png\" alt=\"like\" onclick=\"likeOrUnlike(" + id + ");\"/>\n");
+	        }
+	    }
+    }   
+    else{
+        alert("Cannot search");
+    }
 }
 
 /****************************GERE LES PLUS POPULAIRES****************************/
@@ -453,6 +529,41 @@ function getNumberFollowers(id_user){
     }
     else{
         n=follows[id_user].size;
+    }
+    return n;
+}
+
+function getNumberFollowing(id_user){    
+    var n = 0;
+	if(!env.noConnection){
+        console.log(env.follows);
+        env.follows.forEach(function(e){
+            if (e.id_user == env.fromId){
+                n = e.following.length;
+            } 
+        })
+    }
+    else{
+        n=follows[id_user].size;
+    }
+    return n;
+}
+
+function getNumberMessages(id_user){
+	var n = 0;
+    if(!env.noConnection){
+        env.msgs.forEach(function(m){
+            if (m.id_user == env.fromId){
+                n++;
+            } 
+        })
+    }
+    else{
+        for (var i=0; i<env.msgs.length; i++){
+        	if (env.msgs[i].id_user == env.fromId){
+        		n++;
+        	}
+        }
     }
     return n;
 }

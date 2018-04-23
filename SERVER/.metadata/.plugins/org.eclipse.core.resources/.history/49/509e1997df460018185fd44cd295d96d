@@ -1,0 +1,106 @@
+package services;
+
+import java.net.UnknownHostException;
+import com.mongodb.MapReduceCommand;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import bd.Database;
+
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
+
+import tools.ConnectionTools;
+import tools.FriendsTools;
+import tools.MessageTools;
+import tools.UserTools;
+import errorJSON.ErrorJSON;
+
+public class Search_s {
+	public static JSONObject search(String key_user, String query, String friends) throws JSONException, UnknownHostException, SQLException{
+		JSONObject json = null;
+		
+		if (key_user != null){
+			json = list_messages_user(key_user);
+		}
+		
+		else{
+			
+			json = list_messages_user_friends(key_user,friends);
+		}
+		return json;
+		
+	}
+	
+	public static JSONObject list_messages_user(String key_user) throws JSONException, SQLException, UnknownHostException{
+		JSONObject json = null;
+		String id_user;
+		Connection c = Database.getMySQLConnection();
+		
+		DBCollection coll = Database.getMongocollection("messages");
+		id_user = ConnectionTools.getId_from_key_user(key_user, c);
+		
+		
+		json = MessageTools.getMessages(id_user, coll);
+		
+		return json;
+	}
+	
+	public static JSONObject list_messages_user_friends(String key_user,String friends) throws JSONException, SQLException, UnknownHostException{
+		JSONObject json = null;
+		String id_user;
+		Connection c = Database.getMySQLConnection();
+		DBCollection coll = Database.getMongocollection("messages");
+		id_user = ConnectionTools.getId_from_key_user(key_user, c);
+		json = MessageTools.getMessages(id_user, coll);
+		
+		String[] idFriends = friends.split(" ");
+		
+		JSONArray ret = new JSONArray();
+		for (int i=0;i<idFriends.length;i++){
+			String k=ConnectionTools.getkey_user_from_id(idFriends[i],c);
+			ret.put(list_messages_user(k));
+		}
+		
+		return new JSONObject().put("messages", ret);
+	}
+	
+	public static JSONObject search(String query) throws UnknownHostException{
+		DBCollection coll = Database.getMongocollection("messages");
+		MessageTools.inversedIndex(coll);
+		DBCollection coll = Database.getMongocollection("index");
+		ArrayList<BasicDBObject> messages = MessageTools.getMessageByQuery(index, messages, query);
+		
+		JSONArray ret = new JSONArray();
+		for (BasicDBObject m: messages){
+			JSONObject j = new JSONObject();
+			//j.put("id_msg", b.get("_id"));
+			j.put("id_msg", m.get("id_msg"));
+			j.put("id_user", m.get("id_user"));
+			j.put("author", m.get("author"));
+			j.put("login", m.get("login"));
+			j.put("date", m.get("date"));
+			j.put("content", m.get("content"));
+			j.put("comments", m.get("comments"));
+			j.put("likes", m.get("likes"));
+						
+			ret.put(j);
+		}
+		return new JSONObject().put("messages", ret);
+
+	}
+	
+	
+}

@@ -22,13 +22,12 @@ public class Search extends HttpServlet{
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		PrintWriter out;
 		JSONObject res = null;
-		String key = request.getParameter("key");
-		String query = request.getParameter("q");
-		String id_friend = request.getParameter("friends");
+		String key = request.getParameter("key_user");
+		String query = request.getParameter("query");
 		out = response.getWriter();
 		
 		try{
-			res=Search_s.search(key, query, id_friend);
+			res=Search_s.search(key, query);
 			out.println(res.toString());
 		}catch(JSONException e){
 			out.println("JSONException");

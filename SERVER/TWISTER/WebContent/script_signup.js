@@ -68,6 +68,7 @@ function func_error(msg){
 function func_ok(){
     var msg_box = "<div class=\"ok_msg\">Welcome to Twister!</div>";
     $("form").prepend(msg_box); 
+    $('form')[0].reset();
     
 }
 
@@ -95,7 +96,7 @@ function makeSignupPanel(){
                 "</div>" +  
                 "<div class=\"buttons\">" + 
                     "<input type=\"submit\" value=\"REGISTER\"/>" +
-                    "<input type=\"button\" id=\"cancel\" value=\"CANCEL\"/>" +
+                    "<input type=\"button\" id=\"cancel\" value=\"BACK\"/>" +
                     "<script type=\"text/javascript\">" +
                     "document.getElementById(\"cancel\").onclick = function () {" +
                         "location.href = \"twister.html\";" +

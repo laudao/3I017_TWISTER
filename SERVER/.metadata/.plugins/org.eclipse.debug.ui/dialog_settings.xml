@@ -3,7 +3,7 @@
 	<section name="org.eclipse.debug.ui.SCOPED_SAVE_SELECTION_DIALOG">
 		<item value="308" key="DIALOG_WIDTH"/>
 		<item value="1|Cantarell|11.0|0|GTK|1|" key="DIALOG_FONT_NAME"/>
-		<item value="420" key="DIALOG_HEIGHT"/>
+		<item value="405" key="DIALOG_HEIGHT"/>
 	</section>
 	<section name="org.eclipse.debug.ui.SELECT_LAUNCH_SHORTCUT_DIALOG">
 		<item value="269" key="DIALOG_WIDTH"/>

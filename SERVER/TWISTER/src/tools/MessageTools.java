@@ -1,8 +1,15 @@
 package tools;
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.bson.types.ObjectId;
 import org.json.JSONArray;
@@ -15,6 +22,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
+import com.mongodb.MapReduceCommand;
 
 public class MessageTools {
 	
@@ -96,7 +104,6 @@ public class MessageTools {
 			j.put("date", b.get("date"));
 			j.put("content", b.get("content"));
 			
-			// get comments
 			
 			ret.put(j);
 		}
@@ -235,4 +242,117 @@ public class MessageTools {
 		coll.update(searchQuery, action);
 		
 	} 
+
+	public static void inversedIndex(DBCollection coll){
+		String out = "index";
+				
+		String m =" function(){ "+
+		    "var text = this.content;" +
+		    "var id = this.id_msg;" +
+		    "var words = text.match(/\\w+/g);" +
+		    "var tf = {};"+
+		    "for (var i=0; i<words.length; i++){" +
+		    	"if (tf[words[i]] == null){" +
+	            	"tf[words[i]] = 1;" +
+	        	"}" +
+	        	"else{" +
+	            	"tf[words[i]] += 1;" +
+	            "}" + 
+		    "}"+
+		    "for (w in tf){"+
+		        "var ret = {};"+
+		        "ret[id] = tf[w];"+
+		        "emit(w, ret);"+
+		    "}"+
+		"}";
+		
+		String r = "function(key, val){"+
+		   " var ret = {};"+
+		"for (var i=0; i<val.length; i++){"+
+		        "for (var d in val[i]){"+
+		            "ret[d] = val[i][d] * Math.log(N/val.length);"+
+		        "}"+
+		    "}"+
+		    "return ret;" +
+		"}";
+	
+		String f = "function(k, v){"+
+		    "var df = Object.keys(v).length;"+
+		    "for (d in v){"+
+		        "v[d] = v[d] * Math.log(N/df);"+
+		    "}"+
+		    "return v;"+
+		"}";
+	
+		MapReduceCommand cmd = new MapReduceCommand(coll, m, r, out, MapReduceCommand.OutputType.REPLACE, null);
+		cmd.setFinalize(f);
+		BasicDBObject n = new BasicDBObject();
+		n.put("N", coll.count());
+		cmd.setScope(n);
+		coll.mapReduce(cmd);
+	}
+	
+	public static ArrayList<BasicDBObject> getMessageByQuery(DBCollection index, DBCollection docs,String query){
+	    String[] q = query.split(" ");
+	    HashSet<String> w = new HashSet<String>();
+	    // copier dans le HashSet ici
+	    int i;
+	    for(i=0;i<q.length;i++){
+	    	w.add(q[i]);
+	    }
+	    System.out.println(w);
+	    HashMap<String, Double> scores = new HashMap<String, Double>();
+	    for (String s: w){
+	        BasicDBObject obj = new BasicDBObject();
+	        obj.put("_id", s);
+	        System.out.println(obj);
+	        DBCursor cursor = index.find(obj);
+	        if (cursor.hasNext()){
+	            DBObject res = cursor.next();
+	            System.out.println(res);
+
+	            //ArrayList<DBObject> documents = (ArrayList<DBObject>) res.get("value");
+	            HashMap<String, Double> documents = (HashMap<String, Double>) res.get("value");
+	            Set<String> keys = documents.keySet();
+	            
+	            for (String k: keys){
+	            	double val = Double.valueOf(documents.get(k));
+	            	Double s1 = scores.get(k);
+	            	s1 = (s1 == null)?val:(s1+val);
+	                scores.put(k, s1);
+	                System.out.println(scores);
+	            }
+	            /*
+	            for (DBObject d: documents){
+	                String id = (String) d.get("id_doc");
+	                double val = Double.valueOf((String) d.get("tf-idf"));
+	                Double s1 = scores.get(id);
+	                s1 = (s1 == null)?val:(s1+val);
+	                scores.put(id, s1);
+	            }*/
+	        }
+	    }
+	    // trie par ordre décroissant
+	    List<Map.Entry<String, Double>> entries = new ArrayList<Map.Entry<String, Double>>(scores.entrySet());
+	    java.util.Collections.sort(entries, new Comparator<Map.Entry<String, Double>>(){
+	        public int compare(Map.Entry<String,Double> a, Map.Entry<String,Double> b){ 
+	        	return b.getValue().compareTo(a.getValue());
+	        }
+	    });
+	    
+	    // récupère les messages
+	    
+	    ArrayList<BasicDBObject> ret = new ArrayList<BasicDBObject>();
+	    for (Map.Entry<String, Double> entry: entries){
+	        BasicDBObject obj = new BasicDBObject();
+	        obj.put("id_msg", Integer.parseInt(entry.getKey()));
+	        System.out.println(obj);
+	        DBCursor cursor = docs.find(obj);
+	        if (cursor.hasNext()){
+	            DBObject res = cursor.next();
+	            ret.add((BasicDBObject) res);
+	        }
+	    }
+	    return ret;
+	}
 }

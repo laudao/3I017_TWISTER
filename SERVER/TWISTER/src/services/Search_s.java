@@ -1,6 +1,7 @@
 package services;
 
 import java.net.UnknownHostException;
+import com.mongodb.MapReduceCommand;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -76,45 +77,40 @@ public class Search_s {
 		return new JSONObject().put("messages", ret);
 	}
 	
-	/*public ArrayList<BasicDBObject> getMessageByQuery(DBCollection index, String query){
-	    String[] q = query.split(" ");
-	    HashSet<String> w = new HashSet<String>();
-	    // copier dans le HashSet ici
-	    int i;
-	    for(i=0;i<q.length;i++){
-	    	w.add(q[i]);
-	    }
-	    HashMap<String, Double> scores = new HashMap<String, Double>();
-	    for (String s: w){
-	        BasicDBObject obj = new BasicDBObject();
-	        obj.put("words", s); // ou id
-	        DBCursor cursor = index.find(obj);
-	        if (cursor.hasNext()){
-	            DBObject res = cursor.next();
-	            ArrayList<DBObject> docs = res.get("Messages");
-	            for (DBObject d: docs){
-	                String id = d.get("id_doc");
-	                double val = Double.valueOf(d.get("tf-idf"));
-	                Double s = scores.get(id);
-	                s = (s == nul)?val:(s+val);
-	                scores.put(id, s);
-	            }
-	        }
-	        // trie par ordre décroissant
-	        List<Map.Entry<String, Double>> entries = new ArrayList<Map.Entry<String, Double>>(scores.entry Set())
-	        Collection.sort(entries, new Comparator<Map.Entry<String, Double>>()
-	            { public int compare(Map.Entry<String,Double> a, Map.Entry<String,Double> b){ return b.getValue().compareTo(a.getValue())});
-	    }
-	    // récupère les messages
-	    ArrayList<BasicDBObject> ret = new ArrayList<BasicDBObject>();
-	    for (Map.Entry<String, Double> entry: entries){
-	        BasicDBObject obj = new BasicDBObject();
-	        obj.put("id", entry.getKey());
-	        DBCursor cursor = docs.find(obj);
-	        if (cursor.hasNext()){
-	            DBObject res = cursor.next();
-	            ret.add(res);
-	    }
-	    return ret;
-	}*/
+	public static JSONObject search(String key_user, String query) throws UnknownHostException, JSONException, SQLException{
+		Connection c = Database.getMySQLConnection();
+
+		if(key_user==null){
+			return ErrorJSON.serviceRefused("missing parameter key",-1);
+		}
+		
+		if(!ConnectionTools.connection_within_hour(key_user,c)){
+			return ErrorJSON.serviceRefused("Connection expired",-1);
+		}
+		
+		DBCollection coll = Database.getMongocollection("messages");
+		MessageTools.inversedIndex(coll);
+		DBCollection index = Database.getMongocollection("index");
+		ArrayList<BasicDBObject> messages = MessageTools.getMessageByQuery(index, coll, query);
+		
+		JSONArray ret = new JSONArray();
+		for (BasicDBObject m: messages){
+			JSONObject j = new JSONObject();
+			//j.put("id_msg", b.get("_id"));
+			j.put("id_msg", m.get("id_msg"));
+			j.put("id_user", m.get("id_user"));
+			j.put("author", m.get("author"));
+			j.put("login", m.get("login"));
+			j.put("date", m.get("date"));
+			j.put("content", m.get("content"));
+			j.put("comments", m.get("comments"));
+			j.put("likes", m.get("likes"));
+						
+			ret.put(j);
+		}
+		return new JSONObject().put("messages", ret);
+
+	}
+	
+	
 }
