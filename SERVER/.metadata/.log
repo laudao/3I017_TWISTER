@@ -5878,3 +5878,45 @@ java.lang.NullPointerException
 	at org.eclipse.jst.jee.ui.internal.navigator.Web25ContentProvider.getNewContentProviderInstance(Web25ContentProvider.java:69)
 	at org.eclipse.jst.jee.ui.internal.navigator.LoadingJeeDDJob.run(LoadingJeeDDJob.java:50)
 	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:54)
+!SESSION 2018-04-23 17:08:01.435 -----------------------------------------------
+eclipse.buildId=4.4.2.M20150204-1700
+java.version=1.8.0_45
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=fr_FR
+Framework arguments:  -product org.eclipse.epp.package.java.product
+Command-line arguments:  -os linux -ws gtk -arch x86_64 -product org.eclipse.epp.package.java.product
+
+!ENTRY org.eclipse.core.net 1 0 2018-04-23 17:08:29.405
+!MESSAGE System property http.proxyHost is set to proxy.ufr-info-p6.jussieu.fr but should not be set.
+
+!ENTRY org.eclipse.core.net 1 0 2018-04-23 17:08:29.411
+!MESSAGE System property http.proxyPort is set to 3128 but should not be set.
+
+!ENTRY org.eclipse.core.net 1 0 2018-04-23 17:08:29.423
+!MESSAGE System property http.proxyHost is set to proxy.ufr-info-p6.jussieu.fr but should not be set.
+
+!ENTRY org.eclipse.core.net 1 0 2018-04-23 17:08:29.425
+!MESSAGE System property http.proxyPort is set to 3128 but should not be set.
+
+!ENTRY org.eclipse.jst.j2ee 4 0 2018-04-23 17:08:32.818
+!MESSAGE No IModelProvider exists for project P/TWISTER of version: Dynamic Web Module 3.0
+!STACK 0
+java.lang.NullPointerException: No IModelProvider exists for project P/TWISTER of version: Dynamic Web Module 3.0
+	at org.eclipse.jst.j2ee.model.ModelProviderManager.getModelProvider(ModelProviderManager.java:101)
+	at org.eclipse.jst.j2ee.model.ModelProviderManager.getModelProvider(ModelProviderManager.java:281)
+	at org.eclipse.jst.jee.ui.internal.navigator.JEE5ContentProvider.getCachedModelProvider(JEE5ContentProvider.java:76)
+	at org.eclipse.jst.jee.ui.internal.navigator.Web25ContentProvider.getNewContentProviderInstance(Web25ContentProvider.java:69)
+	at org.eclipse.jst.jee.ui.internal.navigator.LoadingJeeDDJob.run(LoadingJeeDDJob.java:50)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:54)
+
+!ENTRY org.eclipse.core.jobs 4 2 2018-04-23 17:08:32.834
+!MESSAGE An internal error occurred during: "Loading descriptor for TWISTER.".
+!STACK 0
+java.lang.NullPointerException
+	at org.eclipse.jst.jee.ui.internal.navigator.JEE5ContentProvider.getCachedModelProvider(JEE5ContentProvider.java:77)
+	at org.eclipse.jst.jee.ui.internal.navigator.Web25ContentProvider.getNewContentProviderInstance(Web25ContentProvider.java:69)
+	at org.eclipse.jst.jee.ui.internal.navigator.LoadingJeeDDJob.run(LoadingJeeDDJob.java:50)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:54)
+
+!ENTRY org.eclipse.wst.common.project.facet.core 4 0 2018-04-23 17:21:44.426
+!MESSAGE Project facet wst.jsdt.web has not been defined. It is used in plugin org.eclipse.jst.server.core.

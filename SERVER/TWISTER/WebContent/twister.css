@@ -303,7 +303,6 @@ p {
     font-size: 16px;
     margin-bottom: 20px;
     margin-left :20px;
-    cursor:pointer;
 }
 
 
@@ -314,7 +313,6 @@ p {
     margin-left: 20px;
     margin-bottom: -10px;
     transition: .5s;
-    cursor: pointer;
 
 }
 

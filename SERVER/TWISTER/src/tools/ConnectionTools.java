@@ -118,7 +118,7 @@ public class ConnectionTools {
 		//Date d2 = new SimpleDateFormat("yyyy-M-dd HH:mm:ss").parse(new_date));
 
 		long diff = new_date.getTime() - last_date.getTime();
-		return diff<7200000 ;
+		return diff<14400000 ;
 		
 	}
 	

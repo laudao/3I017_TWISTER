@@ -73,9 +73,11 @@ Message.prototype.getHTML =
                         "<p class=\"login\"> @" +this.login + "</p>\n" +
                         "<p class=\"date\">" + this.date + "</p>\n" +
                     "</div>\n" +
-                    "<div class=\"delete\">\n" +
-                        "<img src=\"bin.png\" alt=\"delete\" onclick=\"deleteMessage(" + this.id_msg +")\"/>\n" +
-                    "</div>\n" +
+                    "<div class=\"delete\">\n";
+                  if (this.id_user == env.id_user){
+                        s += "<img src=\"bin.png\" alt=\"delete\" onclick=\"deleteMessage(" + this.id_msg +")\"/>\n";
+                  }
+                  s += "</div>\n" +
                 "</div>\n" +
                 "<p class=\"content\">" + this.content + "</p>\n" +
                     "<div class=\"message-action\">\n" +
@@ -253,8 +255,9 @@ function makeMainPanel(fromId, fromLogin, fromAuthor, query){
             $("#ifollow").css("box-shadow", "0px 0px 8px -4px rgba(0,0,255,0.8)");
         }
     }
-
+    }
     else{
+    	console.log(env.msgs);
         for (var i=0; i<env.msgs.length; i++){
             $("#message_" + i + " .comments-list").hide();
         }
@@ -271,7 +274,6 @@ function makeMainPanel(fromId, fromLogin, fromAuthor, query){
         }
     }
     
-    }
 }
 
 
@@ -355,12 +357,13 @@ function init(){
         env.author = "Hugo wyborska";
     	env.key = "FARA123";
     	setVirtualDB();
-        env.user = {"id": 1, "login": "hugowyb", "author": "Hugo Wyborska"};
+        env.id_user = 1;
+    }else{
+        env.msgs = [];
     }
-    env.id_user = 1;
+    
     env.minId = -1;
     env.maxId = -1;
-    env.msgs = [];
     getFollowing();
     
     
@@ -435,7 +438,11 @@ function searchResponse(resp){
 	    }
     }   
     else{
-        alert("Cannot search");
+    	if (tab.message == "Connection expired"){
+    		expireSession();
+    	}else{
+    		alert("Cannot search");
+    	}
     }
 }
 
