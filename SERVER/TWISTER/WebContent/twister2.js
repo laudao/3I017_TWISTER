@@ -488,7 +488,7 @@ function getMostPopularResponse(resp){
         for (var i=0; i<sortable.length; i++) {
         	s +=  "<div class=\"popular-user\"/>" +
             "<img src=\"egg.jpg\" alt=\"egg_logo\" id=\"profile-use-2\"/>" + 
-            "<p class=\"author\">" + sortable[i][0] + " (" + sortable[i][1] + ") </p>\n" +
+            "<p class=\"author-pop\">" + sortable[i][0] + " (" + sortable[i][1] + ") </p>\n" +
             "</div>";
         }
 

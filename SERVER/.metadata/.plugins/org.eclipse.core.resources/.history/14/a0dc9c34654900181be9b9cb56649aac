@@ -303,18 +303,8 @@ p {
     font-size: 16px;
     margin-bottom: 20px;
     margin-left :20px;
-    cursor: pointer;
 }
 
-.author-pop{
-	font-weight: 700;
-    line-height: 1.5;
-    display: inline-block;
-    color: #333;
-    font-size: 16px;
-    margin-bottom: 20px;
-    margin-left :20px;
-}
 
 #profile-use-2 {
 	width: 52px;
